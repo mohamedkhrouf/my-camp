@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/screen1/mainScreen/Home.dart';
+import 'screens/index/mainScreen/index.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,6 +26,6 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: Home());
+        home: Index());
   }
 }

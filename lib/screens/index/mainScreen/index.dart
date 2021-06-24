@@ -1,49 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
 
-class Cont extends StatelessWidget {
-  Container x;
 
-  Cont()
-      : x = Container(
-          color: Colors.blue,
-          height: 200.0,
-          width: 300.0,
-          margin: EdgeInsets.all(16),
-          child: Text("Hello"),
-        );
 
+class Index extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    x = Container(
-      color: Colors.blue,
-      height: 200.0,
-      width: 300.0,
-      margin: EdgeInsets.all(16),
-      child: Text("Hello"),
-    );
-    return x;
-  }
+  _IndexState createState() => _IndexState();
 }
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  var container = Container(
-    color: Colors.blue,
-    height: 200.0,
-    width: double.infinity,
-    margin: EdgeInsets.all(16),
-    child: Text("Hello"),
-  );
+class _IndexState extends State<Index> {
   var tabs = [
-    SingleChildScrollView(
-      child: Column(
-        children: [Cont(), Cont(), Cont(), Cont()],
-      ),
-    ),
+    HomePage(),
     Container(
       margin: EdgeInsets.only(top: 40.0,),
 
