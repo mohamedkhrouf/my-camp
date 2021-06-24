@@ -5,12 +5,12 @@ class Cont extends StatelessWidget {
 
   Cont()
       : x = Container(
-    color: Colors.blue,
-    height: 200.0,
-    width: 300.0,
-    margin: EdgeInsets.all(16),
-    child: Text("Hello"),
-  );
+          color: Colors.blue,
+          height: 200.0,
+          width: 300.0,
+          margin: EdgeInsets.all(16),
+          child: Text("Hello"),
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +24,7 @@ class Cont extends StatelessWidget {
     return x;
   }
 }
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
     ),
     Center(
       child: Text("Camp sites"),
-    ) ,
+    ),
     Center(
       child: Text("Tasks"),
     ),
@@ -62,7 +63,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext buildContext) {
     return Scaffold(
       appBar: AppBar(
-
         title: Text("hello l fou9"),
         backgroundColor: Color.fromRGBO(50, 60, 70, 1),
       ),
@@ -72,24 +72,24 @@ class _HomeState extends State<Home> {
           backgroundColor: Color.fromRGBO(50, 60, 70, 1),
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text("Home"),
-                ),
+              icon: Icon(Icons.home),
+              label: "Home",
+            ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.group),
-                title: Text("My events"),
+                label: "My events",
                 backgroundColor: Colors.white24),
             BottomNavigationBarItem(
                 icon: Icon(Icons.map),
-                title: Text("Camp sites"),
+                label: "Camp sites",
                 backgroundColor: Colors.white24),
             BottomNavigationBarItem(
                 icon: Icon(Icons.map),
-                title: Text("My tasks"),
+                label: "My tasks",
                 backgroundColor: Colors.white24),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                title: Text("Profile"),
+                label: "Profile",
                 backgroundColor: Colors.white24)
           ],
           onTap: (index) {
