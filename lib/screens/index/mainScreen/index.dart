@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
+import 'package:my_camp/screens/myEvents/mainScreen/myEvents.dart';
 
 
 
@@ -11,24 +12,9 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
   var tabs = [
     HomePage(),
-    Container(
-      margin: EdgeInsets.only(top: 40.0,),
 
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-        OutlinedButton(
-          onPressed: () {
-            print('Received click');
-          },
-          child: const Text('Click Me'),
-        ),
-        ElevatedButton(
-          onPressed: null,
-          child: Text('button'),
-        ),
-      ]),
-    ),
+    MyEvents(),
+
     Center(
       child: Text("Camp "),
     ),
