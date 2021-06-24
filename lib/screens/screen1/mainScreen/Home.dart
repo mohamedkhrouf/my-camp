@@ -62,35 +62,51 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext buildContext) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("hello l fou9"),
-        backgroundColor: Color.fromRGBO(50, 60, 70, 1),
-      ),
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
-          backgroundColor: Color.fromRGBO(50, 60, 70, 1),
+          
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(
+                Icons.home,
+                color: Color.fromRGBO(170,215,62,1),
+              ),
               label: "Home",
+              backgroundColor: Color.fromRGBO(36,34,47,1),
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.group),
-                label: "My events",
-                backgroundColor: Colors.white24),
+              icon: Icon(
+                Icons.group,
+                color: Color.fromRGBO(170,215,62,1),
+              ),
+              label: "My events",
+              backgroundColor: Color.fromRGBO(36,34,47,1),
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.map),
-                label: "Camp sites",
-                backgroundColor: Colors.white24),
+              icon: Icon(
+                Icons.map,
+                color: Color.fromRGBO(170,215,62,1),
+              ),
+              label: "Camp sites",
+              backgroundColor: Color.fromRGBO(36,34,47,1),
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.map),
-                label: "My tasks",
-                backgroundColor: Colors.white24),
+              icon: Icon(
+                Icons.map,
+                color: Color.fromRGBO(170,215,62,1),
+              ),
+              label: "My tasks",
+              backgroundColor: Color.fromRGBO(36,34,47,1),
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: "Profile",
-                backgroundColor: Colors.white24)
+              icon: Icon(
+                Icons.person,
+                color: Color.fromRGBO(170,215,62,1),
+              ),
+              label: "Profile",
+              backgroundColor: Color.fromRGBO(36,34,47,1),
+            )
           ],
           onTap: (index) {
             setState(() {
