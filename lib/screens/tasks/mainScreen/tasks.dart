@@ -26,7 +26,6 @@ List<TaskModel> allTasks = [
 
 ];
 class _Tasks extends State<Tasks> {
-  var taskList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
