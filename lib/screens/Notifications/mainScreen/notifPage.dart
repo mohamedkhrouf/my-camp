@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 
 
 import 'package:flutter/material.dart';
-import 'package:my_camp/screens/myEvents/widgets/event.dart';
+import 'package:my_camp/screens/Notifications/widgets/notif.dart';
 
-class MyEvents extends StatelessWidget {
+
+class NotifPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final border = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(90.0)),
@@ -44,9 +45,9 @@ class MyEvents extends StatelessWidget {
         ),*/
 
       ),
-      Group(),
-      Group(),
-      Group(),
+      Notif(),
+      Notif(),
+      Notif(),
     ]));
   }
 }
