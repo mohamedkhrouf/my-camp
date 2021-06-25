@@ -7,7 +7,7 @@ class Cont extends StatelessWidget {
     return Column(
       children: [
         Container(
-            color: Color.fromRGBO(170, 215, 62, 1),
+            color: Color.fromRGBO(188, 224, 253, 1),
             height: MediaQuery.of(context).size.width * 0.2311,
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(top: 16),
@@ -21,7 +21,7 @@ class Cont extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                      color: Colors.red[500],
+                      color: Colors.blue[500],
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   margin: EdgeInsets.all(24),
                 ),

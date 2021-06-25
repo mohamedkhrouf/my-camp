@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 
-class Ev extends StatelessWidget {
+class EvPage extends StatefulWidget {
+  @override
+  _EvPageState createState() => _EvPageState();
+}
+
+class _EvPageState extends State<EvPage> {
+  var clicked=false;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-            color: Color.fromRGBO(170, 215, 62, 1),
+            color: Color.fromRGBO(188, 224, 253, 1),
             height: MediaQuery.of(context).size.width * 0.2311,
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(top: 16),
@@ -21,7 +28,7 @@ class Ev extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                      color: Colors.red[500],
+                      color: Colors.blue[500],
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   margin: EdgeInsets.all(24),
                 ),
@@ -55,53 +62,73 @@ class Ev extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: Stack(
               children: [
-               Image.asset(
-    'assets/mekki.jpg',
-    height: MediaQuery.of(context).size.width,
-    width: MediaQuery.of(context).size.width,
-
-    fit: BoxFit.fitWidth,
- ),
-                Container(child:
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Container(
-                  OutlinedButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.only(
-                          top: 15, bottom: 15, left: 50, right: 50)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(30),
-                                  bottomRight: Radius.circular(30),
-                                  topLeft: Radius.circular(30),
-                                  bottomLeft: Radius.circular(30)),
-                              side: BorderSide(color: Colors.red))),
-                    ),
-                    onPressed: () {},
-                    child: Text('Events'),
-                  )
-                  ),
-                  Container(
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.only(
-                          top: 15, bottom: 15, left: 30, right: 30)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30),
-                                  bottomLeft: Radius.circular(30),
-                                  topRight: Radius.circular(30),
-                                  bottomRight: Radius.circular(30)),
-                              side: BorderSide(color: Colors.red))),
-                    ),
-                    onPressed: () => {},
-                    child: Text('Publications'),
-                  )),
-                ]),
-                margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.744*0.75)),
-
+                Image.asset(
+                  'assets/mekki.jpg',
+                  height: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fitWidth,
+                ),
+                Container(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: OutlinedButton(
+                              style: ElevatedButton.styleFrom(
+                                  side: BorderSide(color: Colors.brown),
+                                  primary: Colors.white,
+                                  padding: !clicked?EdgeInsets.only(
+                                      top: 15, bottom: 15, left: 50, right: 50):
+                                      EdgeInsets.only(
+                                      top: 15, bottom: 15, left: 32.5, right: 32.5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(30),
+                                          bottomRight: Radius.circular(30),
+                                          topLeft: Radius.circular(30),
+                                          bottomLeft: Radius.circular(30)),
+                                      side: BorderSide(color: Colors.red))),
+                              onPressed: () {
+                                setState(() {
+                                  clicked = !clicked;
+                                });
+                              },
+                              child: !clicked?Text('Join'):Text('pending...'),
+                            ),
+                            margin: EdgeInsets.only(right: 20),
+                          ),
+                          Container(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsets.only(
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 50,
+                                        right: 50)),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(30),
+                                            bottomLeft: Radius.circular(30),
+                                            topRight: Radius.circular(30),
+                                            bottomRight: Radius.circular(30)),
+                                        side: BorderSide(color: Colors.red))),
+                              ),
+                              onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MapPage()))
+                              },
+                              child: Text('Map'),
+                            ),
+                            margin: EdgeInsets.only(left: 20),
+                          )
+                        ]),
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.744 * 0.75)),
               ],
             )),
         Container(

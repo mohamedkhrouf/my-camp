@@ -9,6 +9,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   var publication = true;
   var event = false;
 
@@ -112,10 +113,10 @@ class _HomePageState extends State<HomePage> {
           Cont()
           ],):
           Column(children: [
-            Ev(),
-          Ev(),
-          Ev(),
-          Ev()
+            EvPage(),
+          EvPage(),
+          EvPage(),
+          EvPage()
           ],)
          
         ],
