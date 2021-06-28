@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () => {
                         setState(() {
-                          publication = false;
+                          publication = true;
                           event = true;
                         })
                       },
