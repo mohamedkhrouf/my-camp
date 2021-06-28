@@ -24,8 +24,11 @@ class _Group extends State<Group> {
           );
         },
         child: Container(
+          color: Colors.blue,
+
           padding: EdgeInsets.all(16.0),
           child: Row(
+
             children: [
               Container(
                 child: Container(
@@ -51,7 +54,8 @@ class _Group extends State<Group> {
                     ],
                   )),
               Expanded(
-                  child: Align(
+                  child: Container(
+                      margin: EdgeInsets.only(top: 30),
                       child: Text("Pending..."),
                       alignment: Alignment.bottomRight,
                   )
