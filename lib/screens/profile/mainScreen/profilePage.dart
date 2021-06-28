@@ -66,6 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 top: MediaQuery.of(context).size.width * 0.071),
           ),
           Container(
+            padding:EdgeInsets.only(top:10),
               child: Row(
                 children: [
                   Container(
@@ -132,8 +133,21 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             width: MediaQuery.of(context).size.width * 0.9,
-            margin: EdgeInsets.only(top: 10, bottom: 10),
+            margin: EdgeInsets.only(top: 10, bottom: 0),
           ),
+         Container(child:ElevatedButton(
+      onPressed: () {},
+      child: Icon(Icons.add, color: Colors.white),
+      style: ElevatedButton.styleFrom(
+        shape: CircleBorder(),
+        padding: EdgeInsets.all(10),
+        
+        primary: Colors.blue, // <-- Button color
+        onPrimary: Colors.red, // <-- Splash color
+      ),
+    ),
+    margin: EdgeInsets.all(10),
+    ),
           PostPage(),
           PostPage(),
         ],
