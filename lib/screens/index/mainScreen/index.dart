@@ -18,7 +18,7 @@ class _IndexState extends State<Index> {
     HomePage(),
 
     MyEvents(),
-    NotifPage(),
+    CampSites(),
     Center(
       child: Text("Camp "),
     ),
