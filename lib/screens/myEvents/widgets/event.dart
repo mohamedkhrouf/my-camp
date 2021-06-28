@@ -24,9 +24,8 @@ class _Group extends State<Group> {
           );
         },
         child: Container(
-          color: Colors.blue,
-
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          margin: EdgeInsets.only(bottom: 30.0),
           child: Row(
 
             children: [
@@ -42,6 +41,8 @@ class _Group extends State<Group> {
               Container(
                   padding: EdgeInsets.only(left: 20),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                           child: Text(widget.groupName,
@@ -49,7 +50,7 @@ class _Group extends State<Group> {
                       Container(
                         child:
                             Text(widget.date, style: TextStyle(fontSize: 15)),
-                        margin: EdgeInsets.only(right: 30.0),
+
                       ),
                     ],
                   )),

@@ -18,6 +18,7 @@ class _Task extends State<Task>{
     return ListTile(
         leading: Icon(Icons.person),
         title: Row(
+
             children :[
               Text(widget.taskName),
               Spacer(),
