@@ -4,6 +4,7 @@ import 'package:my_camp/screens/Notifications/mainScreen/notifPage.dart';
 import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 import 'package:my_camp/screens/myEvents/mainScreen/myEvents.dart';
+import 'package:my_camp/screens/profile/mainScreen/profilePage.dart';
 
 
 
@@ -21,12 +22,8 @@ class _IndexState extends State<Index> {
     Center(
       child: Text("Camp "),
     ),
-    Center(
-      child: Text("Tasks"),
-    ),
-    Center(
-      child: Text("Profile"),
-    )
+ 
+   ProfilePage(),
   ];
   var _currentIndex = 0;
 
