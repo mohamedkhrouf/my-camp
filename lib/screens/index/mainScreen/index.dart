@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_camp/screens/Notifications/mainScreen/notifPage.dart';
+
 import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
+import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 import 'package:my_camp/screens/myEvents/mainScreen/myEvents.dart';
 
 
@@ -14,7 +17,7 @@ class _IndexState extends State<Index> {
     HomePage(),
 
     MyEvents(),
-
+    NotifPage(),
     Center(
       child: Text("Camp "),
     ),

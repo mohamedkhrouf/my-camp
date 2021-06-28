@@ -16,7 +16,7 @@ class _Task extends State<Task>{
   Widget build(BuildContext context)
   {
     return ListTile(
-        leading: Icon(Icons.task),
+        leading: Icon(Icons.person),
         title: Row(
             children :[
               Text(widget.taskName),
