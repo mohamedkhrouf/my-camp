@@ -15,39 +15,36 @@ class NotifPage extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Scaffold(
+       appBar:PreferredSize(
+            preferredSize: const Size.fromHeight(40),
+            child: Container(
+              child:Row(children: [
+                  Container(
+                    child: OutlinedButton(
+                        onPressed:(){ Navigator.pop(context);},
+                        child: Icon(Icons.arrow_back),
+                       style: ElevatedButton.styleFrom(
+                                  side: BorderSide(color: Colors.white),)
+                    ),
+
+                  ),
+                 
+              ],
+            ),
+              padding: EdgeInsets.all(0),
+            )
+
+        ) ,
+      body: 
+   SingleChildScrollView(
      child: Column(children: [
-      Container(
-          child: Form(
-              key: _formKey,
-              child: Container(
-                  margin: EdgeInsets.all(16.0),
-                  child:
-                    TextFormField(
-                      decoration: const InputDecoration(
-                      hintText: 'Enter event name',
-                      contentPadding: EdgeInsets.only(left: 15.0),
-                      border:  OutlineInputBorder(
-                        borderRadius: BorderRadius.all( Radius.circular(90.0))
-                      ),
-                      prefixIcon: Icon(Icons.search)
-
-                    )
-              )
-
-              )
-          ),
-       /* decoration: BoxDecoration(
-
-            borderRadius: BorderRadius.all(Radius.circular(90.0)),
-            border: Border.all()
-
-        ),*/
-
-      ),
+     
       Notif(),
       Notif(),
       Notif(),
-    ]));
+    ]))
+      
+    );
   }
 }
