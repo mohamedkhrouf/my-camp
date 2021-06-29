@@ -20,6 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             child: Row(
               children: [
+                Spacer(),
                 Container(
                   width: 122,
                   height: 122,
@@ -59,16 +60,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
+                Spacer()
               ],
             ),
             margin: EdgeInsets.only(
                 left: MediaQuery.of(context).size.width * 0.071,
                 top: MediaQuery.of(context).size.width * 0.071),
           ),
+    
           Container(
               padding: EdgeInsets.only(top: 10),
               child: Row(
                 children: [
+                  Spacer(),
                   Container(
                       child: OutlinedButton(
                         style: ElevatedButton.styleFrom(
@@ -89,8 +93,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () {},
                         child: Text('Edit Picture'),
                       ),
-                      margin: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.07)),
+                     ),
+                     Spacer(),
                   Container(
                     child: OutlinedButton(
                       style: ElevatedButton.styleFrom(
@@ -117,13 +121,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             MaterialPageRoute(
                                 builder: (context) => NotifPage()));
                       },
+
                       child: Text('Notifications'),
                     ),
+
                   ),
+                  Spacer()
                 ],
               ),
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.08)),
+              ),
           Container(
             child: Text(
               'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',

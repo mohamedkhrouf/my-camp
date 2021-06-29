@@ -13,18 +13,19 @@ class Cont extends StatelessWidget {
             margin: EdgeInsets.only(top: 16),
             child: Row(
               children: [
-                Container(
-                  child: Icon(
-                    Icons.person,
-                    color: Color.fromRGBO(255, 255, 255, 1),
-                  ),
-                  height: 40,
-                  width: 40,
+                Spacer(),
+               
+                 Container(
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
-                      color: Colors.blue[500],
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  margin: EdgeInsets.all(24),
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: AssetImage('assets/mekki.jpg'),
+                        fit: BoxFit.fill),
+                  ),
                 ),
+                Spacer(),
                 Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Column(
@@ -47,6 +48,14 @@ class Cont extends StatelessWidget {
                         ),
                       ],
                     )),
+                    Spacer(),
+                     Spacer(),
+                      Spacer(),
+                       Spacer(),
+                      Spacer(),
+                       Spacer(),
+ Spacer(),
+                  Spacer(),
               ],
             )),
          Container(
