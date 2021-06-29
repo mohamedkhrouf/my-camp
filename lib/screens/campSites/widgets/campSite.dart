@@ -3,49 +3,72 @@ import 'package:flutter/material.dart';
 import 'package:my_camp/screens/campSitePage/mainScreen/campSitePage.dart';
 
 class CampSite extends StatefulWidget {
-
   @override
   _CampSite createState() => _CampSite();
 }
 
 class _CampSite extends State<CampSite> {
   @override
-  Widget build(BuildContext context)
-  {
-    return Container(child: Stack(children:[
+  Widget build(BuildContext context) {
+    return Container(
+        child: Stack(children: [
       Container(
-      width: MediaQuery.of(context).size.width,
-      color: Color.fromRGBO(188, 224, 253,1),
-      margin: EdgeInsets.only(right: 16.0, left:16.0 , bottom:8.0),
-      padding: EdgeInsets.only(right:16.0,left: 16.0,top: 16.0,bottom: 36.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(child:Text("esm l blasa")),
-          Container(child:Text("location")),
-          Container(child:Text("text twilllllllllllllhdhkgdth,try,rsy,rstnertnrlllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")),
-
-        ],
+        width: MediaQuery.of(context).size.width,
+        color: Color.fromRGBO(188, 224, 253, 1),
+        margin: EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
+        padding:
+            EdgeInsets.only(right: 16.0, left: 16.0, top: 16.0, bottom: 36.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Text(
+                "esm l blasa",
+                style: TextStyle(
+                  color: Color.fromRGBO(0,0,0, 1),
+                  fontSize: 14*1.1,
+                ),
+              ),
+            ),
+            Container(
+              child: Text(
+                "location",
+                style: TextStyle(
+                  color: Color.fromRGBO(0,0,0, 1),
+                   fontSize: 10*1.1,
+                ),
+              ),
+            ),
+            Container(
+                child: Text(
+              "text twilllllllllllllhdhkgdth,try,rsy,rstnertnrlllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",
+              style: TextStyle(
+                color: Color.fromRGBO(0,0,0, 1),
+                 fontSize: 14*1.1,
+              ),
+            )),
+          ],
+        ),
       ),
-    ),
       Positioned(
-
         right: 20.0,
         bottom: 10.0,
-        child:GestureDetector(
-          onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CampSitePage()),
-            );
-          },
-            child:Row(
-          children: [
-            Text("More"),
-            Icon(Icons.arrow_forward)
-          ],
-        )),
+        child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CampSitePage()),
+              );
+            },
+            child: Row(
+              children: [Text("More",
+              style: TextStyle(
+                color: Color.fromRGBO(0,0,0, 1),
+                 fontSize: 14*1.1,
+              ),), Icon(Icons.arrow_forward,
+              color: Color.fromRGBO(0,0,0 ,1),)],
+            )),
       )
     ]));
   }
