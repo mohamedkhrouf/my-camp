@@ -24,7 +24,7 @@ class _CampSite extends State<CampSite> {
         children: [
           Container(child:Text("esm l blasa")),
           Container(child:Text("location")),
-          Container(child:Text("text twillllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")),
+          Container(child:Text("text twilllllllllllllhdhkgdth,try,rsy,rstnertnrlllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")),
 
         ],
       ),
