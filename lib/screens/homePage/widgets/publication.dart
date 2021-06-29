@@ -49,14 +49,21 @@ class Cont extends StatelessWidget {
                     )),
               ],
             )),
-        Container(
-          color: Colors.blue,
-          height: MediaQuery.of(context).size.width * 0.744,
-          width: MediaQuery.of(context).size.width,
-        ),
+         Container(
+            color: Colors.blue,
+            height: MediaQuery.of(context).size.width * 0.744,
+            width: MediaQuery.of(context).size.width,
+            child: Stack(
+              children: [
+                Image.asset(
+                  'assets/mekki.jpg',
+                  height: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fitWidth,
+                ),],),),
         Container(
             color: Color.fromRGBO(255, 255, 255, 1),
-            height: MediaQuery.of(context).size.width * 0.2752,
+        
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(bottom: 16),
             child: Column(
@@ -80,20 +87,18 @@ class Cont extends StatelessWidget {
                 ),
                 margin: EdgeInsets.only(left: 10,top:10),
                 ),
-                Column(
-                  children: [
-                     Container(
+               Container(
                           child: Text(
-                            "name surname lorem ipsum lorem ipsum lorem ipsum lorem lorem  ipsum lorem",
+                            "name surname lorem ipsum lorem ipsum lorem ipsum lorem lorem  ipsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaum lorem",
                             style: TextStyle(fontSize: 20),
                             textAlign: TextAlign.left,
                           ),
-                          margin: EdgeInsets.only(left: 10),
+                        
+                          margin: EdgeInsets.only(left: 10,right: 10),
                         ),
                   ],
                 )
-              ],
-            ))
+           )
       ],
     );
   }

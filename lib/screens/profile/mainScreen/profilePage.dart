@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           Container(
+            width: MediaQuery.of(context).size.width,
             child: Row(
               children: [
                 Container(
@@ -66,6 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 top: MediaQuery.of(context).size.width * 0.071),
           ),
           Container(
+            width:MediaQuery.of(context).size.width,
             padding:EdgeInsets.only(top:10),
               child: Row(
                 children: [

@@ -16,14 +16,14 @@ class _ImagePageState extends State<ImagePage> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 300,
+      height: MediaQuery.of(context).size.width * 0.744,
       margin: EdgeInsets.symmetric(horizontal: 5.0),
-      decoration: BoxDecoration(color: Colors.amber),
+      decoration: BoxDecoration(color: Colors.white),
       child: Image.asset(
         widget.url,
         height: MediaQuery.of(context).size.width,
         width: MediaQuery.of(context).size.width,
-        fit: BoxFit.fitWidth,
+        fit: BoxFit.fitHeight,
       ),
     );
   }
