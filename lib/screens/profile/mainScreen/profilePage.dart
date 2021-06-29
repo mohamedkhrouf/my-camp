@@ -44,8 +44,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        margin: EdgeInsets.only(top: 30.0, left: 40),
+                        /* margin: EdgeInsets.only(top: 30.0, left: 40) */
                       ),
+                      Spacer(),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: Container(
@@ -67,8 +68,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 top: MediaQuery.of(context).size.width * 0.071),
           ),
           Container(
-            width:MediaQuery.of(context).size.width,
-            padding:EdgeInsets.only(top:10),
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(top: 10),
               child: Row(
                 children: [
                   Container(
@@ -137,19 +138,20 @@ class _ProfilePageState extends State<ProfilePage> {
             width: MediaQuery.of(context).size.width * 0.9,
             margin: EdgeInsets.only(top: 10, bottom: 0),
           ),
-         Container(child:ElevatedButton(
-      onPressed: () {},
-      child: Icon(Icons.add, color: Colors.white),
-      style: ElevatedButton.styleFrom(
-        shape: CircleBorder(),
-        padding: EdgeInsets.all(10),
-        
-        primary: Colors.blue, // <-- Button color
-        onPrimary: Colors.red, // <-- Splash color
-      ),
-    ),
-    margin: EdgeInsets.all(10),
-    ),
+          Container(
+            child: ElevatedButton(
+              onPressed: () {},
+              child: Icon(Icons.add, color: Colors.white),
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(10),
+
+                primary: Colors.blue, // <-- Button color
+                onPrimary: Colors.red, // <-- Splash color
+              ),
+            ),
+            margin: EdgeInsets.all(10),
+          ),
           PostPage(),
           PostPage(),
         ],
