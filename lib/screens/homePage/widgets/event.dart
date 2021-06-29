@@ -20,18 +20,19 @@ class _EvPageState extends State<EvPage> {
             margin: EdgeInsets.only(top: 16),
             child: Row(
               children: [
-                Container(
-                  child: Icon(
-                    Icons.person,
-                    color: Color.fromRGBO(255, 255, 255, 1),
-                  ),
-                  height: 40,
-                  width: 40,
+                Spacer(),
+               
+                 Container(
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
-                      color: Colors.blue[500],
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  margin: EdgeInsets.all(24),
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: AssetImage('assets/mekki.jpg'),
+                        fit: BoxFit.fill),
+                  ),
                 ),
+                Spacer(),
                 Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Column(
@@ -54,6 +55,14 @@ class _EvPageState extends State<EvPage> {
                         ),
                       ],
                     )),
+                    Spacer(),
+                     Spacer(),
+                      Spacer(),
+                       Spacer(),
+                      Spacer(),
+                       Spacer(),
+ Spacer(),
+                  Spacer(),
               ],
             )),
         Container(
@@ -87,7 +96,7 @@ class _EvPageState extends State<EvPage> {
                                           bottomRight: Radius.circular(30),
                                           topLeft: Radius.circular(30),
                                           bottomLeft: Radius.circular(30)),
-                                      side: BorderSide(color: Colors.red))),
+                                   )),
                               onPressed: () {
                                 setState(() {
                                   clicked = !clicked;
@@ -114,7 +123,7 @@ class _EvPageState extends State<EvPage> {
                                             bottomLeft: Radius.circular(30),
                                             topRight: Radius.circular(30),
                                             bottomRight: Radius.circular(30)),
-                                        side: BorderSide(color: Colors.red))),
+                                        )),
                               ),
                               onPressed: () => {
                                 Navigator.push(
@@ -131,46 +140,44 @@ class _EvPageState extends State<EvPage> {
                         top: MediaQuery.of(context).size.width * 0.744 * 0.75)),
               ],
             )),
-        Container(
+       Container(
             color: Color.fromRGBO(255, 255, 255, 1),
-            height: MediaQuery.of(context).size.width * 0.2752,
+        
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(bottom: 16),
             child: Column(
               children: [
-                Container(
-                  child: Row(
-                    children: [
-                      Container(
-                          child: Icon(
-                            Icons.favorite,
-                            color: Color.fromRGBO(2, 255, 255, 1),
-                          ),
-                          margin: EdgeInsets.only(right: 20)),
-                      Container(
-                        child: Icon(
-                          Icons.add_comment,
-                          color: Color.fromRGBO(2, 255, 255, 1),
-                        ),
-                      )
-                    ],
-                  ),
-                  margin: EdgeInsets.only(left: 10, top: 10),
-                ),
-                Column(
+                Container(child:
+                Row(
                   children: [
-                    Container(
-                      child: Text(
-                        "name surname lorem ipsum lorem ipsum lorem ipsum lorem lorem  ipsum lorem",
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.left,
-                      ),
-                      margin: EdgeInsets.only(left: 10),
+                   Container(child:
+                    Icon(
+                      Icons.favorite,
+                      color: Color.fromRGBO(2, 255, 255, 1),
+
                     ),
+                    margin:EdgeInsets.only(right:20)),
+                    Container(child:
+                    Icon(
+                      Icons.add_comment,
+                      color: Color.fromRGBO(2, 255, 255, 1),
+                    ),)
+                  ],
+                ),
+                margin: EdgeInsets.only(left: 10,top:10),
+                ),
+               Container(
+                          child: Text(
+                            "name surname lorem ipsum lorem ipsum lorem ipsum lorem lorem  ipsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaum lorem",
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.left,
+                          ),
+                        
+                          margin: EdgeInsets.only(left: 10,right: 10),
+                        ),
                   ],
                 )
-              ],
-            ))
+           )
       ],
     );
   }
