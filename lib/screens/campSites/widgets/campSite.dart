@@ -24,7 +24,7 @@ class _CampSite extends State<CampSite> {
           children: [
             Container(
               child: Text(
-                "esm l blasa",
+                "Lorem Ipsum",
                 style: TextStyle(
                   color: Color.fromRGBO(0,0,0, 1),
                   fontSize: 14*1.1,
@@ -33,7 +33,7 @@ class _CampSite extends State<CampSite> {
             ),
             Container(
               child: Text(
-                "location",
+                "25.00,-38.36",
                 style: TextStyle(
                   color: Color.fromRGBO(0,0,0, 1),
                    fontSize: 10*1.1,
@@ -42,7 +42,7 @@ class _CampSite extends State<CampSite> {
             ),
             Container(
                 child: Text(
-              "text twilllllllllllllhdhkgdth,try,rsy,rstnertnrlllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
               style: TextStyle(
                 color: Color.fromRGBO(0,0,0, 1),
                  fontSize: 14*1.1,
