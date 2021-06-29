@@ -18,7 +18,6 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width,
             child: Row(
               children: [
                 Container(
@@ -31,8 +30,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         fit: BoxFit.fill),
                   ),
                 ),
+                Spacer(),
                 Container(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.5,
@@ -44,9 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        /* margin: EdgeInsets.only(top: 30.0, left: 40) */
                       ),
-                      Spacer(),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: Container(
@@ -55,8 +55,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               maxLines: 3,
                               style: TextStyle(fontSize: 15)),
                         ),
-                        margin: EdgeInsets.only(
-                            top: 10.0, bottom: 16.0, right: 16.0, left: 16.0),
                       ),
                     ],
                   ),
@@ -68,7 +66,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 top: MediaQuery.of(context).size.width * 0.071),
           ),
           Container(
-              width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(top: 10),
               child: Row(
                 children: [
