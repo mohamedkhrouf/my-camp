@@ -5,14 +5,8 @@ import 'package:my_camp/screens/discussion/mainScreen/discussion.dart';
 class Notif extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Discussion()),
-          );
-        },
-        child: Container(
+    return  Container(
+         width:  MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 16),
           color: Color.fromRGBO(241,249,255,1),
           padding: EdgeInsets.only(top:16.0,bottom: 16.0,left:16.0),
@@ -81,6 +75,6 @@ class Notif extends StatelessWidget {
               ))
             ],
           ),
-        ));
+        );
   }
 }
