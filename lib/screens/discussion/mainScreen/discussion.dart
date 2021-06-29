@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:my_camp/screens/discussion/widgets/chatMessage.dart';
 import 'package:my_camp/screens/tasks/mainScreen/tasks.dart';
 
@@ -9,6 +10,13 @@ class Discussion extends StatefulWidget {
 }
 
 class _Discussion extends State<Discussion> {
+  Future getImage() async {
+    List<Media> res = await ImagesPicker.pick(
+
+      count: 3,
+      pickType: PickType.image,
+    );
+  }
   var messages = [
     ChatMessage(
       message:
@@ -124,20 +132,19 @@ class _Discussion extends State<Discussion> {
                       )),
                       Container(
                           margin: EdgeInsets.only(left: 5),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                allTasks.add(new TaskModel(
-                                    taskName: taskController.text,
-                                    state: true));
-                              });
-                            },
-                            child: Icon(
-                              Icons.send,
+
+                            child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    getImage();
+                                  });
+                                },
+                                child:Icon(
+                                Icons.send,
                               color: Colors.blue,
                               size: 40,
-                            ),
-                          )),
+                            )),
+                          ),
                     ]))),
           ])),
     );
