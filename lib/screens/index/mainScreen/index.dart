@@ -5,7 +5,7 @@ import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
 import 'package:my_camp/screens/myEvents/mainScreen/myEvents.dart';
 import 'package:my_camp/screens/profile/mainScreen/profilePage.dart';
 
-
+import 'package:my_camp/screens/loginPage/mainScreen/loginPage.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -18,10 +18,7 @@ class _IndexState extends State<Index> {
 
     MyEvents(),
     CampSites(),
-    Center(
-      child: Text("Camp "),
-    ),
- 
+   LoginScreen(),
    ProfilePage(),
   ];
   var _currentIndex = 0;
