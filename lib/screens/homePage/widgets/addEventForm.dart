@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'campSitesList.dart';
+
 class AddEventForm extends StatefulWidget {
   @override
   _AddEventForm createState() => _AddEventForm();
@@ -119,6 +121,10 @@ class _AddEventForm extends State<AddEventForm> {
             ),
             GestureDetector(
                 onTap:  (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CampSitesList()),
+                  );
                 }
                 ,
                 child:ListTile(
