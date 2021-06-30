@@ -18,7 +18,7 @@ class _IndexState extends State<Index> {
 
     MyEvents(),
     CampSites(),
-   LoginPage(),
+   LoginScreen(),
    ProfilePage(),
   ];
   var _currentIndex = 0;
