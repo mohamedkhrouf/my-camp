@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_camp/screens/homePage/widgets/addEventForm.dart';
 import 'package:my_camp/screens/homePage/widgets/event.dart';
 import 'package:my_camp/screens/homePage/widgets/publication.dart';
 
@@ -9,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   var publication = true;
   var event = false;
 
@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 70.0, bottom: 30.0),
+            margin: EdgeInsets.only(top: 30.0, bottom: 16.0),
             child: (publication || event)
                 ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     OutlinedButton(
@@ -29,10 +29,10 @@ class _HomePageState extends State<HomePage> {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        bottomLeft: Radius.circular(30)),
-                                    side: BorderSide(color: Colors.red))),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              bottomLeft: Radius.circular(30)),
+                        )),
                       ),
                       onPressed: () {
                         setState(() {
@@ -49,10 +49,10 @@ class _HomePageState extends State<HomePage> {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        bottomRight: Radius.circular(30)),
-                                    side: BorderSide(color: Colors.red))),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(30),
+                              bottomRight: Radius.circular(30)),
+                        )),
                       ),
                       onPressed: () => {
                         setState(() {
@@ -71,10 +71,10 @@ class _HomePageState extends State<HomePage> {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        bottomLeft: Radius.circular(30)),
-                                    side: BorderSide(color: Colors.red))),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              bottomLeft: Radius.circular(30)),
+                        )),
                       ),
                       onPressed: () => {
                         setState(() {
@@ -91,10 +91,10 @@ class _HomePageState extends State<HomePage> {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        bottomRight: Radius.circular(30)),
-                                    side: BorderSide(color: Colors.red))),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(30),
+                              bottomRight: Radius.circular(30)),
+                        )),
                       ),
                       onPressed: () {
                         setState(() {
@@ -106,19 +106,52 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ]),
           ),
-          !publication?Column(children: [
-            Cont(),
-          Cont(),
-          Cont(),
-          Cont()
-          ],):
-          Column(children: [
-            EvPage(),
-          EvPage(),
-          EvPage(),
-          EvPage()
-          ],)
-         
+          !publication
+              ? Column(
+                  children: [Cont(), Cont(), Cont(), Cont()],
+                )
+              : Column(children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 16.0),
+                    child: Row(children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 10.0),
+                      child: CircleAvatar(
+                        radius: 25.0,
+                        backgroundImage: NetworkImage("assets/mekki.jpg"),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    ),
+                    new Flexible(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddEventForm()),
+                          );
+                        },
+                        child: SizedBox(
+
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0,top: 4.2),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.0),
+                                border: Border.all(color: Colors.black)),
+                            child: Text(
+                              'Add a new event...',
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ])),
+                  Column(
+                    children: [EvPage(), EvPage(), EvPage(), EvPage()],
+                  )
+                ])
         ],
       ),
     );

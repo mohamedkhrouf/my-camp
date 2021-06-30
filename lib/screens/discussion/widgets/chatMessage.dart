@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 enum MessageType { sent, received }
 
 class ChatMessage extends StatelessWidget {
@@ -77,8 +78,24 @@ Widget build(BuildContext context) {
     child: Column(
       crossAxisAlignment: messageAlignment(),
       children: [
+
+        Row(
+            mainAxisSize: MainAxisSize.min,
+            children:[
+        (messageType == null || messageType == MessageType.received) ?
         Container(
-          constraints: BoxConstraints(minWidth: minWidth ?? 100.0, maxWidth: maxWidth ?? 250.0),
+            height: 30,
+            width: 30,
+            margin: EdgeInsets.only(right: 10),
+            decoration: new BoxDecoration(
+              color: Colors.blue,
+              shape: BoxShape.circle,
+            ),
+          child: Icon(Icons.person),
+        ): Container(),
+
+        Container(
+          constraints: BoxConstraints(minWidth: minWidth ?? 100.0, maxWidth: maxWidth ?? MediaQuery.of(context).size.width*0.55),
           decoration: BoxDecoration(
             color: backgroundColor ?? messageBgColor(context),
             borderRadius: BorderRadius.only(
@@ -99,6 +116,21 @@ Widget build(BuildContext context) {
               fontWeight: FontWeight.w500,
             ),
           ),
+        ),
+          (messageType == MessageType.sent) ?
+          Container(
+            height: 30,
+            width: 30,
+            margin: EdgeInsets.only(left: 10),
+            decoration: new BoxDecoration(
+              color: Colors.blue,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.person),
+          )
+              : Container()
+
+        ]
         ),
         Padding(
           padding: const EdgeInsets.symmetric(

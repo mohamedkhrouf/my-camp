@@ -15,7 +15,8 @@ class _EvPageState extends State<EvPage> {
       children: [
         Container(
             color: Color.fromRGBO(188, 224, 253, 1),
-            height: MediaQuery.of(context).size.width * 0.2311,
+            padding: EdgeInsets.only(top:16.0,bottom: 16.0),
+
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(top: 16),
             child: Row(
@@ -23,19 +24,19 @@ class _EvPageState extends State<EvPage> {
                 Spacer(),
                
                  Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: AssetImage('assets/mekki.jpg'),
-                        fit: BoxFit.fill),
+                  child: CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage:
+                    NetworkImage("assets/mekki.jpg"),
+                    backgroundColor: Colors.transparent,
                   ),
                 ),
                 Spacer(),
                 Container(
-                    margin: EdgeInsets.only(top: 20),
+                    
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           child: Text(
