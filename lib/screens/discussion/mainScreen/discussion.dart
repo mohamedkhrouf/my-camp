@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:my_camp/screens/discussion/widgets/chatMessage.dart';
 import 'package:my_camp/screens/tasks/mainScreen/tasks.dart';
 
@@ -13,14 +14,14 @@ class _Discussion extends State<Discussion> {
   var messages = [
     ChatMessage(
       message:
-          "ejri ejri ya mohamed l9it jara luizfdh,jdt,dtnsrnsrtnsrtyjtujtjkyultli",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       messageType: MessageType.sent,
     ),
     ChatMessage(
       time: "20:15",
       showTime: true,
     ),
-    ChatMessage(),
+    ChatMessage(message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",),
     ChatMessage(),
     ChatMessage(),
     ChatMessage(
@@ -41,7 +42,7 @@ class _Discussion extends State<Discussion> {
     ChatMessage(),
   ];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final taskController = TextEditingController();
+  final messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +94,7 @@ class _Discussion extends State<Discussion> {
           child: Column(children: [
             Expanded(
                 child: SingleChildScrollView(
+                  reverse: true,
                     child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: messages.length,
@@ -115,29 +117,34 @@ class _Discussion extends State<Discussion> {
                               print("hrgnrs");
                             });
                           },
-                          child:Icon(
+                          child:Container(
+
+                              child:Icon(
                             Icons.image,
                             color: Colors.blue,
                             size: 40,
-                          )),
+                          ))),
                       new Flexible(
-                          child: TextFormField(
-                        controller: taskController,
+                          child:Container(
+                              height: 35 ,
+                              child: TextFormField(
+                        controller: messageController,
                         decoration: const InputDecoration(
                             hintText: 'Enter your message',
                             contentPadding: EdgeInsets.only(left: 15.0),
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(90.0))),
-                            prefixIcon: Icon(Icons.search)),
-                      )),
+                            ),
+                      ))),
                       Container(
                           margin: EdgeInsets.only(left: 5),
 
                             child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-
+                                        messages.add(ChatMessage(message: messageController.text,messageType: MessageType.sent,));
+                                        messageController.text="";
                                   });
                                 },
                                 child:Icon(

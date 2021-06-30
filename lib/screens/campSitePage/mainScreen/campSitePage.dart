@@ -65,19 +65,7 @@ class _CampSitePage extends State<CampSitePage> {
               width: MediaQuery.of(context).size.width * 0.9,
               margin: EdgeInsets.only(top: 10, bottom: 0),
             ),
-            Container(child:ElevatedButton(
-              onPressed: () {},
-              child: Icon(Icons.add, color: Colors.white),
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(10),
 
-                primary: Colors.blue, // <-- Button color
-                onPrimary: Colors.red, // <-- Splash color
-              ),
-            ),
-              margin: EdgeInsets.all(10),
-            ),
             PostPage(),
             PostPage(),
           ],

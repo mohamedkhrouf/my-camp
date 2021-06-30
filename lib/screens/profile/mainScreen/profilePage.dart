@@ -22,13 +22,11 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Spacer(),
                 Container(
-                  width: 122,
-                  height: 122,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: AssetImage('assets/mekki.jpg'),
-                        fit: BoxFit.fill),
+                  child: CircleAvatar(
+                    radius: 60.0,
+                    backgroundImage:
+                    NetworkImage("assets/mekki.jpg"),
+                    backgroundColor: Colors.transparent,
                   ),
                 ),
                 Spacer(),
@@ -70,11 +68,13 @@ class _ProfilePageState extends State<ProfilePage> {
     
           Container(
               padding: EdgeInsets.only(top: 10),
-              child: Row(
+              child: Wrap(
                 children: [
                   Spacer(),
                   Container(
-                      child: OutlinedButton(
+                    margin: EdgeInsets.only(right: 16.0,bottom: 16.0),
+
+                    child: OutlinedButton(
                         style: ElevatedButton.styleFrom(
                             side: BorderSide(
                                 width: 3,

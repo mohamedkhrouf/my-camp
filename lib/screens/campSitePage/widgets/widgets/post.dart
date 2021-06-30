@@ -14,6 +14,7 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       child: Stack(children: [
         CarouselSlider(
           options: CarouselOptions(
@@ -58,7 +59,7 @@ class _PostPageState extends State<PostPage> {
               ],
             )),
       ]),
-     margin: EdgeInsets.only(bottom:16),
+     margin: EdgeInsets.only(top:16),
     );
   }
 }
