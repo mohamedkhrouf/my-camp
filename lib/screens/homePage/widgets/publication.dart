@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class Cont extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class Cont extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 30.0,
                     backgroundImage:
-                    NetworkImage("assets/mekki.jpg"),
+                    AssetImage("assets/mekki.jpg"),
                     backgroundColor: Colors.transparent,
                   ),
                  ),
