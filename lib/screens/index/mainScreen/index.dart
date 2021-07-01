@@ -6,7 +6,8 @@ import 'package:my_camp/screens/myEvents/mainScreen/myEvents.dart';
 import 'package:my_camp/screens/profile/mainScreen/profilePage.dart';
 
 import 'package:my_camp/screens/loginPage/mainScreen/loginPage.dart';
-
+import 'package:my_camp/screens/taskPage/mainScreen/taskPage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class Index extends StatefulWidget {
   @override
   _IndexState createState() => _IndexState();
@@ -18,7 +19,7 @@ class _IndexState extends State<Index> {
 
     MyEvents(),
     CampSites(),
-   LoginScreen(),
+   TaskPage(),
    ProfilePage(),
   ];
   var _currentIndex = 0;
@@ -32,7 +33,7 @@ class _IndexState extends State<Index> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.home,
+                FontAwesomeIcons.campground,
                 color: Color.fromRGBO(170, 215, 62, 1),
               ),
               label: "Home",
@@ -40,7 +41,7 @@ class _IndexState extends State<Index> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.group,
+                FontAwesomeIcons.peopleCarry,
                 color: Color.fromRGBO(170, 215, 62, 1),
               ),
               label: "My events",
@@ -48,7 +49,7 @@ class _IndexState extends State<Index> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.map,
+                FontAwesomeIcons.binoculars,
                 color: Color.fromRGBO(170, 215, 62, 1),
               ),
               label: "Camp sites",
@@ -56,7 +57,7 @@ class _IndexState extends State<Index> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.map,
+                FontAwesomeIcons.tasks,
                 color: Color.fromRGBO(170, 215, 62, 1),
               ),
               label: "My tasks",
@@ -64,7 +65,7 @@ class _IndexState extends State<Index> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.person,
+               FontAwesomeIcons.hiking,
                 color: Color.fromRGBO(170, 215, 62, 1),
               ),
               label: "Profile",

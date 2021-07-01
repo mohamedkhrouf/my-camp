@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                       margin: EdgeInsets.only(right: 10.0),
                       child: CircleAvatar(
                         radius: 25.0,
-                        backgroundImage: NetworkImage("assets/mekki.jpg"),
+                        backgroundImage: AssetImage("assets/mekki.jpg"),
                         backgroundColor: Colors.transparent,
                       ),
                     ),
