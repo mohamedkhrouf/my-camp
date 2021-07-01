@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class EvPage extends StatefulWidget {
   @override
   _EvPageState createState() => _EvPageState();
@@ -154,16 +154,16 @@ class _EvPageState extends State<EvPage> {
                 Container(
                   child: Row(
                     children: [
-                      Container(
+                       Container(
                           child: Icon(
-                            Icons.favorite,
-                            color: Color.fromRGBO(2, 255, 255, 1),
+                            FontAwesomeIcons.fire,
+                            color: Color.fromRGBO(0,0,0, 1),
                           ),
                           margin: EdgeInsets.only(right: 20)),
                       Container(
                         child: Icon(
-                          Icons.add_comment,
-                          color: Color.fromRGBO(2, 255, 255, 1),
+                          FontAwesomeIcons.commentDots,
+                          color: Color.fromRGBO(0,0,0, 1),
                         ),
                       )
                     ],

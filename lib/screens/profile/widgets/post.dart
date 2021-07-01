@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
+
 import 'package:my_camp/screens/profile/widgets/image.dart';
 
 class PostPage extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_camp/screens/discussion/mainScreen/discussion.dart';
+
 
 class Notif extends StatelessWidget {
   @override
