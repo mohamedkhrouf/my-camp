@@ -28,12 +28,12 @@ class Notif extends StatelessWidget {
                       Container(
                         child:
                             Text("John Doe ", style: TextStyle(fontSize: 20)),
-                        margin: EdgeInsets.only(right: 30.0),
+                      
                       ),
                       Container(
                         child: Text("San francisco",
                             style: TextStyle(fontSize: 15)),
-                        margin: EdgeInsets.only(right: 30.0),
+                        
                       ),
                     ],
                   )),
@@ -53,7 +53,7 @@ class Notif extends StatelessWidget {
                           onPrimary: Colors.red, // <-- Splash color
                         ),
                       ),
-                      margin: EdgeInsets.only(left:10),
+                      
                       ),
                       Container(child:
                       ElevatedButton(
@@ -65,7 +65,7 @@ class Notif extends StatelessWidget {
                           primary: Colors.grey, // <-- Button color
                         ),
                       ),
-                      margin: EdgeInsets.only(right:5 ),
+                     
                       ),
                     
                     ],
