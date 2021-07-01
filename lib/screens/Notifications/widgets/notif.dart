@@ -42,6 +42,7 @@ class Notif extends StatelessWidget {
                 child: Container(
                   child: Row(
                     children: [
+                      Spacer(),
                         Container(child:ElevatedButton(
                         onPressed: () {},
                         child: Icon(Icons.check_sharp, color: Colors.white),
@@ -69,7 +70,7 @@ class Notif extends StatelessWidget {
                     
                     ],
                   ),
-                margin:  EdgeInsets.only(left: 55),
+                
                 ),
                 alignment: Alignment.bottomRight,
               ))
