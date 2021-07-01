@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_camp/screens/profile/widgets/image.dart';
 
 class PostPage extends StatefulWidget {
@@ -77,20 +77,21 @@ Container(
                 Container(child:
                 Row(
                   children: [
-                   Container(child:
-                    Icon(
-                      Icons.favorite,
-                      color: Color.fromRGBO(2, 255, 255, 1),
+                    Container(
 
-                    ),
-                    margin:EdgeInsets.only(right:20)),
-                    Container(child:
-                    Icon(
-                      Icons.add_comment,
-                      color: Color.fromRGBO(2, 255, 255, 1),
-                    ),)
-                  ],
-                ),
+                          child: Icon(
+                            FontAwesomeIcons.fire,
+                            color: Color.fromRGBO(0,0,0, 1),
+                          ),
+                          margin: EdgeInsets.only(right: 20)),
+                      Container(
+                        child: Icon(
+                          FontAwesomeIcons.commentDots,
+                          color: Color.fromRGBO(0,0,0, 1),
+                        ),
+                      )
+                  ]), 
+                
                 margin: EdgeInsets.only(left: 10,top:10),
                 ),
                Container(

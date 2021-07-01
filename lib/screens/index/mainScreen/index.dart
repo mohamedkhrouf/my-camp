@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:my_camp/screens/campSites/mainScreen/campSites.dart';
 
 import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
+import 'package:my_camp/screens/myEvents/mainScreen/myEvents.dart';
 
 import 'package:my_camp/screens/profile/mainScreen/profilePage.dart';
 
 import 'package:my_camp/screens/taskPage/mainScreen/taskPage.dart';
-import 'package:my_camp/screens/postImage/mainScreen/postImage.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Index extends StatefulWidget {
@@ -17,7 +18,7 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
   var tabs = [
     HomePage(),
-    PostImage(),
+    MyEvents(),
     CampSites(),
     TaskPage(),
     ProfilePage(),
