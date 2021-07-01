@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_camp/screens/homePage/widgets/addEventForm.dart';
+import 'package:my_camp/screens/addEventFormPage/mainScreen/addEventForm.dart';
 import 'package:my_camp/screens/homePage/widgets/event.dart';
 import 'package:my_camp/screens/homePage/widgets/publication.dart';
 

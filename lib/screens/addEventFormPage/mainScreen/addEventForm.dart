@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
+import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
 
-import 'campSitesList.dart';
+import '../../homePage/widgets/campSitesList.dart';
 
 class AddEventForm extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class AddEventForm extends StatefulWidget {
 }
 
 class _AddEventForm extends State<AddEventForm> {
-
+  List<Widget> chosenImages = [];
   final descriptionController = TextEditingController();
   DateTime firstDate = DateTime.now();
   DateTime selectedCampingDate = DateTime.now();
@@ -62,9 +63,9 @@ class _AddEventForm extends State<AddEventForm> {
       body:Container(
           padding : EdgeInsets.only(top: 32.0),
           margin: EdgeInsets.only(left: 16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+         // mainAxisAlignment: MainAxisAlignment.start,
+          //crossAxisAlignment: CrossAxisAlignment.start,
           children:[
             Container(
               child: Text("Hello username",
@@ -97,6 +98,26 @@ class _AddEventForm extends State<AddEventForm> {
             ListTile(
               leading: Icon(FontAwesomeIcons.images,color: Colors.green,),
               title: Text("Choose an image"),
+            ),
+            Container(
+              child:Wrap(
+                  spacing: 8.0,
+                  children: [
+                    (chosenImages.length<6) ?
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          chosenImages.add(ImageContainer());
+                        });
+                      },
+                      child:AddImage() ,
+                    )
+                    :
+                    Container(),
+                    ...chosenImages,
+                  ],
+                ),
+
             ),
             GestureDetector(
               onTap:  (){
