@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/campSites/mainScreen/campSites.dart';
 
@@ -24,7 +25,6 @@ class _IndexState extends State<Index> {
     ProfilePage(),
   ];
   var _currentIndex = 0;
-
   @override
   Widget build(BuildContext buildContext) {
     return Scaffold(
