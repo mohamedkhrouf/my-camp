@@ -84,7 +84,21 @@ class _AddEventForm extends State<AddEventForm> {
             icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
             onPressed: () => Navigator.of(context).pop(),
           ),
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0,top: 20),
+              child: GestureDetector(
+                onTap: () {},
+                child: Text(
+                  "Publish",
+                  style: TextStyle(
+                      color:Color.fromRGBO(170, 215, 62, 1),
 
+                  ),
+                )
+              )
+          ),
+        ],
 
         ),
       body:Container(
