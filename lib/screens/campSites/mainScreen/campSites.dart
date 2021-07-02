@@ -21,40 +21,43 @@ class _CampSites extends State<CampSites> {
                   key: _formKey,
                   child: Container(
                       margin: EdgeInsets.all(16.0),
-
-                      child:Row (children:[
-                        new Flexible(child: TextFormField(
+                      child: Row(children: [
+                        new Flexible(
+                            child: TextFormField(
                           decoration: const InputDecoration(
                               hintText: 'Enter your task',
                               contentPadding: EdgeInsets.only(left: 15.0),
                               border: OutlineInputBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(90.0))),
+                                      BorderRadius.all(Radius.circular(90.0))),
                               prefixIcon: Icon(Icons.search)),
-
-                        )
-                        ),
-                           ]
-                      )
-                  )
-              ),
+                        )),
+                      ]))),
               CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
               CampSite(),
-              CampSite(),              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
+              CampSite(),
               CampSite(),
               CampSite(),
             ],
@@ -64,16 +67,15 @@ class _CampSites extends State<CampSites> {
             right: 15.0,
             bottom: 10.0,
             child: ElevatedButton(
-                onPressed: null,
-                child: Icon(Icons.add),
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(30),
-                  primary: Colors.blue, // <-- Button color
-                  onPrimary: Colors.red, // <-- Splash color
-                ),
-            )
-        ),
+              onPressed: null,
+              child: Icon(Icons.add),
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(30),
+                primary: Colors.blue, // <-- Button color
+                onPrimary: Colors.red, // <-- Splash color
+              ),
+            )),
       ],
     );
   }

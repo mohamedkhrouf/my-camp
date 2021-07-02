@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "787686171836",
+    "firebase_url": "https://my-camp-acfe1-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "my-camp-acfe1",
+    "storage_bucket": "my-camp-acfe1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787686171836:android:24f72a4d3968ec6108dcb9",
+        "android_client_info": {
+          "package_name": "com.example.my_camp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787686171836-ivtgo6pgoeecj4hej2d8srtqgal1vi5g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH2peeNhnelKB0XzyaW2pgYiN1QkLn0sU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787686171836-ivtgo6pgoeecj4hej2d8srtqgal1vi5g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "787686171836-9ffc7iu0j4pnbigsh9tgnshsrfr3jubq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.stage.myCamp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787686171836:android:353ce70f0632947908dcb9",
+        "android_client_info": {
+          "package_name": "com.stage.myCamp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787686171836-ivtgo6pgoeecj4hej2d8srtqgal1vi5g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH2peeNhnelKB0XzyaW2pgYiN1QkLn0sU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787686171836-ivtgo6pgoeecj4hej2d8srtqgal1vi5g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "787686171836-9ffc7iu0j4pnbigsh9tgnshsrfr3jubq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.stage.myCamp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

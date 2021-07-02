@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import "package:latlong2/latlong.dart";
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -11,26 +11,24 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar:PreferredSize(
-            preferredSize: const Size.fromHeight(40),
-            child: Container(
-              child:Row(children: [
-                  Container(
-                    child: OutlinedButton(
+       appBar:AppBar(
+         backgroundColor: Color.fromRGBO(36, 34, 47, 1),
+            
+            leading: IconButton(
+              
                         onPressed:(){ Navigator.pop(context);},
-                        child: Icon(Icons.arrow_back),
-                       style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: Colors.white),)
+                        icon: Icon(Icons.arrow_back,color: Color.fromRGBO(170, 215, 62, 1),),
+                       
                     ),
 
                   ),
-                  Text("Events", style: TextStyle(fontSize: 20),)
-              ],
-            ),
-              padding: EdgeInsets.all(0),
-            )
+             
+              
+            
+             
+            
 
-        ) ,
+        
       body: 
    
         FlutterMap(
@@ -53,7 +51,7 @@ class _MapPageState extends State<MapPage> {
                     height: 18.0,
                     width: 18.0,
                     child: Icon(
-                      Icons.add_location,
+                      FontAwesomeIcons.mapMarkerAlt,
                       color: Color.fromRGBO(128, 0, 32, 1),
                     ),
                   ),
