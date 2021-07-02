@@ -23,21 +23,20 @@ class _Group extends State<Group> {
             MaterialPageRoute(builder: (context) => Discussion()),
           );
         },
-        child: Stack(children: [
+        child: Container(child:Stack(children: [
           Container(
+            
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             margin: EdgeInsets.only(bottom: 30.0),
             child: Row(
 
               children: [
-                Container(
-                  child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: new BoxDecoration(
-                        color: Colors.blue,
-                        shape: BoxShape.circle,
-                      )),
+                 Container(
+                  child: CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: AssetImage("assets/mekki.jpg"),
+                    backgroundColor: Colors.transparent,
+                  ),
                 ),
                 Container(
                     padding: EdgeInsets.only(left: 20),
@@ -58,6 +57,7 @@ class _Group extends State<Group> {
 
               ],
             ),
+            
           ),
           Positioned(
               right: 10,
@@ -65,8 +65,13 @@ class _Group extends State<Group> {
               child: Container(
                 margin: EdgeInsets.only(top: 30),
                 child: Text("Pending..."),
+               
               )
           )
-        ],));
+        ],),
+        
+        ),
+        
+        );
   }
 }
