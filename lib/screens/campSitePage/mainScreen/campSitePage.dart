@@ -14,11 +14,18 @@ class _CampSitePage extends State<CampSitePage> {
   {
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        title: Text("Camp Site"),
+        backgroundColor: Color.fromRGBO(36, 34, 47, 1)
+        ,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+            "CampSite",
+            style: TextStyle(
+              color: Color.fromRGBO(170, 215, 62, 1)
+            ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
