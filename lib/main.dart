@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:my_camp/screens/addEventFormPage/mainScreen/addEventForm.dart';
 
 import 'screens/index/mainScreen/index.dart';
+GetIt getIt = GetIt.instance;
 
 void main() {
+  getIt.registerSingleton<AddEventForm>(AddEventForm(),);
   runApp(MyApp());
 }
 
