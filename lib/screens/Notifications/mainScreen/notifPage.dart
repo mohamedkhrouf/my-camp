@@ -16,7 +16,17 @@ class NotifPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar:PreferredSize(
+       appBar:AppBar(
+         backgroundColor: Color.fromRGBO(36, 34, 47, 1)
+         ,
+         leading: IconButton(
+           icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
+           onPressed: () => Navigator.of(context).pop(),
+         ),
+       ),
+
+
+       /*PreferredSize(
             preferredSize: const Size.fromHeight(40),
             child: Container(
               child:Row(children: [
@@ -35,7 +45,7 @@ class NotifPage extends StatelessWidget {
               padding: EdgeInsets.all(0),
             )
 
-        ) ,
+        ) ,*/
       body: 
    SingleChildScrollView(
      child: Column(children: [

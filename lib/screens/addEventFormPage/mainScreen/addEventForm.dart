@@ -1,18 +1,45 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../../homePage/widgets/campSitesList.dart';
 
 class AddEventForm extends StatefulWidget {
+
   @override
   _AddEventForm createState() => _AddEventForm();
+
+
 }
 
 class _AddEventForm extends State<AddEventForm> {
-  List<Widget> chosenImages = [];
+    List chosenImages = [];
+    void deleteImage(int index) {
+      setState(() {
+          chosenImages.removeAt(index);
+      });
+
+    }
+
+  File _image ;
+  final _picker = ImagePicker();
+  Future getImage() async {
+    final image = await _picker.getImage(source:ImageSource.gallery);
+    setState(() {
+      _image=File(image.path);
+
+
+      chosenImages.add(
+          image.path
+
+        //ImageContainer(imagePath: _image.path,index: chosenImages.length,deleteImage: deleteImage,          )
+      );
+    });
+  }
   final descriptionController = TextEditingController();
   DateTime firstDate = DateTime.now();
   DateTime selectedCampingDate = DateTime.now();
@@ -57,7 +84,21 @@ class _AddEventForm extends State<AddEventForm> {
             icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
             onPressed: () => Navigator.of(context).pop(),
           ),
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0,top: 20),
+              child: GestureDetector(
+                onTap: () {},
+                child: Text(
+                  "Publish",
+                  style: TextStyle(
+                      color:Color.fromRGBO(170, 215, 62, 1),
 
+                  ),
+                )
+              )
+          ),
+        ],
 
         ),
       body:Container(
@@ -106,15 +147,18 @@ class _AddEventForm extends State<AddEventForm> {
                     (chosenImages.length<6) ?
                     GestureDetector(
                       onTap: (){
-                        setState(() {
-                          chosenImages.add(ImageContainer());
-                        });
+                        getImage();
+
                       },
                       child:AddImage() ,
                     )
                     :
                     Container(),
-                    ...chosenImages,
+                    ...chosenImages.asMap().entries.map((e)
+                    {
+                      return ImageContainer(imagePath: e.value,index: e.key,deleteImage: deleteImage,) as Widget;
+                    }
+                    ),
                   ],
                 ),
 

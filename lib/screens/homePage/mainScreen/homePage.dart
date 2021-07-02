@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
                 ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     OutlinedButton(
                       style: ButtonStyle(
+                        
                         padding: MaterialStateProperty.all(EdgeInsets.only(
                             top: 15, bottom: 15, left: 30, right: 30)),
                         shape:
