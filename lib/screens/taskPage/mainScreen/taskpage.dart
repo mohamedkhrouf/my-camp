@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/taskPage/widgets/task.dart';
-import 'package:my_camp/screens/taskPage/widgets/tasksAppBar.dart';
 
 class TaskModel {
   TaskModel({this.taskName, this.state});

@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/Notifications/mainScreen/notifPage.dart';
-import 'package:my_camp/screens/homePage/widgets/event.dart';
-import 'package:my_camp/screens/homePage/widgets/publication.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:my_camp/screens/postImage/mainScreen/postImage.dart';
+
 import 'package:my_camp/screens/profile/widgets/post.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -143,7 +142,12 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Container(
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                 Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PostImage()));
+              },
               child: Icon(Icons.add, color: Colors.white),
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),

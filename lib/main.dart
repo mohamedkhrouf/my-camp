@@ -1,19 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:my_camp/screens/addEventFormPage/mainScreen/addEventForm.dart';
 
 import 'screens/index/mainScreen/index.dart';
-GetIt getIt = GetIt.instance;
 
 void main() {
-  getIt.registerSingleton<AddEventForm>(AddEventForm(),);
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-
+  final Future<FirebaseApp> _fb = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,6 +28,19 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: Index());
+        home: FutureBuilder(
+            future: _fb,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                print('You have an error ! ${snapshot.error.toString()}');
+                return Text('Something went wrong!');
+              } else if (snapshot.hasData) {
+                return Index();
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }));
   }
 }
