@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_camp/services/singup.dart';
 
 import 'screens/index/mainScreen/index.dart';
 
@@ -35,7 +37,17 @@ class MyApp extends StatelessWidget {
                 print('You have an error ! ${snapshot.error.toString()}');
                 return Text('Something went wrong!');
               } else if (snapshot.hasData) {
-                return Index();
+                return FutureBuilder<User>(
+                    builder: (BuildContext context, AsyncSnapshot<User> snapshot){
+                      if (snapshot.hasData){
+                        User user = snapshot.data; // this is your user instance
+                        /// is because there is user already logged
+                        return Index();
+                      }
+                      /// other way there is no user logged.
+                      return SignUp();
+                    }
+                ) ;
               } else {
                 return Center(
                   child: CircularProgressIndicator(),

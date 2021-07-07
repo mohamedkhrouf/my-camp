@@ -47,7 +47,47 @@ class _Discussion extends State<Discussion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
+      appBar:
+      AppBar(
+        backgroundColor: Color.fromRGBO(36, 34, 47, 1)
+        ,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          "Esml l groupe",
+          style: TextStyle(
+              color: Color.fromRGBO(170, 215, 62, 1)
+          ),
+        ),
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                  onTap: () {},
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Tasks()),
+                      );
+                    },
+                    child: Text("Tasks"),
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.only(right: 16.0, left: 16.0)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ))),
+                  )
+              )
+          ),
+        ],
+      ),
+
+      /* PreferredSize(
           preferredSize: const Size.fromHeight(100),
           child: Container(
             color: Colors.blue,
@@ -88,7 +128,8 @@ class _Discussion extends State<Discussion> {
               ],
             ),
             padding: EdgeInsets.all(16.0),
-          )),
+          )
+      ),*/
       body: Container(
           width: MediaQuery.of(context).size.width,
           child: Column(children: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_camp/screens/addEventFormPage/mainScreen/addEventForm.dart';
 import 'package:my_camp/screens/homePage/widgets/event.dart';
 import 'package:my_camp/screens/homePage/widgets/publication.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final User user =  FirebaseAuth.instance.currentUser;
+    print(user.uid);
     return SingleChildScrollView(
       child: Column(
         children: [
