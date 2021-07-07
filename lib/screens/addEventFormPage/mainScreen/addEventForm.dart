@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
-import 'package:image_picker/image_picker.dart';
+
 import '../../homePage/widgets/campSitesList.dart';
 
 class AddEventForm extends StatefulWidget {
@@ -15,6 +16,11 @@ class AddEventForm extends StatefulWidget {
 
 
 }
+
+
+
+
+
 
 class _AddEventForm extends State<AddEventForm> {
     List chosenImages = [];

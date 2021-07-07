@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/addEventFormPage/mainScreen/addEventForm.dart';
 import 'package:my_camp/screens/homePage/widgets/event.dart';
 import 'package:my_camp/screens/homePage/widgets/publication.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:localstorage/localstorage.dart';
+
+final usersRef = FirebaseFirestore.instance.collection('user');
+final postsRef = FirebaseFirestore.instance.collection('post');
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,11 +17,46 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var publication = true;
   var event = false;
+  List users = [];
+  final posts = new LocalStorage('posts');
+  @override
+  void initState() {
+    usersRef.snapshots().listen((snapshot) {
+      users = snapshot.docs;
+    });
+    print(users);
+    super.initState();
+  }
+
+  getUsers() {
+    usersRef.snapshots().listen((snapshot) {
+      List documents = [];
+      setState(() {
+        documents = snapshot.docs;
+      });
+      documents.forEach((element) {
+        print(element.data()["username"]);
+        documents.add(element.data()["username"]);
+      });
+      print(documents);
+      return documents;
+    });
+  }
+
+  getPosts() {
+    postsRef.snapshots().listen((snapshot) {
+      List documents;
+      setState(() {
+        documents = snapshot.docs;
+      });
+      documents.forEach((element) {
+        print(element.data());
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final User user =  FirebaseAuth.instance.currentUser;
-    print(user.uid);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -27,7 +66,6 @@ class _HomePageState extends State<HomePage> {
                 ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     OutlinedButton(
                       style: ButtonStyle(
-                        
                         padding: MaterialStateProperty.all(EdgeInsets.only(
                             top: 15, bottom: 15, left: 30, right: 30)),
                         shape:
@@ -116,42 +154,42 @@ class _HomePageState extends State<HomePage> {
                 )
               : Column(children: [
                   Container(
-                    margin: EdgeInsets.only(left: 16.0),
-                    child: Row(children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 10.0),
-                      child: CircleAvatar(
-                        radius: 25.0,
-                        backgroundImage: AssetImage("assets/mekki.jpg"),
-                        backgroundColor: Colors.transparent,
-                      ),
-                    ),
-                    new Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddEventForm()),
-                          );
-                        },
-                        child: SizedBox(
-
-                          height: 30,
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Container(
-                            padding: EdgeInsets.only(left: 16.0,top: 4.2),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.0),
-                                border: Border.all(color: Colors.black)),
-                            child: Text(
-                              'Add a new event...',
-                              textAlign: TextAlign.left,
-                            ),
+                      margin: EdgeInsets.only(left: 16.0),
+                      child: Row(children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 10.0),
+                          child: CircleAvatar(
+                            radius: 25.0,
+                            backgroundImage: AssetImage("assets/mekki.jpg"),
+                            backgroundColor: Colors.transparent,
                           ),
                         ),
-                      ),
-                    )
-                  ])),
+                        new Flexible(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddEventForm()),
+                              );
+                            },
+                            child: SizedBox(
+                              height: 30,
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Container(
+                                padding: EdgeInsets.only(left: 16.0, top: 4.2),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    border: Border.all(color: Colors.black)),
+                                child: Text(
+                                  'Add a new event...',
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ])),
                   Column(
                     children: [EvPage(), EvPage(), EvPage(), EvPage()],
                   )
