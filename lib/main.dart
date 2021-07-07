@@ -6,6 +6,7 @@ import 'screens/index/mainScreen/index.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+ 
   runApp(MyApp());
 }
 
