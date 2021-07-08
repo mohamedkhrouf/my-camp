@@ -1,13 +1,13 @@
-
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_camp/screens/index/mainScreen/index.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 import 'package:my_camp/services/login.dart';
 import 'authentication.dart';
-class SignUp extends StatefulWidget {
 
+class SignUp extends StatefulWidget {
   @override
   _SignUp createState() => _SignUp();
 }
@@ -15,10 +15,26 @@ class SignUp extends StatefulWidget {
 class _SignUp extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
 
-  var  emailController = new TextEditingController();
-   var passwordController = new TextEditingController();
+  var emailController = new TextEditingController();
+  var passwordController = new TextEditingController();
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
   var loading = false ;
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
 
   @override
     Widget build(BuildContext context) {
@@ -70,7 +86,7 @@ class _SignUp extends State<SignUp> {
         ),
       );
 
-      final signUp = Padding(
+      final loginButton = Padding(
         padding: EdgeInsets.symmetric(vertical: 16.0),
         child: RaisedButton(
           shape: RoundedRectangleBorder(
@@ -78,9 +94,6 @@ class _SignUp extends State<SignUp> {
           ),
           onPressed: () {
             if(_formKey.currentState.validate()) {
-              setState(() {
-                loading = true ;
-              });
             AuthenticationHelper()
                 .signUp(
                     email: emailController.text,
@@ -88,12 +101,9 @@ class _SignUp extends State<SignUp> {
                 .then((result) {
               if (result == null) {
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => LogIn()));
+                    context, MaterialPageRoute(builder: (context) => Index()));
               } else {
-                setState(() {
-                  loading= false ;
-                });
-                print(result);
+                print("hello");
               }
             });
           }
@@ -105,18 +115,7 @@ class _SignUp extends State<SignUp> {
         ),
       );
 
-      final loginLabel = TextButton(
-        child: Text(
-          'LogIn?',
-          style: TextStyle(color: Colors.black54),
-        ),
-        onPressed: () {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => LogIn()));
-        },
-      );
-
-      final forgotLabel = TextButton(
+      final forgotLabel = FlatButton(
         child: Text(
           'Forgot password?',
           style: TextStyle(color: Colors.black54),
@@ -124,7 +123,7 @@ class _SignUp extends State<SignUp> {
         onPressed: () {},
       );
 
-      return loading ? Loading() : Scaffold(
+      return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
           child: ListView(
@@ -140,8 +139,7 @@ class _SignUp extends State<SignUp> {
         SizedBox(height: 8.0),
         password,
         SizedBox(height: 24.0),
-        signUp,
-        loginLabel,
+        loginButton,
         forgotLabel
       ],
     ),),
