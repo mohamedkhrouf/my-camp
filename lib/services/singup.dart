@@ -3,6 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/index/mainScreen/index.dart';
+import 'package:my_camp/screens/loading/mainScreen/loading.dart';
+import 'package:my_camp/services/login.dart';
 import 'authentication.dart';
 class SignUp extends StatefulWidget {
 
@@ -16,6 +18,7 @@ class _SignUp extends State<SignUp> {
   var  emailController = new TextEditingController();
    var passwordController = new TextEditingController();
 
+  var loading = false ;
 
   @override
     Widget build(BuildContext context) {
@@ -67,7 +70,7 @@ class _SignUp extends State<SignUp> {
         ),
       );
 
-      final loginButton = Padding(
+      final signUp = Padding(
         padding: EdgeInsets.symmetric(vertical: 16.0),
         child: RaisedButton(
           shape: RoundedRectangleBorder(
@@ -75,6 +78,9 @@ class _SignUp extends State<SignUp> {
           ),
           onPressed: () {
             if(_formKey.currentState.validate()) {
+              setState(() {
+                loading = true ;
+              });
             AuthenticationHelper()
                 .signUp(
                     email: emailController.text,
@@ -82,9 +88,12 @@ class _SignUp extends State<SignUp> {
                 .then((result) {
               if (result == null) {
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => Index()));
+                    context, MaterialPageRoute(builder: (context) => LogIn()));
               } else {
-                print("hello");
+                setState(() {
+                  loading= false ;
+                });
+                print(result);
               }
             });
           }
@@ -96,7 +105,18 @@ class _SignUp extends State<SignUp> {
         ),
       );
 
-      final forgotLabel = FlatButton(
+      final loginLabel = TextButton(
+        child: Text(
+          'LogIn?',
+          style: TextStyle(color: Colors.black54),
+        ),
+        onPressed: () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LogIn()));
+        },
+      );
+
+      final forgotLabel = TextButton(
         child: Text(
           'Forgot password?',
           style: TextStyle(color: Colors.black54),
@@ -104,7 +124,7 @@ class _SignUp extends State<SignUp> {
         onPressed: () {},
       );
 
-      return Scaffold(
+      return loading ? Loading() : Scaffold(
         backgroundColor: Colors.white,
         body: Center(
           child: ListView(
@@ -120,7 +140,8 @@ class _SignUp extends State<SignUp> {
         SizedBox(height: 8.0),
         password,
         SizedBox(height: 24.0),
-        loginButton,
+        signUp,
+        loginLabel,
         forgotLabel
       ],
     ),),
