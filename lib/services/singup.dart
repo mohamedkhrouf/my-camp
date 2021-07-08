@@ -17,6 +17,8 @@ class _SignUp extends State<SignUp> {
 
   var emailController = new TextEditingController();
   var passwordController = new TextEditingController();
+  var loading = false ;
+
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -25,7 +27,6 @@ class _SignUp extends State<SignUp> {
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
 
-  var loading = false ;
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
@@ -94,6 +95,9 @@ class _SignUp extends State<SignUp> {
           ),
           onPressed: () {
             if(_formKey.currentState.validate()) {
+            setState(() {
+            loading= true ;
+            });
             AuthenticationHelper()
                 .signUp(
                     email: emailController.text,
@@ -103,6 +107,9 @@ class _SignUp extends State<SignUp> {
                 Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (context) => Index()));
               } else {
+                setState(() {
+                  loading= false ;
+                });
                 print("hello");
               }
             });
@@ -123,7 +130,7 @@ class _SignUp extends State<SignUp> {
         onPressed: () {},
       );
 
-      return Scaffold(
+      return loading ? Loading() :Scaffold(
         backgroundColor: Colors.white,
         body: Center(
           child: ListView(
