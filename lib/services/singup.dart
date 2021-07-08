@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_camp/screens/index/mainScreen/index.dart';
 import 'authentication.dart';
@@ -15,6 +16,18 @@ class _SignUp extends State<SignUp> {
 
   var emailController = new TextEditingController();
   var passwordController = new TextEditingController();
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final AccessToken result = await FacebookAuth.instance.login() as AccessToken;
+
+    // Create a credential from the access token
+    final facebookAuthCredential =
+        FacebookAuthProvider.credential(result.token);
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance
+        .signInWithCredential(facebookAuthCredential);
+  }
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -121,6 +134,22 @@ class _SignUp extends State<SignUp> {
       },
       child: Text('Signup with google'),
     );
+    final loginWithFacebook = ElevatedButton(
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all(
+            EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+        )),
+      ),
+      onPressed: () {
+        print(signInWithFacebook().then((value) => {
+            print(value)
+            }));
+      },
+      child: Text('Signup with Facebook'),
+    );
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
@@ -179,7 +208,8 @@ class _SignUp extends State<SignUp> {
                   SizedBox(height: 24.0),
                   loginButton,
                   forgotLabel,
-                  loginWithGoogle
+                  loginWithGoogle,
+                  loginWithFacebook
                 ],
               ),
             ),
