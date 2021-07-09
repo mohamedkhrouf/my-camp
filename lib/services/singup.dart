@@ -53,8 +53,7 @@ class _SignUp extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     final loginWithGoogle = ElevatedButton(
-
-       style: ElevatedButton.styleFrom(
+        style: ElevatedButton.styleFrom(
             primary: Color.fromRGBO(36, 34, 47, 1),
             padding: EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
             shape: RoundedRectangleBorder(
@@ -72,7 +71,6 @@ class _SignUp extends State<SignUp> {
               }));
         },
         child: Container(
-         
             width: 25,
             height: 35,
             child: Row(children: [
@@ -83,17 +81,12 @@ class _SignUp extends State<SignUp> {
             ])));
 
     final loginWithFacebook = ElevatedButton(
-      
       style: ElevatedButton.styleFrom(
-        primary: Color.fromRGBO(36, 34, 47, 1),
- padding:
-
-            EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
-        shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                 
-        
-      )),
+          primary: Color.fromRGBO(36, 34, 47, 1),
+          padding: EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          )),
       onPressed: () {
         signInWithFacebook().then((value) => {
               if (value.user.emailVerified)
@@ -106,7 +99,27 @@ class _SignUp extends State<SignUp> {
             });
       },
       child: Container(
-         
+          width: 25,
+          height: 35,
+          child: Row(children: [
+            Icon(
+              FontAwesomeIcons.facebookF,
+              color: Color.fromRGBO(170, 215, 62, 1),
+            ),
+          ])),
+    );
+    final logindirect = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          primary: Color.fromRGBO(36, 34, 47, 1),
+          padding: EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          )),
+      onPressed: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Index()));
+      },
+      child: Container(
           width: 25,
           height: 35,
           child: Row(children: [
@@ -243,7 +256,8 @@ class _SignUp extends State<SignUp> {
                       loginWithFacebook,
                       Spacer(),
                       Spacer(),
-                      Spacer()
+                      Spacer(),
+                      logindirect
                     ],
                   )
                 ],

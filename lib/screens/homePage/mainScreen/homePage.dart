@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:my_camp/screens/addEventFormPage/mainScreen/addEventForm.dart';
 import 'package:my_camp/screens/homePage/widgets/event.dart';
 import 'package:my_camp/screens/homePage/widgets/publication.dart';
-import 'package:localstorage/localstorage.dart';
-
-final usersRef = FirebaseFirestore.instance.collection('user');
-final postsRef = FirebaseFirestore.instance.collection('post');
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,43 +11,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List eventList = [];
   var publication = true;
   var event = false;
-  List users = [];
-  final posts = new LocalStorage('posts');
+
   @override
   void initState() {
-    usersRef.snapshots().listen((snapshot) {
-      users = snapshot.docs;
-    });
-    print(users);
     super.initState();
+    getEvents();
   }
 
-  getUsers() {
-    usersRef.snapshots().listen((snapshot) {
-      List documents = [];
-      setState(() {
-        documents = snapshot.docs;
-      });
-      documents.forEach((element) {
-        print(element.data()["username"]);
-        documents.add(element.data()["username"]);
-      });
-      print(documents);
-      return documents;
-    });
-  }
+  List getEvents() {
+    List documents;
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('event');
 
-  getPosts() {
-    postsRef.snapshots().listen((snapshot) {
-      List documents;
-      setState(() {
-        documents = snapshot.docs;
-      });
-      documents.forEach((element) {
-        print(element.data());
-      });
+    collectionReference.snapshots().listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          eventList = snapshot.docs;
+          //print(documents[3].data());
+          // usersList = snapshot.docs;
+        });
+      }
     });
   }
 
@@ -191,7 +173,12 @@ class _HomePageState extends State<HomePage> {
                         )
                       ])),
                   Column(
-                    children: [EvPage(), EvPage(), EvPage(), EvPage()],
+                    children: [
+                      ...eventList.map((e) {
+                        return EvPage(data: e.data());
+                      }),
+                     
+                    ],
                   )
                 ])
         ],

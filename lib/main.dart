@@ -6,9 +6,9 @@ import 'package:my_camp/services/singup.dart';
 
 import 'screens/index/mainScreen/index.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
+ await Firebase.initializeApp();
   runApp(MyApp());
 }
 
