@@ -164,7 +164,7 @@ var error = "" ;
             loginButton,
             signUpLabel,
 
-            (error == "" || error== null )? Container() : Text(error, style: TextStyle(color: Colors.red,fontSize: 30),),
+            (error == "" || error== null )? Container() : Text(error, style: TextStyle(color: Colors.red,),),
           ],
         ),
       ),

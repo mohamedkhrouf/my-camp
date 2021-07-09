@@ -1,6 +1,7 @@
 
 
 import 'package:email_auth/email_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,15 +21,13 @@ class _VerifyOtp extends State<VerifyOtp> {
 
   var  otpController = new TextEditingController();
   var loading = false ;
-  void verifyOtp() {
+   verifyOtp() async {
+    setState(() {
+      loading= true ;
+    });
     EmailAuth.sessionName = "test session" ;
     var res =  EmailAuth.validate(receiverMail: widget.email, userOTP: otpController.text);
-    if(res){
-        print("redirect to change password");
-    }else
-    {
-        print("invalid otp");
-    }
+    return res ;
   }
 
 
@@ -43,7 +42,7 @@ class _VerifyOtp extends State<VerifyOtp> {
       ),
     );
 
-    final email = TextFormField(
+    final otpCode = TextFormField(
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter your code';
@@ -83,7 +82,23 @@ class _VerifyOtp extends State<VerifyOtp> {
         ),
         onPressed: () {
           if(_formKey.currentState.validate()) {
-            verifyOtp();
+            setState(() {
+              loading=true ;
+            });
+            verifyOtp().then((result)
+            {
+              if(result){
+                FirebaseAuth.instance.sendPasswordResetEmail(email: widget.email);
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => LogIn()));
+              }else
+              {
+                setState(() {
+                  loading=false ;
+                });
+              }
+            }
+            );
           }
         },
         padding: EdgeInsets.all(12),
@@ -111,7 +126,7 @@ class _VerifyOtp extends State<VerifyOtp> {
             Form(
               key: _formKey,child: Column(
               children: [
-                email,
+                otpCode,
 
                 SizedBox(height: 24.0),
 
