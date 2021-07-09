@@ -101,7 +101,7 @@ class _ForgotPassword extends State<ForgotPassword> {
         padding: EdgeInsets.all(12),
 
         color: Color.fromRGBO(36, 34, 47, 1),
-        child: Text('Send verification mail', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1))),
+        child: Text('Send verification mail', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1),fontSize: 20)),
       ),
     );
 
@@ -127,13 +127,13 @@ class _ForgotPassword extends State<ForgotPassword> {
 
                 SizedBox(height: 24.0),
 
-                verifyButton,
-                logInLabel,
-                (error == "" || error== null )? Container() : Text(error, style: TextStyle(color: Colors.red),),
+
               ],
             ),),
 
-
+            verifyButton,
+            logInLabel,
+            (error == "" || error== null )? Container() : Text(error, style: TextStyle(color: Colors.red),),
           ],
         ),
       ),

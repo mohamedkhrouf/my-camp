@@ -112,7 +112,7 @@ var error = "" ;
         padding: EdgeInsets.all(12),
 
         color: Color.fromRGBO(36, 34, 47, 1),
-        child: Text('Login', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1))),
+        child: Text('Login', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1),fontSize: 20)),
       ),
     );
 
@@ -145,21 +145,26 @@ var error = "" ;
               children: [
                 email,
                 SizedBox(height: 8.0),
-                password,
-                SizedBox(height: 24.0),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                  password,
+                  forgotLabel,
+                ],
+                ),
 
-                loginButton,
-                signUpLabel,
+                SizedBox(height: 12.0),
 
-                forgotLabel,
-                (error == "" || error== null )? Container() : Text(error, style: TextStyle(color: Colors.red),),
+
 
               ],
             ),),
+
             loginButton,
             signUpLabel,
 
-
+            (error == "" || error== null )? Container() : Text(error, style: TextStyle(color: Colors.red,fontSize: 30),),
           ],
         ),
       ),
