@@ -43,6 +43,7 @@ dependencies:
   flutter_email_sender: ^5.0.2
   email_auth: ^0.0.1+4
 
+  flutter_facebook_auth: ^3.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

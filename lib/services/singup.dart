@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_camp/screens/index/mainScreen/index.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 import 'package:my_camp/services/login.dart';
 import 'authentication.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -15,92 +19,151 @@ class _SignUp extends State<SignUp> {
 
   var emailController = new TextEditingController();
   var passwordController = new TextEditingController();
-  var loading = false ;
+  var loading = false;
   var error = "";
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final AccessToken result =
+        await FacebookAuth.instance.login() as AccessToken;
 
+    // Create a credential from the access token
+    final facebookAuthCredential =
+        FacebookAuthProvider.credential(result.token);
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance
+        .signInWithCredential(facebookAuthCredential);
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+   
+  }
 
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     final loginWithGoogle = ElevatedButton(
+        style: ButtonStyle(
+          padding:
+              MaterialStateProperty.all(EdgeInsets.only(top: 15, bottom: 15)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(90)),
+          )),
+        ),
+        onPressed: () {
+          print(signInWithGoogle().then((value) => {
+                if (value.user.emailVerified == true)
+                  {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Index()))
+                  }
+                else
+                  {print("non")}
+              }));
+        },
+        child: Container(
+            width: 25,
+            height: 35,
+            child: Row(children: [
+              Icon(
+                FontAwesomeIcons.google,
+                color: Color.fromRGBO(255, 255, 255, 1),
+              ),
+            ])));
+
+    final loginWithFacebook = ElevatedButton(
       style: ButtonStyle(
         padding: MaterialStateProperty.all(
-            EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30)),
+            EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            )),
+          borderRadius: BorderRadius.all(Radius.circular(90)),
+        )),
       ),
       onPressed: () {
-        print(AuthenticationHelper().signInWithGoogle().then((value) => {
-          if (value.user.emailVerified == true)
-            {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Index()))
-            }
-          else
-            {print("non")}
-        }));
+        print(signInWithFacebook().then((value) => {print(value)}));
       },
-      child: Text('Signup with google'),
+      child: Container(
+          width: 25,
+          height: 35,
+          child: Row(children: [
+            Icon(
+              FontAwesomeIcons.facebookF,
+              color: Color.fromRGBO(255, 255, 255, 1),
+            ),
+          ])),
     );
-      final logo = Hero(
-        tag: 'hero',
-        child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 130,
-          child: Image.asset('assets/logo1.png'),
-        ),
-      );
+    final logo = Hero(
+      tag: 'hero',
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        radius: 130,
+        child: Image.asset('assets/logo1.png'),
+      ),
+    );
 
-      final email = TextFormField(
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter your email';
-          }
-          if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
-            return 'Emal invalid';
-          }
-          return null;
-        },
+    final email = TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email';
+        }
+        if (!RegExp(
+                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(value)) {
+          return 'Emal invalid';
+        }
+        return null;
+      },
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      autofocus: false,
+      decoration: InputDecoration(
+        hintText: 'Email',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
+    );
 
-        controller: emailController,
-        keyboardType: TextInputType.emailAddress,
-        autofocus: false,
-        decoration: InputDecoration(
-          hintText: 'Email',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-        ),
-      );
-
-      final password = TextFormField(
-        validator: (value) {
-        if (value.length< 8) {
+    final password = TextFormField(
+      validator: (value) {
+        if (value.length < 8) {
           return 'Password should be longer than 8 caracters';
         }
-        return null ;
-        },
-        controller: passwordController,
-        autofocus: false,
-        obscureText: true,
-        decoration: InputDecoration(
+        return null;
+      },
+      controller: passwordController,
+      autofocus: false,
+      obscureText: true,
+      decoration: InputDecoration(
           hintText: 'Password',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          fillColor: Color.fromRGBO(170, 215, 62, 1)
-        ),
-      );
+          fillColor: Color.fromRGBO(170, 215, 62, 1)),
+    );
 
-      final signUpButton = Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          onPressed: () {
-            if(_formKey.currentState.validate()) {
+    final signUpButton = Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
             setState(() {
-            loading= true ;
+              loading = true;
             });
             AuthenticationHelper()
                 .signUp(
@@ -112,66 +175,71 @@ class _SignUp extends State<SignUp> {
                     context, MaterialPageRoute(builder: (context) => Index()));
               } else {
                 setState(() {
-                  error=result ;
-                  loading= false ;
+                  error = result;
+                  loading = false;
                 });
               }
             });
           }
         },
-          padding: EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
+        color: Color.fromRGBO(36, 34, 47, 1),
+        child: Text('Sign up',
+            style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1))),
+      ),
+    );
+    final loginLabel = TextButton(
+      child: Text(
+        'LogIn?',
+        style: TextStyle(color: Colors.black54),
+      ),
+      onPressed: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LogIn()));
+      },
+    );
 
-          color: Color.fromRGBO(36, 34, 47, 1),
-          child: Text('Sign up', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1))),
-        ),
-      );
-      final loginLabel = TextButton(
-        child: Text(
-          'LogIn?',
-          style: TextStyle(color: Colors.black54),
-        ),
-        onPressed: () {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => LogIn()));
-        },
-      );
-
-
-      return loading ? Loading() :Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(36, 34, 47, 1),
-          title: Center(child:Text("Sign up",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),),),
-        ),
-        backgroundColor: Colors.white,
-        body: Center(
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.only(left: 24.0, right: 24.0),
-            children: <Widget>[
-              logo,
-              SizedBox(height: 48.0),
-    Form(
-    key: _formKey,child: Column(
-      children: [
-        email,
-        SizedBox(height: 8.0),
-        password,
-        SizedBox(height: 24.0),
-        signUpButton,
-        loginLabel,
-        loginWithGoogle ,
-        (error == "" )? Container() : Text(error, style: TextStyle(color: Colors.red),),
-      ],
-    ),
-    ),
-
-
-            ],
-          ),
-        ),
-      );
-    }
-    /*return Scaffold(
+    return loading
+        ? Loading()
+        : Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                children: <Widget>[
+                  logo,
+                  SizedBox(height: 48.0),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        email,
+                        SizedBox(height: 8.0),
+                        password,
+                        SizedBox(height: 24.0),
+                        Row(
+                          children: [
+                            Spacer(),
+                            Spacer(),
+                            Spacer(),
+                            loginWithGoogle,
+                            Spacer(),
+                            loginWithFacebook,
+                            Spacer(),
+                            Spacer(),
+                            Spacer()
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+  }
+  /*return Scaffold(
       appBar: AppBar(
         title: Text("Auth"),
 
@@ -195,6 +263,6 @@ class _SignUp extends State<SignUp> {
         },
       ) ,
     );*/
-  }
 
 
+}
