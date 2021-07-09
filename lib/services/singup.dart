@@ -62,7 +62,7 @@ class _SignUp extends State<SignUp> {
             )),
         onPressed: () {
           print(signInWithGoogle().then((value) => {
-                if (value.user.emailVerified == true)
+                if (value.user.emailVerified)
                   {
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => Index()))
@@ -72,7 +72,7 @@ class _SignUp extends State<SignUp> {
               }));
         },
         child: Container(
-          color: Color.fromRGBO(36, 34, 47, 1),
+         
             width: 25,
             height: 35,
             child: Row(children: [
@@ -95,10 +95,18 @@ class _SignUp extends State<SignUp> {
         
       )),
       onPressed: () {
-        print(signInWithFacebook().then((value) => {print(value)}));
+        signInWithFacebook().then((value) => {
+              if (value.user.emailVerified)
+                {
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => Index()))
+                }
+              else
+                {print("non")}
+            });
       },
       child: Container(
-         color: Color.fromRGBO(36, 34, 47, 1),
+         
           width: 25,
           height: 35,
           child: Row(children: [
