@@ -1,25 +1,29 @@
 
 
+import 'package:email_auth/email_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_camp/screens/index/mainScreen/index.dart';
+
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
-import 'package:my_camp/services/forgotPassword.dart';
-import 'package:my_camp/services/singup.dart';
-import 'authentication.dart';
-class LogIn extends StatefulWidget {
+import 'package:my_camp/services/verifyOTP.dart';
+import 'login.dart';
+class ForgotPassword extends StatefulWidget {
 
   @override
-  _LogIn createState() => _LogIn();
+  _ForgotPassword createState() => _ForgotPassword();
 }
 
-class _LogIn extends State<LogIn> {
+class _ForgotPassword extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
 
   var  emailController = new TextEditingController();
-  var passwordController = new TextEditingController();
-var loading = false ;
-var error = "" ;
+  var loading = false ;
+  var error = "" ;
+ sendOtp() async{
+  EmailAuth.sessionName = "test session" ;
+  var res = await EmailAuth.sendOtp(receiverMail: emailController.text);
+  return res ;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -53,36 +57,21 @@ var error = "" ;
       ),
     );
 
-    final password = TextFormField(
-      validator: (value) {
-        if (value.length< 8) {
-          return 'Password should be longer than 8 caracters';
-        }
-        return null ;
-      },
-      controller: passwordController,
-      autofocus: false,
-      obscureText: true,
-      decoration: InputDecoration(
-          hintText: 'Password',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          fillColor: Color.fromRGBO(170, 215, 62, 1)
-      ),
-    );
 
-    final signUpLabel = TextButton(
+
+    final logInLabel = TextButton(
+
       child: Text(
-        'SignUp?',
+        'LogIn?',
         style: TextStyle(color: Colors.black54),
       ),
       onPressed: () {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => SignUp()));
+            context, MaterialPageRoute(builder: (context) => LogIn()));
       },
     );
 
-    final loginButton = Padding(
+    final verifyButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
@@ -90,47 +79,38 @@ var error = "" ;
         ),
         onPressed: () {
           if(_formKey.currentState.validate()) {
-            setState(() {
-              loading= true ;
-            });
-            AuthenticationHelper()
-                .signIn(email: emailController.text, password: passwordController.text)
-                .then((result) {
-              if (result == null) {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Index()));
-              } else {
-                setState(() {
-                  error= result ;
-                  loading = false ;
-                });
-                print(result);
+              setState(() {
+                loading= true ;
+              });
+              sendOtp().then((result){
+                if(result){
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => VerifyOtp(email: emailController.text,)));
+                }else
+                {
+                  setState(() {
+                    loading= false ;
+                    error="Unknown Error" ;
+                  });
+                }
               }
-            });
+              );
+
           }
-        },
+          },
         padding: EdgeInsets.all(12),
 
         color: Color.fromRGBO(36, 34, 47, 1),
-        child: Text('Login', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1))),
+        child: Text('Send verification mail', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1))),
       ),
     );
 
-    final forgotLabel = FlatButton(
-      child: Text(
-        'Forgot password?',
-        style: TextStyle(color: Colors.black54),
-      ),
-      onPressed: () {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => ForgotPassword()));
-      },
-    );
+
 
     return loading? Loading() : Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(36, 34, 47, 1),
-        title: Center(child:Text("Login",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),),),
+        title: Center(child: Text("Forgot password",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),),),
       ),
       backgroundColor: Colors.white,
       body: Center(
@@ -144,20 +124,14 @@ var error = "" ;
               key: _formKey,child: Column(
               children: [
                 email,
-                SizedBox(height: 8.0),
-                password,
+
                 SizedBox(height: 24.0),
 
-                loginButton,
-                signUpLabel,
-
-                forgotLabel,
+                verifyButton,
+                logInLabel,
                 (error == "" || error== null )? Container() : Text(error, style: TextStyle(color: Colors.red),),
-
               ],
             ),),
-            loginButton,
-            signUpLabel,
 
 
           ],
@@ -190,5 +164,7 @@ var error = "" ;
       ) ,
     );*/
 }
+
+
 
 

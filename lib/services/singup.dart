@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_camp/screens/index/mainScreen/index.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 import 'package:my_camp/services/login.dart';
@@ -18,27 +16,33 @@ class _SignUp extends State<SignUp> {
   var emailController = new TextEditingController();
   var passwordController = new TextEditingController();
   var loading = false ;
+  var error = "";
 
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
 
   @override
     Widget build(BuildContext context) {
+    final loginWithGoogle = ElevatedButton(
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all(
+            EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            )),
+      ),
+      onPressed: () {
+        print(AuthenticationHelper().signInWithGoogle().then((value) => {
+          if (value.user.emailVerified == true)
+            {
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => Index()))
+            }
+          else
+            {print("non")}
+        }));
+      },
+      child: Text('Signup with google'),
+    );
       final logo = Hero(
         tag: 'hero',
         child: CircleAvatar(
@@ -87,7 +91,7 @@ class _SignUp extends State<SignUp> {
         ),
       );
 
-      final loginButton = Padding(
+      final signUpButton = Padding(
         padding: EdgeInsets.symmetric(vertical: 16.0),
         child: RaisedButton(
           shape: RoundedRectangleBorder(
@@ -108,9 +112,9 @@ class _SignUp extends State<SignUp> {
                     context, MaterialPageRoute(builder: (context) => Index()));
               } else {
                 setState(() {
+                  error=result ;
                   loading= false ;
                 });
-                print("hello");
               }
             });
           }
@@ -121,16 +125,23 @@ class _SignUp extends State<SignUp> {
           child: Text('Sign up', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1))),
         ),
       );
-
-      final forgotLabel = FlatButton(
+      final loginLabel = TextButton(
         child: Text(
-          'Forgot password?',
+          'LogIn?',
           style: TextStyle(color: Colors.black54),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LogIn()));
+        },
       );
 
+
       return loading ? Loading() :Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(36, 34, 47, 1),
+          title: Center(child:Text("Sign up",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),),),
+        ),
         backgroundColor: Colors.white,
         body: Center(
           child: ListView(
@@ -146,10 +157,13 @@ class _SignUp extends State<SignUp> {
         SizedBox(height: 8.0),
         password,
         SizedBox(height: 24.0),
-        loginButton,
-        forgotLabel
+        signUpButton,
+        loginLabel,
+        loginWithGoogle ,
+        (error == "" )? Container() : Text(error, style: TextStyle(color: Colors.red),),
       ],
-    ),),
+    ),
+    ),
 
 
             ],
