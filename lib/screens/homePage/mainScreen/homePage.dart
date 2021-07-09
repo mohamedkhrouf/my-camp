@@ -6,7 +6,7 @@ import 'package:my_camp/screens/homePage/widgets/event.dart';
 import 'package:my_camp/screens/homePage/widgets/publication.dart';
 import 'package:localstorage/localstorage.dart';
 
-final fb = Firebase
+final usersRef = FirebaseFirestore.instance.collection('user');
 final postsRef = FirebaseFirestore.instance.collection('post');
 
 class HomePage extends StatefulWidget {

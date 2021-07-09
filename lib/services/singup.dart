@@ -48,21 +48,18 @@ class _SignUp extends State<SignUp> {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
-   
   }
 
   @override
   Widget build(BuildContext context) {
     final loginWithGoogle = ElevatedButton(
-        style: ButtonStyle(
-          padding:
-              MaterialStateProperty.all(EdgeInsets.only(top: 15, bottom: 15)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(90)),
-          )),
-        ),
+
+       style: ElevatedButton.styleFrom(
+            primary: Color.fromRGBO(36, 34, 47, 1),
+            padding: EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            )),
         onPressed: () {
           print(signInWithGoogle().then((value) => {
                 if (value.user.emailVerified == true)
@@ -75,34 +72,39 @@ class _SignUp extends State<SignUp> {
               }));
         },
         child: Container(
+          color: Color.fromRGBO(36, 34, 47, 1),
             width: 25,
             height: 35,
             child: Row(children: [
               Icon(
                 FontAwesomeIcons.google,
-                color: Color.fromRGBO(255, 255, 255, 1),
+                color: Color.fromRGBO(170, 215, 62, 1),
               ),
             ])));
 
     final loginWithFacebook = ElevatedButton(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(
-            EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(90)),
-        )),
-      ),
+      
+      style: ElevatedButton.styleFrom(
+        primary: Color.fromRGBO(36, 34, 47, 1),
+ padding:
+
+            EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
+        shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                 
+        
+      )),
       onPressed: () {
         print(signInWithFacebook().then((value) => {print(value)}));
       },
       child: Container(
+         color: Color.fromRGBO(36, 34, 47, 1),
           width: 25,
           height: 35,
           child: Row(children: [
             Icon(
               FontAwesomeIcons.facebookF,
-              color: Color.fromRGBO(255, 255, 255, 1),
+              color: Color.fromRGBO(170, 215, 62, 1),
             ),
           ])),
     );
@@ -218,22 +220,24 @@ class _SignUp extends State<SignUp> {
                         SizedBox(height: 8.0),
                         password,
                         SizedBox(height: 24.0),
-                        Row(
-                          children: [
-                            Spacer(),
-                            Spacer(),
-                            Spacer(),
-                            loginWithGoogle,
-                            Spacer(),
-                            loginWithFacebook,
-                            Spacer(),
-                            Spacer(),
-                            Spacer()
-                          ],
-                        )
                       ],
                     ),
                   ),
+                  signUpButton,
+                  loginLabel,
+                  Row(
+                    children: [
+                      Spacer(),
+                      Spacer(),
+                      Spacer(),
+                      loginWithGoogle,
+                      Spacer(),
+                      loginWithFacebook,
+                      Spacer(),
+                      Spacer(),
+                      Spacer()
+                    ],
+                  )
                 ],
               ),
             ),
@@ -263,6 +267,5 @@ class _SignUp extends State<SignUp> {
         },
       ) ,
     );*/
-
 
 }
