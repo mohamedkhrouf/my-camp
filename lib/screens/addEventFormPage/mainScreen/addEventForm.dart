@@ -128,9 +128,9 @@ class _AddEventForm extends State<AddEventForm> {
             ),
             Container(
               margin: EdgeInsets.only(top: 16.0,right: 16.0),
-              child: TextField(
+              child: TextFormField(
                 decoration: const InputDecoration(
-                    hintText: 'Enter event name',
+                    hintText: 'Enter event Description',
                     contentPadding: EdgeInsets.only(left: 15.0,top: 3,bottom: 3),
                     border: OutlineInputBorder(
                         borderRadius:
@@ -203,6 +203,61 @@ class _AddEventForm extends State<AddEventForm> {
                   title: Text("Choose position"),
                 )
             ),
+Container(
+  margin: EdgeInsets.only(right: 16.0),
+  child:            Row(
+mainAxisAlignment: MainAxisAlignment.spaceEvenly,  children: <Widget>[
+    new Flexible(
+
+      child:
+      Container(child:
+      TextFormField(
+
+        decoration: const InputDecoration(
+
+          hintText: 'Latitude',
+          contentPadding: EdgeInsets.only(left: 15.0,top: 3,bottom: 3),
+          border: OutlineInputBorder(
+              borderRadius:
+              BorderRadius.all(Radius.circular(16.0))),
+        ),
+      ),
+      ),
+    ),
+    Flexible(
+
+      child:
+    TextFormField(
+
+      decoration: const InputDecoration(
+
+        hintText: 'Longitude',
+        contentPadding: EdgeInsets.only(left: 15.0,top: 3,bottom: 3),
+        border: OutlineInputBorder(
+            borderRadius:
+            BorderRadius.all(Radius.circular(16.0))),
+      ),
+    ),
+    ),
+
+  ],
+),),
+
+
+
+
+
+            DropdownButton<String>(
+              items: <String>['A', 'B', 'C', 'D'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (_) {
+                print("afz");
+              },
+            )
 
 
           ]
