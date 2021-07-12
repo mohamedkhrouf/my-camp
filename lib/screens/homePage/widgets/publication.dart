@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +12,22 @@ class Cont extends StatefulWidget {
 }
 
 class _ContState extends State<Cont> {
+    List userList = [];
+  var username;
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
+  getUser() {
+//    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
+    String uid = widget.yep["userId"].id;
+    print(uid);
+    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
+      username = value.data();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
