@@ -2,7 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Cont extends StatelessWidget {
+class Cont extends StatefulWidget {
+  @override
+  _ContState createState() => _ContState();
+  final yep;
+  final test;
+  const Cont({Key key, this.yep, this.test}) : super(key: key);
+}
+
+class _ContState extends State<Cont> {
   @override
   Widget build(BuildContext context) {
     return Column(
