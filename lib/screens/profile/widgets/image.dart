@@ -1,7 +1,5 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class ImagePage extends StatefulWidget {
   final String url;
@@ -19,7 +17,7 @@ class _ImagePageState extends State<ImagePage> {
       height: MediaQuery.of(context).size.width * 0.744,
       margin: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(color: Colors.white),
-      child: Image.asset(
+      child: Image.network(
         widget.url,
         height: MediaQuery.of(context).size.width,
         width: MediaQuery.of(context).size.width,

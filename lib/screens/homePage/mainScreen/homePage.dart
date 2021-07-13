@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List eventList = [];
-  var publication = true;
+  var publication = false;
   var event = false;
   List postList = [];
   @override
@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
+        
       }
     });
   }
@@ -148,8 +149,12 @@ class _HomePageState extends State<HomePage> {
                   ]),
           ),
           !publication
-              ? Column(
-                  children: [Cont(), Cont(), Cont(), Cont()],
+             ? Column(
+                  children: [
+                    ...postList.map((e) {
+                      return Cont(yep: e.data());
+                    })
+                  ],
                 )
               : Column(children: [
                   Container(
