@@ -73,14 +73,16 @@ class _MyEvents extends State<MyEvents> {
   getMyEvents() {
 //    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
     String userId = (FirebaseAuth.instance.currentUser).uid;
+    print(userId);
     FirebaseFirestore.instance
         .collection('user')
         .doc(userId)
         .get()
         .then((value) {
+
       for (int i = 0; i < value["events"].length; i++) {
         value["events"][i].get().then((value) {
-          print(value);
+
           setState(() {
             myEvents.add(value);
           });
@@ -131,6 +133,7 @@ class _MyEvents extends State<MyEvents> {
                 return Group(
                   groupName: e.data()["name"],
                   date: e.data()["name"],
+                  eventId: e.id,
                 );
               }),
               /* Container(

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,13 +7,15 @@ import 'package:my_camp/screens/discussion/widgets/chatMessage.dart';
 import 'package:my_camp/screens/tasks/mainScreen/tasks.dart';
 
 class Discussion extends StatefulWidget {
+  final eventId ;
+
+  const Discussion({Key key, this.eventId}) : super(key: key);
   @override
   _Discussion createState() => _Discussion();
 }
 
 class _Discussion extends State<Discussion> {
-
-  var messages = [
+  /*var messages = [
     ChatMessage(
       message:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
@@ -21,7 +25,10 @@ class _Discussion extends State<Discussion> {
       time: "20:15",
       showTime: true,
     ),
-    ChatMessage(message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",),
+    ChatMessage(
+      message:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    ),
     ChatMessage(),
     ChatMessage(),
     ChatMessage(
@@ -40,50 +47,62 @@ class _Discussion extends State<Discussion> {
     ChatMessage(),
     ChatMessage(),
     ChatMessage(),
-  ];
+  ];*/
+  var messages = [] ;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final messageController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getMessages();
+  }
+  List getMessages() {
+print(widget.eventId)  ;
+    FirebaseFirestore.instance.collection('event').doc(widget.eventId).snapshots().listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          for(int i =0 ; i< snapshot.data()["messages"].length ; i++)
+          snapshot.data()["messages"][i].get().then((value){
+            setState(() {
+              messages.add(value) ;
+            });
+          });
+
+          //print(documents[3].data());
+          // usersList = snapshot.docs;
+        });
+      }
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-      AppBar(
-        backgroundColor: Color.fromRGBO(36, 34, 47, 1)
-        ,
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(36, 34, 47, 1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           "Esml l groupe",
-          style: TextStyle(
-              color: Color.fromRGBO(170, 215, 62, 1)
-          ),
+          style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
         ),
         actions: [
           Padding(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: EdgeInsets.only(right: 20.0,top: 20),
               child: GestureDetector(
-                  onTap: () {},
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Tasks()),
-                      );
-                    },
-                    child: Text("Tasks"),
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                            EdgeInsets.only(right: 16.0, left: 16.0)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ))),
-                  )
-              )
-          ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Tasks()),
+                    );
+                  },
+
+                    child: Text("Tasks",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),),
+
+                  )),
         ],
       ),
 
@@ -131,28 +150,49 @@ class _Discussion extends State<Discussion> {
           )
       ),*/
       body: Container(
+        color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: Column(children: [
             Expanded(
                 child: SingleChildScrollView(
-                  reverse: true,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: messages.length,
+                    reverse: true,
+                    physics: ScrollPhysics(),
+
+                    child:
+
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: messages.length,
                         itemBuilder: (context, index) {
                           return ChatMessage(
-                            messageType: messages[index].messageType,
-                            time: messages[index].time,
-                            showTime: messages[index].showTime,
-                            message: messages[index].message,
+                            messageType: messages[index].data()["senderId"].id == FirebaseAuth.instance.currentUser.uid ? MessageType.sent : MessageType.received,
+                            //time: messages[index].data()["sendTime"],
+                            message: messages[index].data()["text"],
                           );
-                        }))),
+                        }
+                        )
+                )
+            ),
             Form(
+
                 key: _formKey,
                 child: Container(
-                    margin: EdgeInsets.all(16.0),
+
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+
+                      boxShadow: [
+                      BoxShadow(
+                        blurRadius:64,
+                        color: Color(0xFF087949).withOpacity(0.4),
+                        offset: Offset(0, 5), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                    padding: EdgeInsets.only(top: 8.0,right: 16.0, left: 16.0,bottom: 8.0),
                     child: Row(children: [
-                      GestureDetector(
+                      /* GestureDetector(
                           onTap: () {
                             setState(() {
                               print("hrgnrs");
@@ -162,38 +202,53 @@ class _Discussion extends State<Discussion> {
 
                               child:Icon(
                             Icons.image,
-                            color: Colors.blue,
+                            color: Color.fromRGBO(170, 215, 62, 1),
                             size: 40,
-                          ))),
+                          ))),*/
                       new Flexible(
-                          child:Container(
-                              height: 35 ,
+                          child: Container(
+                              height: 35,
                               child: TextFormField(
-                        controller: messageController,
-                        decoration: const InputDecoration(
-                            hintText: 'Enter your message',
-                            contentPadding: EdgeInsets.only(left: 15.0),
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(90.0))),
-                            ),
-                      ))),
+                                controller: messageController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter your message',
+                                  contentPadding: EdgeInsets.only(left: 15.0),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(90.0))),
+                                ),
+                              ))),
                       Container(
-                          margin: EdgeInsets.only(left: 5),
+                        margin: EdgeInsets.only(left: 5),
+                        child: GestureDetector(
+                            onTap: () async {
 
-                            child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                        messages.add(ChatMessage(message: messageController.text,messageType: MessageType.sent,));
-                                        messageController.text="";
-                                  });
-                                },
-                                child:Icon(
-                                Icons.send,
-                              color: Colors.blue,
-                              size: 40,
+                              final newMessage= await FirebaseFirestore.instance.collection('message').add(
+                                    {
+                                      'eventId': FirebaseFirestore.instance.doc("event/"+widget.eventId),
+                                      'senderId' : FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser.uid) ,
+                                      'text' : messageController.text,
+                                      'sendTime' : DateTime.now()
+                                    });
+                                FirebaseFirestore.instance.collection('event').doc(widget.eventId).update(
+                                    {"messages" : FieldValue.arrayUnion([FirebaseFirestore.instance.doc("message/"+newMessage.id)])}
+                                );
+                                messageController.clear();
+
+
+                               /* messages.add(ChatMessage(
+                                  message: messageController.text,
+                                  messageType: MessageType.sent,
+                                ));
+                                messageController.clear();*/
+
+                            },
+                            child: Icon(
+                              Icons.send,
+                              color: Color.fromRGBO(170, 215, 62, 1),
+                              size: 33,
                             )),
-                          ),
+                      ),
                     ]))),
           ])),
     );

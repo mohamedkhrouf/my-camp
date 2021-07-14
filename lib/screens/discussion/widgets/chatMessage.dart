@@ -40,17 +40,17 @@ double topRightRadius() {
 
 Color messageBgColor(BuildContext context) {
   if (messageType == null || messageType == MessageType.received) {
-    return Color(0xffa3a5bd);
+    return Color.fromRGBO(36, 34, 47, 1);
   } else {
-    return Color(0xffcccedb);
+    return (Color.fromRGBO(170, 215, 62, 1));
   }
 }
 
 Color messageTextColor(BuildContext context) {
   if (messageType == null || messageType == MessageType.received) {
-    return Color(0xff262833);
+    return Color(0xffffffff);
   } else {
-    return Color(0xff262833);
+    return Color(0xFFFFFFFF);
   }
 }
 
@@ -88,7 +88,7 @@ Widget build(BuildContext context) {
             width: 30,
             margin: EdgeInsets.only(right: 10),
             decoration: new BoxDecoration(
-              color: Colors.blue,
+              color: Color.fromRGBO(170, 215, 62, 1),
               shape: BoxShape.circle,
             ),
           child: Icon(Icons.person),
@@ -123,7 +123,7 @@ Widget build(BuildContext context) {
             width: 30,
             margin: EdgeInsets.only(left: 10),
             decoration: new BoxDecoration(
-              color: Colors.blue,
+              color: Color.fromRGBO(170, 215, 62, 1),
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.person),

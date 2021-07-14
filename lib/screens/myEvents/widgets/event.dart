@@ -1,13 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/discussion/mainScreen/discussion.dart';
 
 class Group extends StatefulWidget {
   final String groupName;
-
+  final String eventId ;
   final String date;
 
-  const Group({Key key, this.groupName, this.date}) : super(key: key);
+  const Group({Key key, this.groupName, this.date, this.eventId}) : super(key: key);
 
   @override
   _Group createState() => _Group();
@@ -20,7 +21,7 @@ class _Group extends State<Group> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Discussion()),
+            MaterialPageRoute(builder: (context) => Discussion(eventId: widget.eventId )),
           );
         },
         child: Container(child:Stack(children: [
