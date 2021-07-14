@@ -47,10 +47,10 @@ class _HomePageState extends State<HomePage> {
       if (mounted) {
         setState(() {
           postList = snapshot.docs;
+        
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
-        
       }
     });
   }
@@ -149,10 +149,10 @@ class _HomePageState extends State<HomePage> {
                   ]),
           ),
           !publication
-             ? Column(
+              ? Column(
                   children: [
                     ...postList.map((e) {
-                      return Cont(yep: e.data());
+                      return Cont(yep: e.data(),id:e.id);
                     })
                   ],
                 )
