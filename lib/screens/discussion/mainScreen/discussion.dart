@@ -49,6 +49,7 @@ class _Discussion extends State<Discussion> {
     ChatMessage(),
   ];*/
   var messages = [] ;
+  var images=[];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final messageController = TextEditingController();
 
@@ -66,13 +67,23 @@ print(widget.eventId)  ;
         setState(() {
           messages= snapshot.docs ;
 
+          for(int i =0 ; i< messages.length ; i++){
+            FirebaseFirestore.instance.collection('user').doc(messages[i].data()["senderId"].id).get().then((value)
+                {
+                  setState(() {
+                    images.add(value.data()["avatar"]);
 
+                  });
+                } );
+          }
 
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
       }
     });
+
+    print(images);
   }
   @override
   Widget build(BuildContext context) {
@@ -163,10 +174,12 @@ print(widget.eventId)  ;
                       shrinkWrap: true,
                       itemCount: messages.length,
                         itemBuilder: (context, index) {
+
                           return ChatMessage(
                             messageType: messages[index].data()["senderId"].id == FirebaseAuth.instance.currentUser.uid ? MessageType.sent : MessageType.received,
                             //time: messages[index].data()["sendTime"],
                             message: messages[index].data()["text"],
+                            senderImage: images[index],
                           );
                         }
                         )
@@ -219,6 +232,7 @@ print(widget.eventId)  ;
                       Container(
                         margin: EdgeInsets.only(left: 5),
                         child: GestureDetector(
+
                             onTap: () async {
 
                               final newMessage= await FirebaseFirestore.instance.collection('event').doc(widget.eventId).collection('messages').add(

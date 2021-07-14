@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 enum MessageType { sent, received }
 
 class ChatMessage extends StatelessWidget {
+  final String senderImage ;
   final String message;
   final MessageType messageType;
   final Color backgroundColor;
@@ -12,7 +13,7 @@ class ChatMessage extends StatelessWidget {
   final double maxWidth;
   final double minWidth;
 ChatMessage(
-    {this.message, this.messageType, this.backgroundColor, this.textColor, this.time, this.showTime, this.minWidth, this.maxWidth});
+    {this.message, this.messageType, this.backgroundColor, this.textColor, this.time, this.showTime, this.minWidth, this.maxWidth, this.senderImage});
 
 CrossAxisAlignment messageAlignment() {
   if (messageType == null || messageType == MessageType.received) {
@@ -84,14 +85,14 @@ Widget build(BuildContext context) {
             children:[
         (messageType == null || messageType == MessageType.received) ?
         Container(
-            height: 30,
-            width: 30,
+
             margin: EdgeInsets.only(right: 10),
-            decoration: new BoxDecoration(
-              color: Color.fromRGBO(170, 215, 62, 1),
-              shape: BoxShape.circle,
-            ),
-          child: Icon(Icons.person),
+
+          child: CircleAvatar(
+          radius: 20.0,
+          backgroundImage: NetworkImage(senderImage),
+          backgroundColor: Colors.transparent,
+        ),
         ): Container(),
 
         Container(
@@ -119,14 +120,14 @@ Widget build(BuildContext context) {
         ),
           (messageType == MessageType.sent) ?
           Container(
-            height: 30,
-            width: 30,
+
             margin: EdgeInsets.only(left: 10),
-            decoration: new BoxDecoration(
-              color: Color.fromRGBO(170, 215, 62, 1),
-              shape: BoxShape.circle,
+
+            child: CircleAvatar(
+              radius: 20.0,
+              backgroundImage: NetworkImage(senderImage),
+              backgroundColor: Colors.transparent,
             ),
-            child: Icon(Icons.person),
           )
               : Container()
 

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_camp/services/singup.dart';
+import 'package:my_camp/services/login.dart';
 
 import 'screens/index/mainScreen/index.dart';
 
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
                         return Index();
                       }
                       /// other way there is no user logged.
-                      return SignUp();
+                      return LogIn();
                     }
                 ) ;
               } else {
