@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/campSites/widgets/campSite.dart';
@@ -9,6 +11,29 @@ class CampSites extends StatefulWidget {
 
 class _CampSites extends State<CampSites> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List campList = [];
+  @override
+  void initState() {
+    super.initState();
+    getCamps();
+    print(campList);
+  }
+
+  List getCamps() {
+    List documents;
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('place');
+
+    collectionReference.snapshots().listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          campList = snapshot.docs;
+          //print(documents[3].data());
+          // usersList = snapshot.docs;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,33 +58,9 @@ class _CampSites extends State<CampSites> {
                               prefixIcon: Icon(Icons.search)),
                         )),
                       ]))),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
-              CampSite(),
+              ...campList.map((e) {
+                return CampSite();
+              }),
             ],
           ),
         ),
