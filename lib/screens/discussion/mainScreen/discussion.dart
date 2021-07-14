@@ -60,15 +60,13 @@ class _Discussion extends State<Discussion> {
   }
   List getMessages() {
 print(widget.eventId)  ;
-    FirebaseFirestore.instance.collection('event').doc(widget.eventId).snapshots().listen((snapshot) {
+    FirebaseFirestore.instance.collection('event').doc(widget.eventId).
+    collection('messages').orderBy("sendTime" ).snapshots().listen((snapshot) {
       if (mounted) {
         setState(() {
-          for(int i =0 ; i< snapshot.data()["messages"].length ; i++)
-          snapshot.data()["messages"][i].get().then((value){
-            setState(() {
-              messages.add(value) ;
-            });
-          });
+          messages= snapshot.docs ;
+
+
 
           //print(documents[3].data());
           // usersList = snapshot.docs;
@@ -223,16 +221,14 @@ print(widget.eventId)  ;
                         child: GestureDetector(
                             onTap: () async {
 
-                              final newMessage= await FirebaseFirestore.instance.collection('message').add(
+                              final newMessage= await FirebaseFirestore.instance.collection('event').doc(widget.eventId).collection('messages').add(
                                     {
                                       'eventId': FirebaseFirestore.instance.doc("event/"+widget.eventId),
                                       'senderId' : FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser.uid) ,
                                       'text' : messageController.text,
                                       'sendTime' : DateTime.now()
                                     });
-                                FirebaseFirestore.instance.collection('event').doc(widget.eventId).update(
-                                    {"messages" : FieldValue.arrayUnion([FirebaseFirestore.instance.doc("message/"+newMessage.id)])}
-                                );
+             
                                 messageController.clear();
 
 

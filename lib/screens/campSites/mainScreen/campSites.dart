@@ -16,7 +16,6 @@ class _CampSites extends State<CampSites> {
   void initState() {
     super.initState();
     getCamps();
-    print(campList);
   }
 
   List getCamps() {
