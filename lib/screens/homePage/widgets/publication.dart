@@ -61,7 +61,11 @@ class _ContState extends State<Cont> {
 
  Future<void> like() {
     String userId = (FirebaseAuth.instance.currentUser).uid;
-   
+    return users
+        .doc('ABC123')
+        .update({'company': 'Stokes and Sons'})
+        .then((value) => print("User Updated"))
+        .catchError((error) => print("Failed to update user: $error"));
      
     
   }
