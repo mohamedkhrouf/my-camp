@@ -1,12 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:localstorage/localstorage.dart';
-import 'package:my_camp/screens/campSitePage/widgets/widgets/image.dart';
-import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
 class Cont extends StatefulWidget {
   @override
@@ -15,7 +13,6 @@ class Cont extends StatefulWidget {
 
   const Cont({Key key, this.yep}) : super(key: key);
 }
-
 
 class _ContState extends State<Cont> {
   var items = [];
@@ -30,6 +27,8 @@ class _ContState extends State<Cont> {
       items.add(e.toString());
       print(e.toString());
     });
+    print(liked());
+    print(widget.yep["likes"].toString());
   }
 
   getUser() {
@@ -44,6 +43,27 @@ class _ContState extends State<Cont> {
       }
     });
     return user;
+  }
+
+  nblikes() {
+    return widget.yep["likes"].length;
+  }
+
+  liked() {
+    if (widget.yep["likes"]
+        .toString()
+        .contains((FirebaseAuth.instance.currentUser).uid)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+ Future<void> like() {
+    String userId = (FirebaseAuth.instance.currentUser).uid;
+   
+     
+    
   }
 
   @override
@@ -120,8 +140,7 @@ class _ContState extends State<Cont> {
               items: items.map((i) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return Image.network(
-                       i,
+                    return Image.network(i,
                         height: MediaQuery.of(context).size.width,
                         width: MediaQuery.of(context).size.width,
                         fit: BoxFit.fitHeight);
@@ -168,21 +187,30 @@ class _ContState extends State<Cont> {
                   child: Row(
                     children: [
                       Container(
-                        
-
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {});
+                          },
                           child: Icon(
                             FontAwesomeIcons.fire,
-                            color: Color.fromRGBO(0, 0, 0, 1),
+                            color: liked()
+                                ? Color.fromRGBO(207, 53, 46, 1)
+                                : Color.fromRGBO(0, 0, 0, 1),
+                            size: 27,
                           ),
-                        
-                          
-                          margin: EdgeInsets.only(right: 20),
-                          
-                          ),
+                        ),
+                        margin: EdgeInsets.only(right: 20),
+                      ),
                       Container(
-                        child: Icon(
-                          FontAwesomeIcons.commentDots,
-                          color: Color.fromRGBO(0, 0, 0, 1),
+                        child: GestureDetector(
+                          child: Icon(
+                            FontAwesomeIcons.commentDots,
+                            color: Color.fromRGBO(0, 0, 0, 1),
+                            size: 27,
+                          ),
+                          onTap: () {
+                            setState(() {});
+                          },
                         ),
                       )
                     ],
@@ -191,7 +219,7 @@ class _ContState extends State<Cont> {
                 ),
                 Container(
                   child: Text(
-                   widget.yep["text"],
+                    widget.yep["text"],
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.left,
                   ),
