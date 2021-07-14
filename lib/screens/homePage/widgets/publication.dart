@@ -10,8 +10,8 @@ class Cont extends StatefulWidget {
   @override
   _ContState createState() => _ContState();
   final yep;
-
-  const Cont({Key key, this.yep}) : super(key: key);
+  final id;
+  const Cont({Key key, this.yep, this.id}) : super(key: key);
 }
 
 class _ContState extends State<Cont> {
@@ -29,6 +29,7 @@ class _ContState extends State<Cont> {
     });
     print(liked());
     print(widget.yep["likes"].toString());
+    print(widget.id);
   }
 
   getUser() {
@@ -59,15 +60,29 @@ class _ContState extends State<Cont> {
     }
   }
 
- Future<void> like() {
+  Future<void> like() {
     String userId = (FirebaseAuth.instance.currentUser).uid;
-    return users
-        .doc('ABC123')
-        .update({'company': 'Stokes and Sons'})
-        .then((value) => print("User Updated"))
-        .catchError((error) => print("Failed to update user: $error"));
-     
     
+    if (widget.yep["likes"]
+        .toString()
+        .contains((FirebaseAuth.instance.currentUser).uid)) {
+      
+      FirebaseFirestore.instance
+          .collection('post')
+          .doc(widget.id)
+          .update({'likes':FieldValue.arrayRemove([userId])})
+          .then((value) => print("User Updated"))
+          .catchError((error) => print("Failed to update user: $error"));
+    } else {
+      FirebaseFirestore.instance
+          .collection('post')
+          .doc(widget.id)
+          .update({
+            'likes': FieldValue.arrayUnion([userId])
+          })
+          .then((value) => print("User Updated"))
+          .catchError((error) => print("Failed to update user: $error"));
+    }
   }
 
   @override
@@ -193,7 +208,9 @@ class _ContState extends State<Cont> {
                       Container(
                         child: GestureDetector(
                           onTap: () {
-                            setState(() {});
+                            setState(() {
+                              like();
+                            });
                           },
                           child: Icon(
                             FontAwesomeIcons.fire,
