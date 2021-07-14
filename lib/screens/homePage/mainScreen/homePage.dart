@@ -12,13 +12,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List eventList = [];
-  var publication = true;
+  var publication = false;
   var event = false;
-
+  List postList = [];
   @override
   void initState() {
     super.initState();
     getEvents();
+    getPosts();
   }
 
   List getEvents() {
@@ -33,6 +34,23 @@ class _HomePageState extends State<HomePage> {
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
+      }
+    });
+  }
+
+  List getPosts() {
+    List documents;
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('post');
+
+    collectionReference.snapshots().listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          postList = snapshot.docs;
+          //print(documents[3].data());
+          // usersList = snapshot.docs;
+        });
+        
       }
     });
   }
@@ -131,8 +149,12 @@ class _HomePageState extends State<HomePage> {
                   ]),
           ),
           !publication
-              ? Column(
-                  children: [Cont(), Cont(), Cont(), Cont()],
+             ? Column(
+                  children: [
+                    ...postList.map((e) {
+                      return Cont(yep: e.data());
+                    })
+                  ],
                 )
               : Column(children: [
                   Container(
@@ -177,7 +199,6 @@ class _HomePageState extends State<HomePage> {
                       ...eventList.map((e) {
                         return EvPage(data: e.data());
                       }),
-                     
                     ],
                   )
                 ])

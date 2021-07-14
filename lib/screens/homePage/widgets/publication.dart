@@ -1,8 +1,51 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:my_camp/screens/campSitePage/widgets/widgets/image.dart';
+import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
-class Cont extends StatelessWidget {
+class Cont extends StatefulWidget {
+  @override
+  _ContState createState() => _ContState();
+  final yep;
+
+  const Cont({Key key, this.yep}) : super(key: key);
+}
+
+
+class _ContState extends State<Cont> {
+  var items = [];
+  var ind = 1;
+  var user;
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+    widget.yep["images"].forEach((e) {
+      items.add(e.toString());
+      print(e.toString());
+    });
+  }
+
+  getUser() {
+//    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
+    String uid = widget.yep["userId"].id;
+    print(uid);
+    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
+      if (mounted) {
+        setState(() {
+          user = value;
+        });
+      }
+    });
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,7 +61,9 @@ class Cont extends StatelessWidget {
                 Container(
                   child: CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: AssetImage("assets/mekki.jpg"),
+                    backgroundImage: NetworkImage(user != null
+                        ? user.data()["avatar"]
+                        : "https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -30,7 +75,7 @@ class Cont extends StatelessWidget {
                   children: [
                     Container(
                       child: Text(
-                        "name surname",
+                        user != null ? user.data()["username"] : "",
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.left,
                       ),
@@ -38,7 +83,12 @@ class Cont extends StatelessWidget {
                     ),
                     Container(
                       child: Text(
-                        "name surname",
+                        widget.yep != null
+                            ? DateTime.fromMicrosecondsSinceEpoch(
+                                    widget.yep["publicationDate"].seconds *
+                                        1000002)
+                                .toString()
+                            : "",
                         style: TextStyle(fontSize: 15),
                       ),
                     ),
@@ -54,20 +104,59 @@ class Cont extends StatelessWidget {
                 Spacer(),
               ],
             )),
-        Container(
-          color: Colors.blue,
-          height: MediaQuery.of(context).size.width * 0.744,
-          width: MediaQuery.of(context).size.width,
-          child: Stack(
-            children: [
-              Image.asset(
-                'assets/mekki.jpg',
-                height: MediaQuery.of(context).size.width,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.fitWidth,
+        Stack(
+          children: [
+            CarouselSlider(
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    ind = index + 1;
+                  });
+                },
+                height: MediaQuery.of(context).size.width * 0.8,
+                viewportFraction: 1,
+                enableInfiniteScroll: false,
               ),
-            ],
-          ),
+              items: items.map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Image.network(
+                       i,
+                        height: MediaQuery.of(context).size.width,
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.fitHeight);
+                  },
+                );
+              }).toList(),
+            ),
+            Positioned(
+                right: 10,
+                top: 5,
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                        left: 20,
+                        right: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(0, 0, 0, 1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    Container(
+                      child: Text(
+                        ' $ind/${widget.yep["images"].length}',
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
+                      ),
+                      margin: EdgeInsets.only(top: 2),
+                    ),
+                  ],
+                )),
+          ],
         ),
         Container(
             color: Color.fromRGBO(255, 255, 255, 1),
@@ -79,15 +168,21 @@ class Cont extends StatelessWidget {
                   child: Row(
                     children: [
                       Container(
+                        
+
                           child: Icon(
                             FontAwesomeIcons.fire,
-                            color: Color.fromRGBO(0,0,0, 1),
+                            color: Color.fromRGBO(0, 0, 0, 1),
                           ),
-                          margin: EdgeInsets.only(right: 20)),
+                        
+                          
+                          margin: EdgeInsets.only(right: 20),
+                          
+                          ),
                       Container(
                         child: Icon(
                           FontAwesomeIcons.commentDots,
-                          color: Color.fromRGBO(0,0,0, 1),
+                          color: Color.fromRGBO(0, 0, 0, 1),
                         ),
                       )
                     ],
@@ -96,7 +191,7 @@ class Cont extends StatelessWidget {
                 ),
                 Container(
                   child: Text(
-                    "name surname lorem ipsum lorem ipsum lorem ipsum lorem lorem  ipsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaum lorem",
+                   widget.yep["text"],
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.left,
                   ),

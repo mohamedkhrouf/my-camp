@@ -5,6 +5,8 @@ import 'package:my_camp/screens/campSitePage/mainScreen/campSitePage.dart';
 class CampSite extends StatefulWidget {
   @override
   _CampSite createState() => _CampSite();
+  final data;
+  const CampSite({Key key, this.data}) : super(key: key);
 }
 
 class _CampSite extends State<CampSite> {
@@ -26,8 +28,8 @@ class _CampSite extends State<CampSite> {
               child: Text(
                 "Lorem Ipsum",
                 style: TextStyle(
-                  color: Color.fromRGBO(0,0,0, 1),
-                  fontSize: 14*1.1,
+                  color: Color.fromRGBO(0, 0, 0, 1),
+                  fontSize: 14 * 1.1,
                 ),
               ),
             ),
@@ -35,17 +37,17 @@ class _CampSite extends State<CampSite> {
               child: Text(
                 "25.00,-38.36",
                 style: TextStyle(
-                  color: Color.fromRGBO(0,0,0, 1),
-                   fontSize: 10*1.1,
+                  color: Color.fromRGBO(0, 0, 0, 1),
+                  fontSize: 10 * 1.1,
                 ),
               ),
             ),
             Container(
                 child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
               style: TextStyle(
-                color: Color.fromRGBO(0,0,0, 1),
-                 fontSize: 14*1.1,
+                color: Color.fromRGBO(0, 0, 0, 1),
+                fontSize: 14 * 1.1,
               ),
             )),
           ],
@@ -62,12 +64,19 @@ class _CampSite extends State<CampSite> {
               );
             },
             child: Row(
-              children: [Text("More",
-              style: TextStyle(
-                color: Color.fromRGBO(0,0,0, 1),
-                 fontSize: 14*1.1,
-              ),), Icon(Icons.arrow_forward,
-              color: Color.fromRGBO(0,0,0 ,1),)],
+              children: [
+                Text(
+                  "More",
+                  style: TextStyle(
+                    color: Color.fromRGBO(0, 0, 0, 1),
+                    fontSize: 14 * 1.1,
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward,
+                  color: Color.fromRGBO(0, 0, 0, 1),
+                )
+              ],
             )),
       )
     ]));
