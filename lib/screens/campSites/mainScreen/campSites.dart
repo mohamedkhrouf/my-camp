@@ -58,7 +58,7 @@ class _CampSites extends State<CampSites> {
                         )),
                       ]))),
               ...campList.map((e) {
-                return CampSite();
+                return CampSite(data:e.data());
               }),
             ],
           ),
