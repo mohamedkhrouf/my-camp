@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/Notifications/mainScreen/notifPage.dart';
@@ -11,6 +13,36 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  var user;
+  List posts;
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+    getPosts();
+    print(posts);
+  }
+
+  List getProfile() {
+    var uid = (FirebaseAuth.instance.currentUser).uid;
+
+    print(uid);
+    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
+      if (mounted) {
+        setState(() {
+          user = value;
+        });
+      }
+    });
+    return user;
+  }
+
+  List getPosts() {
+    if (user != null) {
+      
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -23,8 +55,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   child: CircleAvatar(
                     radius: 60.0,
-                    backgroundImage:
-                    AssetImage("assets/mekki.jpg"),
+                    backgroundImage: NetworkImage(user != null
+                        ? user.data()["avatar"]
+                        : "https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -37,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: Text(
-                          "Ahmed Mekki ",
+                          user != null ? user.data()["username"] : "",
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.blue,
@@ -46,14 +79,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Container(
+                          child: Text(user != null ? user.data()["ville"] : "",
+                              maxLines: 3, style: TextStyle(fontSize: 15)),
+                        ),
+                      ),
+                      Container(
                         child: Container(
                           child: Text(
-                              "jeyeb 13.5 fel sem 2 lssd tayer aaaaaaaaaaaaaaaaaa",
+                              user != null ? user.data()["birthday"] : "",
                               maxLines: 3,
                               style: TextStyle(fontSize: 15)),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -64,74 +102,68 @@ class _ProfilePageState extends State<ProfilePage> {
                 left: MediaQuery.of(context).size.width * 0.071,
                 top: MediaQuery.of(context).size.width * 0.071),
           ),
-    
           Container(
-              padding: EdgeInsets.only(top: 10),
-              child: Wrap(
-                children: [
-                  Spacer(),
-                  Container(
-                    margin: EdgeInsets.only(right: 16.0,bottom: 16.0),
-
-                    child: OutlinedButton(
-                        style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.only(top: 10),
+            child: Wrap(
+              children: [
+                Spacer(),
+                Container(
+                  margin: EdgeInsets.only(right: 16.0, bottom: 16.0),
+                  child: OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                        side: BorderSide(
+                            width: 3,
+                            style: BorderStyle.solid,
+                            color: Colors.blue),
+                        primary: Color.fromRGBO(241, 249, 255, 1),
+                        padding: EdgeInsets.only(
+                            top: 10, bottom: 10, left: 40, right: 40),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30)),
+                            side: BorderSide(color: Colors.red))),
+                    onPressed: () {},
+                    child: Text('Edit Picture'),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  child: OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                        side: BorderSide(
+                            width: 3,
+                            style: BorderStyle.solid,
+                            color: Colors.blue),
+                        primary: Color.fromRGBO(241, 249, 255, 1),
+                        padding: EdgeInsets.only(
+                            top: 10, bottom: 10, left: 40, right: 40),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30)),
                             side: BorderSide(
                                 width: 3,
                                 style: BorderStyle.solid,
-                                color: Colors.blue),
-                            primary: Color.fromRGBO(241, 249, 255, 1),
-                            padding: EdgeInsets.only(
-                                top: 10, bottom: 10, left: 40, right: 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(30),
-                                    bottomRight: Radius.circular(30),
-                                    topLeft: Radius.circular(30),
-                                    bottomLeft: Radius.circular(30)),
-                                side: BorderSide(color: Colors.red))),
-                        onPressed: () {},
-                        child: Text('Edit Picture'),
-                      ),
-                     ),
-                     Spacer(),
-                  Container(
-                    child: OutlinedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                              width: 3,
-                              style: BorderStyle.solid,
-                              color: Colors.blue),
-                          primary: Color.fromRGBO(241, 249, 255, 1),
-                          padding: EdgeInsets.only(
-                              top: 10, bottom: 10, left: 40, right: 40),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(30),
-                                  bottomRight: Radius.circular(30),
-                                  topLeft: Radius.circular(30),
-                                  bottomLeft: Radius.circular(30)),
-                              side: BorderSide(
-                                  width: 3,
-                                  style: BorderStyle.solid,
-                                  color: Colors.blue))),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NotifPage()));
-                      },
-
-                      child: Text('Notifications'),
-                    ),
-
+                                color: Colors.blue))),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => NotifPage()));
+                    },
+                    child: Text('Notifications'),
                   ),
-                  Spacer()
-                ],
-              ),
-              ),
+                ),
+                Spacer()
+              ],
+            ),
+          ),
           Container(
             child: Text(
-              'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+              user != null ? user.data()["description"] : "",
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.grey,
@@ -143,10 +175,8 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             child: ElevatedButton(
               onPressed: () {
-                 Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PostImage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PostImage()));
               },
               child: Icon(Icons.add, color: Colors.white),
               style: ElevatedButton.styleFrom(
@@ -159,8 +189,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             margin: EdgeInsets.all(10),
           ),
-          PostPage(),
-          PostPage(),
+          posts != null
+              ? {
+                  ...posts.map((e) {
+                    return PostPage();
+                  })
+                }
+              : Text("loading"),
         ],
       ),
     );
