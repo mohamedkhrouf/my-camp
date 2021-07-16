@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class Notif extends StatefulWidget {
 
-class Notif extends StatelessWidget {
+  @override
+  _Notif createState() => _Notif();
+}
+
+class _Notif extends State<Notif> {
+
   @override
   Widget build(BuildContext context) {
     return  Container(

@@ -4,9 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/Notifications/widgets/notif.dart';
 
+class NotifPage extends StatefulWidget {
 
-class NotifPage extends StatelessWidget {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  @override
+  _NotifPageState createState() => _NotifPageState();
+}
+
+class _NotifPageState extends State<NotifPage> {
+
   final border = OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(90.0)),
       borderSide: BorderSide(

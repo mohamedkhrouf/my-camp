@@ -41,15 +41,18 @@ class _ChatMessage extends State<ChatMessage> {
     // TODO: implement initState
     super.initState();
    // print(widget.members);
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(widget.senderId)
-        .get()
-        .then((value) => setState(() {
-              widget.senderImage = value.data()["avatar"];
-            }));
+getImage();
   }
-
+  var senderImage = null ;
+getImage(){
+  FirebaseFirestore.instance
+      .collection('user')
+      .doc(widget.senderId)
+      .get()
+      .then((value) => setState(() {
+    senderImage = value.data()["avatar"];
+  }));
+}
   CrossAxisAlignment messageAlignment() {
     if (widget.messageType == null ||
         widget.messageType == MessageType.received) {
@@ -124,7 +127,7 @@ class _ChatMessage extends State<ChatMessage> {
                     widget.messageType == MessageType.received)
                 ? Container(
                     margin: EdgeInsets.only(right: 10),
-                    child: widget.senderImage == null
+                    child: senderImage == null
                         ? Container(
                             width: 35,
                             height: 35,
@@ -134,7 +137,7 @@ class _ChatMessage extends State<ChatMessage> {
                           )
                         : CircleAvatar(
                             radius: 20.0,
-                            backgroundImage: NetworkImage(widget.senderImage),
+                            backgroundImage: NetworkImage(senderImage),
                             backgroundColor: Colors.transparent,
                           ),
                   )
@@ -168,7 +171,7 @@ class _ChatMessage extends State<ChatMessage> {
             (widget.messageType == MessageType.sent)
                 ? Container(
                     margin: EdgeInsets.only(left: 10),
-                    child: widget.senderImage == null
+                    child: senderImage == null
                         ? Container(
                             width: 35,
                             height: 35,
@@ -178,7 +181,7 @@ class _ChatMessage extends State<ChatMessage> {
                           )
                         : CircleAvatar(
                             radius: 20.0,
-                            backgroundImage: NetworkImage(widget.senderImage),
+                            backgroundImage: NetworkImage(senderImage),
                             backgroundColor: Colors.transparent,
                           ),
                   )

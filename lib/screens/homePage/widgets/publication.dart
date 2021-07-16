@@ -145,7 +145,13 @@ class _ContState extends State<Cont> {
                 Spacer(),
               ],
             )),
-        Stack(
+        GestureDetector(
+          onDoubleTap: (){
+            setState(() {
+              like();
+            });
+          },
+          child:Stack(
           children: [
             CarouselSlider(
               options: CarouselOptions(
@@ -197,7 +203,7 @@ class _ContState extends State<Cont> {
                   ],
                 )),
           ],
-        ),
+        ),),
         Container(
             color: Color.fromRGBO(255, 255, 255, 1),
             width: MediaQuery.of(context).size.width,
