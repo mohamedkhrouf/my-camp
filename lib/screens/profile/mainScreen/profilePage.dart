@@ -39,20 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   List getPosts() {
     if (user != null) {
-      List ids = user.data()["posts"].toString().split(",");
-      ids.forEach((element) {
-        FirebaseFirestore.instance
-            .collection('post')
-            .doc(element)
-            .get()
-            .then((value) {
-          if (mounted) {
-            setState(() {
-              posts.add(value);
-            });
-          }
-        });
-      });
+      
     }
   }
 
@@ -202,9 +189,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             margin: EdgeInsets.all(10),
           ),
-          posts!=null? {...posts.map((e) {
-            return PostPage();
-          })}:Text("loading"),
+          posts != null
+              ? {
+                  ...posts.map((e) {
+                    return PostPage();
+                  })
+                }
+              : Text("loading"),
         ],
       ),
     );
