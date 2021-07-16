@@ -73,6 +73,7 @@ class _Task extends State<Task> {
     }
 
     return ListTile(
+
         leading: Container(
           child: CircleAvatar(
             radius: 30.0,

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -123,10 +124,11 @@ class _ContState extends State<Cont> {
                     Container(
                       child: Text(
                         widget.yep != null
-                            ? DateTime.fromMicrosecondsSinceEpoch(
-                                    widget.yep["publicationDate"].seconds *
-                                        1000002)
-                                .toString()
+                            ? DateFormat('dd/MM/yyyy').format(DateTime.fromMicrosecondsSinceEpoch(
+                            widget.yep["publicationDate"].microsecondsSinceEpoch))
+                            .toString()
+
+
                             : "",
                         style: TextStyle(fontSize: 15),
                       ),

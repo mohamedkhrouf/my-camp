@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/tasks/widgets/task.dart';
@@ -11,27 +13,39 @@ class TaskModel {
 }
 
 class Tasks extends StatefulWidget {
+  final eventId ;
+  const Tasks({Key key, this.eventId}) : super(key: key);
   @override
   _Tasks createState() => _Tasks();
 }
 
-List<TaskModel> allTasks = [
-  new TaskModel(taskName: "task 1 .....", state: true),
-  new TaskModel(taskName: "task 2 .....", state: true),
-  new TaskModel(taskName: "task 3 .....", state: true),
-  new TaskModel(taskName: "task 4 .....", state: true),
-  new TaskModel(taskName: "task 75 .....", state: true),
-  new TaskModel(taskName: "task 8 .....", state: true),
-  new TaskModel(taskName: "task 7 .....", state: true),
-  new TaskModel(taskName: "task 9 .....", state: true),
-  new TaskModel(taskName: "task 10 .....", state: true),
-  new TaskModel(taskName: "task 11 .....", state: true),
-];
+
 
 class _Tasks extends State<Tasks> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final taskController = TextEditingController();
+  var allTasks = [];
+  var realTasks = [];
+  var taskname= "";
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTasks();
+  }
+  getTasks(){
+  FirebaseFirestore.instance.collection('task').
+  snapshots().listen((snapshot) {
+    if (mounted) {
+    setState(() {
+      allTasks=snapshot.docs;
+
+    });}
+
+  });
+  
+  }
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -41,11 +55,20 @@ class _Tasks extends State<Tasks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          child: TasksAppBar(),
-          preferredSize: const Size.fromHeight(100),
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(36, 34, 47, 1),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            "Tasks",
+            style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
+          ),
+
         ),
         body: SingleChildScrollView(
+            physics: ScrollPhysics(),
             child: Column(children: [
               Form(
                   key: _formKey,
@@ -54,6 +77,11 @@ class _Tasks extends State<Tasks> {
 
                       child:Row (children:[
                         new Flexible(child: TextFormField(
+                          onChanged: (text){
+                            setState(() {
+                              taskname=taskController.text ;
+                            });
+                          },
                           controller: taskController ,
                           decoration: const InputDecoration(
                               hintText: 'Enter your task',
@@ -68,37 +96,74 @@ class _Tasks extends State<Tasks> {
                         Container(
 
                             margin: EdgeInsets.only(left: 5),
-                            child:ElevatedButton(
+                            child:taskname!=""?ElevatedButton(
                             onPressed: (){
                               setState(() {
-                                allTasks.add(new TaskModel(taskName: taskController.text, state: true));
+                                FirebaseFirestore.instance.collection('task').add(
+                                    {
+                                      'checked' : false ,
+                                      'eventId': FirebaseFirestore.instance.collection('event').doc(widget.eventId),
+                                      'name' : taskController.text ,
+                                      'userId' : null
+
+
+                                    });
 
                               });
+                              taskController.clear();
                             },
-                            child: Text("Add"),
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(EdgeInsets.all(20.0)),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    )))
+                            child: Text("Add",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1) ),),
+                            style: ElevatedButton.styleFrom(
 
-                        ))
+                              primary:Color.fromRGBO(36, 34, 47, 1) ,
+                                padding: EdgeInsets.only(right:20.0, left: 20.0 , top : 16 , bottom: 16)
+
+
+
+                            )
+
+                        ):ElevatedButton(
+                                onPressed: (){
+
+
+                                },
+                                child: Text("Add",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1) ),),
+                                style: ElevatedButton.styleFrom(
+
+                                    primary:Color.fromRGBO(36, 34, 47, 1) ,
+                                    padding: EdgeInsets.only(right:20.0, left: 20.0 , top : 16 , bottom: 16)
+
+
+
+                                )
+
+                            ))
                       ]
                       )
             )
         ),
-              ListView.builder(
+              ...allTasks.map((item) {
+                if (item
+                    .data()["eventId"]
+                    .id == widget.eventId
+                    ) {
+                  return new Task(taskName: item.data()["name"],userId: item.data()["userId"],taskId: item.id,taskDone :item.data()["checked"]);
+                } else {
+                  return Container();
+                }
+              }).toList(),
+            /*  ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                 itemCount: allTasks.length,
                 itemBuilder: (context, index) {
                 return Container(
-                    margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                    margin: EdgeInsets.only(left: 16.0, right: 3.5),
                     decoration: BoxDecoration(
                         border: Border(bottom:BorderSide(width: 0.5,color: Color.fromRGBO(241,220,255 ,1)),)
                     ),
-                    child:Task(taskName: allTasks[index].taskName));
-              })
+                    child:Task(taskName: realTasks[index].data()["name"]));
+              })*/
         ])));
   }
 }

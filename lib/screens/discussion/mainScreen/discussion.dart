@@ -4,16 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_camp/screens/discussion/widgets/chatMessage.dart';
+import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 import 'package:my_camp/screens/tasks/mainScreen/tasks.dart';
 
 class Discussion extends StatefulWidget {
   final eventId ;
+  final groupName;
 
-  const Discussion({Key key, this.eventId}) : super(key: key);
+  const Discussion({Key key, this.eventId, this.groupName}) : super(key: key);
   @override
   _Discussion createState() => _Discussion();
 }
+class Member{
+Member({this.memberImage, this.memberId});
 
+final String memberImage;
+final String memberId;
+}
 class _Discussion extends State<Discussion> {
   /*var messages = [
     ChatMessage(
@@ -49,7 +56,7 @@ class _Discussion extends State<Discussion> {
     ChatMessage(),
   ];*/
   var messages = [] ;
-  var images=[];
+  var members = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final messageController = TextEditingController();
 
@@ -57,25 +64,18 @@ class _Discussion extends State<Discussion> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //getMembers();
     getMessages();
   }
-  List getMessages() {
-print(widget.eventId)  ;
+  Future<void> getMessages() async{
     FirebaseFirestore.instance.collection('event').doc(widget.eventId).
     collection('messages').orderBy("sendTime" ).snapshots().listen((snapshot) {
       if (mounted) {
         setState(() {
           messages= snapshot.docs ;
+         //while(messages.length>images.length)
 
-          for(int i =0 ; i< messages.length ; i++){
-            FirebaseFirestore.instance.collection('user').doc(messages[i].data()["senderId"].id).get().then((value)
-                {
-                  setState(() {
-                    images.add(value.data()["avatar"]);
 
-                  });
-                } );
-          }
 
           //print(documents[3].data());
           // usersList = snapshot.docs;
@@ -83,7 +83,23 @@ print(widget.eventId)  ;
       }
     });
 
-    print(images);
+print (members);
+  }
+  getMembers(){
+    FirebaseFirestore.instance.collection('event').doc(widget.eventId).get().then((value) {
+      setState(() {
+        var tempMembers = value.data()["members"];
+        for(int i =0 ; i<tempMembers.length; i++)
+        {
+          var tempMemberImage="";
+          FirebaseFirestore.instance.collection('user').doc(tempMembers[i].id).get().then((value) {
+            tempMemberImage=value.data()["avatar"];
+            members.add(new Member(memberId: tempMembers[i].id,memberImage: tempMemberImage));
+          });
+
+        }
+      });
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -94,8 +110,8 @@ print(widget.eventId)  ;
           icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          "Esml l groupe",
+        title: Text(widget.groupName
+          ,
           style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
         ),
         actions: [
@@ -105,7 +121,7 @@ print(widget.eventId)  ;
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Tasks()),
+                      MaterialPageRoute(builder: (context) => Tasks(eventId: widget.eventId,)),
                     );
                   },
 
@@ -158,7 +174,7 @@ print(widget.eventId)  ;
             padding: EdgeInsets.all(16.0),
           )
       ),*/
-      body: Container(
+      body:Container(
         color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: Column(children: [
@@ -179,7 +195,10 @@ print(widget.eventId)  ;
                             messageType: messages[index].data()["senderId"].id == FirebaseAuth.instance.currentUser.uid ? MessageType.sent : MessageType.received,
                             //time: messages[index].data()["sendTime"],
                             message: messages[index].data()["text"],
-                            senderImage: images[index],
+                            //senderImage: "https://www.justifit.fr/wp-content/uploads/2020/06/Droit-a-limage.jpg",
+                              senderId: messages[index].data()["senderId"].id,
+                            members: members
+
                           );
                         }
                         )

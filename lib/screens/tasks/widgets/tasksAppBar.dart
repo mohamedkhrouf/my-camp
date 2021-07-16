@@ -8,30 +8,18 @@ class TasksAppBar extends StatefulWidget{
 class _TasksAppBar extends State<TasksAppBar>{
   @override
   Widget build(BuildContext context) {
-    return Container(
-          color: Colors.blue,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  child: Icon(Icons.arrow_back),
-                  margin: EdgeInsets.only(right: 20.0),
-                ),
-              ),
-              Text(
-                "Tasks",
-                style: TextStyle(fontSize: 20),
-              ),
+    return  AppBar(
+        backgroundColor: Color.fromRGBO(36, 34, 47, 1),
+    leading: IconButton(
+    icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
+    onPressed: () => Navigator.of(context).pop(),
+    ),
+    title: Text(
+    "Tasks",
+    style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
+    ),
 
-            ],
-          ),
-          padding: EdgeInsets.all(16.0),
-        );
+    );
   }
 
 

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/myEvents/widgets/event.dart';
 /*
@@ -132,8 +132,11 @@ class _MyEvents extends State<MyEvents> {
               ...shownEventList.map((e) {
                 return Group(
                   groupName: e.data()["name"],
-                  date: e.data()["name"],
+                  date: DateFormat('dd/MM/yyyy').format(DateTime.fromMicrosecondsSinceEpoch(
+                      e.data()["startingDate"].microsecondsSinceEpoch))
+                      .toString(),
                   eventId: e.id,
+                  groupImage : e.data()["images"][0]
                 );
               }),
               /* Container(

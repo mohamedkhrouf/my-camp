@@ -7,8 +7,9 @@ class Group extends StatefulWidget {
   final String groupName;
   final String eventId ;
   final String date;
+  final String groupImage;
 
-  const Group({Key key, this.groupName, this.date, this.eventId}) : super(key: key);
+  const Group({Key key, this.groupName, this.date, this.eventId, this.groupImage}) : super(key: key);
 
   @override
   _Group createState() => _Group();
@@ -21,7 +22,7 @@ class _Group extends State<Group> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Discussion(eventId: widget.eventId )),
+            MaterialPageRoute(builder: (context) => Discussion(eventId: widget.eventId, groupName: widget.groupName )),
           );
         },
         child: Container(child:Stack(children: [
@@ -35,7 +36,7 @@ class _Group extends State<Group> {
                  Container(
                   child: CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: AssetImage("assets/mekki.jpg"),
+                    backgroundImage: NetworkImage(widget.groupImage),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
