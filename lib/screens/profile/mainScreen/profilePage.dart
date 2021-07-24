@@ -14,7 +14,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   var user;
-  List posts;
+  List posts=[];
   @override
   void initState() {
     super.initState();
@@ -38,9 +38,19 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   List getPosts() {
-    if (user != null) {
-      
-    }
+    List documents;
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('post');
+
+    collectionReference.snapshots().listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          posts = snapshot.docs;
+          //print(documents[3].data());
+          // usersList = snapshot.docs;
+        });
+      }
+    });
   }
 
   @override
@@ -189,13 +199,18 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             margin: EdgeInsets.all(10),
           ),
-          posts != null
-              ? {
-                  ...posts.map((e) {
-                    return PostPage();
-                  })
-                }
-              : Text("loading"),
+        ...posts.map((item) {
+            if (item.data()["userId"] != null) {
+              if (item.data()["userId"].id ==
+                  (((FirebaseAuth.instance.currentUser).uid))) {
+                return new PostPage(yep: item.data(),id: item.id);
+              } else {
+                return Container();
+              }
+            } else {
+              return Container();
+            }
+          }).toList(),
         ],
       ),
     );

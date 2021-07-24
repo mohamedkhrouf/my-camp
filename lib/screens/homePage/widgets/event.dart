@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
@@ -6,12 +8,72 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class EvPage extends StatefulWidget {
   @override
   _EvPageState createState() => _EvPageState();
-  final data;
-  const EvPage({Key key, this.data}) : super(key: key);
+  final yep;
+  final id;
+  const EvPage({Key key, this.yep, this.id}) : super(key: key);
 }
 
 class _EvPageState extends State<EvPage> {
   var clicked = false;
+  var user;
+
+    @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+  getUser() {
+//    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
+    String uid = widget.yep["adminId"].id;
+    print(uid);
+    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
+      if (mounted) {
+        setState(() {
+          user = value;
+        });
+      }
+    });
+    return user;
+  }
+ nblikes() {
+    return widget.yep["likes"].length;
+  }
+
+  liked() {
+    if (widget.yep["likes"]
+        .toString()
+        .contains((FirebaseAuth.instance.currentUser).uid)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> like() {
+    String userId = (FirebaseAuth.instance.currentUser).uid;
+
+    if (widget.yep["likes"]
+        .toString()
+        .contains((FirebaseAuth.instance.currentUser).uid)) {
+      FirebaseFirestore.instance
+          .collection('event')
+          .doc(widget.id)
+          .update({
+            'likes': FieldValue.arrayRemove([userId])
+          })
+          .then((value) => print("User Updated"))
+          .catchError((error) => print("Failed to update user: $error"));
+    } else {
+      FirebaseFirestore.instance
+          .collection('event')
+          .doc(widget.id)
+          .update({
+            'likes': FieldValue.arrayUnion([userId])
+          })
+          .then((value) => print("User Updated"))
+          .catchError((error) => print("Failed to update user: $error"));
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,7 +89,7 @@ class _EvPageState extends State<EvPage> {
                 Container(
                   child: CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: AssetImage("assets/mekki.jpg"),
+                    backgroundImage: NetworkImage(user!=null?user.data()["avatar"]:"https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -39,7 +101,7 @@ class _EvPageState extends State<EvPage> {
                   children: [
                     Container(
                       child: Text(
-                        widget.data["name"],
+                        widget.yep["name"],
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.left,
                       ),
@@ -48,8 +110,7 @@ class _EvPageState extends State<EvPage> {
                     Container(
                       child: Text(
                         DateTime.fromMicrosecondsSinceEpoch(
-                                widget.data["publicationDate"].seconds *
-                                    1000002)
+                                widget.yep["publicationDate"].seconds * 1000002)
                             .toString(),
                         style: TextStyle(fontSize: 15),
                         textAlign: TextAlign.left,
@@ -72,7 +133,7 @@ class _EvPageState extends State<EvPage> {
             child: Stack(
           children: [
             Image.network(
-              widget.data["images"][0],
+              widget.yep["images"][0],
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.fitWidth,
             ),
@@ -151,15 +212,32 @@ class _EvPageState extends State<EvPage> {
                   child: Row(
                     children: [
                       Container(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              like();
+                            });
+                          },
                           child: Icon(
                             FontAwesomeIcons.fire,
-                            color: Color.fromRGBO(0, 0, 0, 1),
+                            color: liked()
+                                ? Color.fromRGBO(207, 53, 46, 1)
+                                : Color.fromRGBO(0, 0, 0, 1),
+                            size: 27,
                           ),
-                          margin: EdgeInsets.only(right: 20)),
+                        ),
+                        margin: EdgeInsets.only(right: 20),
+                      ),
                       Container(
-                        child: Icon(
-                          FontAwesomeIcons.commentDots,
-                          color: Color.fromRGBO(0, 0, 0, 1),
+                        child: GestureDetector(
+                          child: Icon(
+                            FontAwesomeIcons.commentDots,
+                            color: Color.fromRGBO(0, 0, 0, 1),
+                            size: 27,
+                          ),
+                          onTap: () {
+                            setState(() {});
+                          },
                         ),
                       )
                     ],
@@ -168,7 +246,7 @@ class _EvPageState extends State<EvPage> {
                 ),
                 Container(
                   child: Text(
-                    widget.data["description"],
+                    widget.yep["description"],
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.left,
                   ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/addEventFormPage/mainScreen/addEventForm.dart';
@@ -14,12 +15,28 @@ class _HomePageState extends State<HomePage> {
   List eventList = [];
   var publication = false;
   var event = false;
+  var user;
   List postList = [];
   @override
   void initState() {
     super.initState();
     getEvents();
     getPosts();
+    getUser();
+  }
+
+  getUser() {
+//    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
+    String uid = (FirebaseAuth.instance.currentUser).uid;
+    print(uid);
+    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
+      if (mounted) {
+        setState(() {
+          user = value;
+        });
+      }
+    });
+    return user;
   }
 
   List getEvents() {
@@ -47,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       if (mounted) {
         setState(() {
           postList = snapshot.docs;
-        
+
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
@@ -152,7 +169,7 @@ class _HomePageState extends State<HomePage> {
               ? Column(
                   children: [
                     ...postList.map((e) {
-                      return Cont(yep: e.data(),id:e.id);
+                      return Cont(yep: e.data(), id: e.id);
                     })
                   ],
                 )
@@ -164,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                           margin: EdgeInsets.only(right: 10.0),
                           child: CircleAvatar(
                             radius: 25.0,
-                            backgroundImage: AssetImage("assets/mekki.jpg"),
+                            backgroundImage: NetworkImage(user!=null?user.data()["avatar"]:"https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
                             backgroundColor: Colors.transparent,
                           ),
                         ),
@@ -197,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     children: [
                       ...eventList.map((e) {
-                        return EvPage(data: e.data());
+                        return EvPage(yep: e.data(),id:e.id);
                       }),
                     ],
                   )
