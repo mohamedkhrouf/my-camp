@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 class Notif extends StatefulWidget {
   @override
   _Notif createState() => _Notif();
-  final yep;
+  final demand;
   final id;
-  const Notif({Key key, this.yep, this.id}) : super(key: key);
+  const Notif({Key key, this.demand, this.id}) : super(key: key);
 }
 
 class _Notif extends State<Notif> {
   var user;
+  var event ;
 
   void initState() {
     super.initState();
@@ -20,9 +21,9 @@ class _Notif extends State<Notif> {
     print(user);
   }
 
-  getUser() {
+  getUser()  {
 //    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
-    String uid = widget.yep["userId"].id;
+    String uid = widget.demand["userId"].id;
     print(uid);
     FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
       if (mounted) {
@@ -31,7 +32,10 @@ class _Notif extends State<Notif> {
         });
       }
     });
-    return user;
+
+          event = widget.demand["eventId"];
+
+
   }
 
   @override
@@ -57,6 +61,8 @@ class _Notif extends State<Notif> {
           Container(
               padding: EdgeInsets.only(left: 20),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     child: Text(user!=null?user.data()["username"]:"",
@@ -64,7 +70,7 @@ class _Notif extends State<Notif> {
                   ),
                   Container(
                     child:
-                        Text("San francisco", style: TextStyle(fontSize: 15)),
+                        Text(event!= null ? event["name"]: "", style: TextStyle(fontSize: 15)),
                   ),
                 ],
               )),

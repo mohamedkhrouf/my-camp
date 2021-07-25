@@ -79,7 +79,7 @@ class _NotifPageState extends State<NotifPage> {
               if (item.data()["receiverId"].id ==
                   (((FirebaseAuth.instance.currentUser).uid))) {
                 
-                return new Notif(yep: item.data(), id: item.id);
+                return new Notif(demand: item.data(), id: item.id);
               } else {
                 return Container();
               }

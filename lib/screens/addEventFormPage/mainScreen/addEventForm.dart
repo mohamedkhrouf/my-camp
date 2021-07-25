@@ -110,8 +110,8 @@ class _AddEventForm extends State<AddEventForm> {
         return collectionReference
             .add({
           'name' : 'camping by',
-          'description': descriptionController.text, // John Doe
-          'latitude': latitudeController.text, // Stokes and Sons
+          'description': descriptionController.text,
+          'latitude': latitudeController.text,
           'longitude': longitudeController.text ,
           'nbPart' : nbPlaceController.text ,
           'startingDate' : selectedCampingDate ,

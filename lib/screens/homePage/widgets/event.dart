@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 class EvPage extends StatefulWidget {
   @override
@@ -101,7 +102,7 @@ class _EvPageState extends State<EvPage> {
                   children: [
                     Container(
                       child: Text(
-                        widget.yep["name"],
+                        user!=null ?  user.data()["username"]: "",
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.left,
                       ),
@@ -109,8 +110,8 @@ class _EvPageState extends State<EvPage> {
                     ),
                     Container(
                       child: Text(
-                        DateTime.fromMicrosecondsSinceEpoch(
-                                widget.yep["publicationDate"].seconds * 1000002)
+                        DateFormat('dd/MM/yyyy').format(DateTime.fromMicrosecondsSinceEpoch(
+                            widget.yep["publicationDate"].microsecondsSinceEpoch))
                             .toString(),
                         style: TextStyle(fontSize: 15),
                         textAlign: TextAlign.left,
@@ -166,7 +167,14 @@ class _EvPageState extends State<EvPage> {
                             )),
                         onPressed: () {
                           setState(() {
-                            clicked = !clicked;
+                            FirebaseFirestore.instance.collection('demand').add(
+                              {
+                                  'eventId': widget.yep,
+                                  'userId' : FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid),
+                                  'state': "pending",
+                                  'receiverId': FirebaseFirestore.instance.doc("user/"+user.id)
+                              }
+                            );
                           });
                         },
                         child: !clicked ? Text('Join') : Text('pending...'),
@@ -203,10 +211,13 @@ class _EvPageState extends State<EvPage> {
           ],
         )),
         Container(
+            margin: EdgeInsets.only(left: 10, top: 10,bottom: 16),
+
             color: Color.fromRGBO(255, 255, 255, 1),
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(bottom: 16),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   child: Row(
@@ -242,18 +253,18 @@ class _EvPageState extends State<EvPage> {
                       )
                     ],
                   ),
-                  margin: EdgeInsets.only(left: 10, top: 10),
                 ),
+                Text("Event Name: "+widget.yep["name"],style: TextStyle(fontSize: 20),),
                 Container(
                   child: Text(
                     widget.yep["description"],
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.left,
                   ),
-                  margin: EdgeInsets.only(left: 10, right: 10),
                 ),
               ],
-            ))
+            )
+        )
       ],
     );
   }
