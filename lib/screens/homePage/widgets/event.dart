@@ -169,7 +169,7 @@ class _EvPageState extends State<EvPage> {
                           setState(() {
                             FirebaseFirestore.instance.collection('demand').add(
                               {
-                                  'eventId': widget.yep,
+                                  'eventId': FirebaseFirestore.instance.doc("event/"+widget.id),
                                   'userId' : FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid),
                                   'state': "pending",
                                   'receiverId': FirebaseFirestore.instance.doc("user/"+user.id)

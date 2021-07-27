@@ -32,8 +32,14 @@ class _Notif extends State<Notif> {
         });
       }
     });
+    FirebaseFirestore.instance.collection('event').doc(widget.demand["eventId"].id).get().then((value) {
+      if (mounted) {
+        setState(() {
+          event = value;
+        });
+      }
+    });
 
-          event = widget.demand["eventId"];
 
 
   }
@@ -70,7 +76,7 @@ class _Notif extends State<Notif> {
                   ),
                   Container(
                     child:
-                        Text(event!= null ? event["name"]: "", style: TextStyle(fontSize: 15)),
+                        Text(event!= null ? event.data()["name"]: "", style: TextStyle(fontSize: 15)),
                   ),
                 ],
               )),
@@ -82,7 +88,31 @@ class _Notif extends State<Notif> {
                   Spacer(),
                   Container(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        FirebaseFirestore.instance.collection('event')
+                            .doc(widget.demand["eventId"].id)
+                            .update(
+                            {
+                              'members' :FieldValue
+                                  .arrayUnion(
+                                    [widget.demand["userId"]]
+                                  )
+                            }
+                            ).then((value) => print(widget.demand["userId"]))
+                            .catchError((error) => print("Failed to update event: $error"));
+                        FirebaseFirestore.instance.collection('user')
+                            .doc(widget.demand["userId"].id)
+                            .update(
+                            {
+                              'events' :FieldValue
+                                  .arrayUnion(
+                                  [widget.demand["eventId"]]
+                              )
+                            }
+                        ).then((value) => print(widget.demand["eventId"]))
+                            .catchError((error) => print("Failed to update user: $error"));
+                       FirebaseFirestore.instance.collection('demand').doc(widget.id).delete();
+                      },
                       child: Icon(Icons.check_sharp, color: Colors.white),
                       style: ElevatedButton.styleFrom(
                         shape: CircleBorder(),
@@ -94,7 +124,10 @@ class _Notif extends State<Notif> {
                   ),
                   Container(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print("delete");
+                        FirebaseFirestore.instance.collection('demand').doc(widget.id).delete();
+                      },
                       child: Icon(Icons.clear, color: Colors.white),
                       style: ElevatedButton.styleFrom(
                         shape: CircleBorder(),

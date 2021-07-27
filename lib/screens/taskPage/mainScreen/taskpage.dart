@@ -41,7 +41,10 @@ class _TaskPage extends State<TaskPage> {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(top: 40),
-        child: SingleChildScrollView(
+        child: taskList.length==0
+            ?
+        Center(child: Text("No tasks"))
+            :SingleChildScrollView(
             child: Column(
           children: [
             ...taskList.map((item) {

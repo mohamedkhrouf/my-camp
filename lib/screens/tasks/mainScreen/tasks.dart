@@ -67,7 +67,8 @@ class _Tasks extends State<Tasks> {
           ),
 
         ),
-        body: SingleChildScrollView(
+        body:
+        SingleChildScrollView(
             physics: ScrollPhysics(),
             child: Column(children: [
               Form(

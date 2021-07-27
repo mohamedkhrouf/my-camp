@@ -72,7 +72,7 @@ class _NotifPageState extends State<NotifPage> {
             )
 
         ) ,*/
-        body: SingleChildScrollView(
+        body: notifs.length==0? Center(child: Text("No notifications")): SingleChildScrollView(
             child: Column(children: [
           ...notifs.map((item) {
             if (item.data()["receiverId"] != null) {
