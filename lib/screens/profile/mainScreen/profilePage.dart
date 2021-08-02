@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/Notifications/mainScreen/notifPage.dart';
+import 'package:my_camp/screens/editProfile/mainScreen/editProfilePage.dart';
 import 'package:my_camp/screens/postImage/mainScreen/postImage.dart';
 
 import 'package:my_camp/screens/profile/widgets/post.dart';
@@ -135,8 +136,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 topLeft: Radius.circular(30),
                                 bottomLeft: Radius.circular(30)),
                             side: BorderSide(color: Colors.red))),
-                    onPressed: () {},
-                    child: Text('Edit Picture'),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => EditProfilePage()));
+                    },
+                    child: Text('Edit Profile'),
                   ),
                 ),
                 Spacer(),
