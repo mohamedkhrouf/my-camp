@@ -43,7 +43,7 @@ class _TaskPage extends State<TaskPage> {
         margin: EdgeInsets.only(top: 40),
         child: taskList.length==0
             ?
-        Center(child: Text("No tasks"))
+        Center(child: Text("No tasks for the moment"))
             :SingleChildScrollView(
             child: Column(
           children: [
