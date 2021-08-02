@@ -83,7 +83,6 @@ class _EvPageState extends State<EvPage> {
             color: Color.fromRGBO(188, 224, 253, 1),
             padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top: 16),
             child: Row(
               children: [
                 Spacer(),
@@ -211,8 +210,8 @@ class _EvPageState extends State<EvPage> {
           ],
         )),
         Container(
-            margin: EdgeInsets.only(left: 10, top: 10,bottom: 16),
-
+            margin: EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.only(left:10.0 , top: 10.0),
             color: Color.fromRGBO(255, 255, 255, 1),
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -254,6 +253,7 @@ class _EvPageState extends State<EvPage> {
                     ],
                   ),
                 ),
+                SizedBox(height: 6.0),
                 Text("Event Name: "+widget.yep["name"],style: TextStyle(fontSize: 20),),
                 Container(
                   child: Text(

@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                 )
               : Column(children: [
                   Container(
-                      margin: EdgeInsets.only(left: 16.0),
+                      margin: EdgeInsets.only(left: 16.0,right: 16.0,bottom: 16.0),
                       child: Row(children: [
                         Container(
                           margin: EdgeInsets.only(right: 10.0),
@@ -191,14 +191,14 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AddEventForm()),
+                                    builder: (context) => AddEventForm(user: user)),
                               );
                             },
                             child: SizedBox(
-                              height: 30,
+                              height: 36,
                               width: MediaQuery.of(context).size.width * 0.8,
                               child: Container(
-                                padding: EdgeInsets.only(left: 16.0, top: 4.2),
+                                padding: EdgeInsets.only(left: 16.0, top: 10,bottom: 10),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16.0),
                                     border: Border.all(color: Colors.black)),

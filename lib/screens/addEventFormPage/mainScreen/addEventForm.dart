@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' ;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,20 +13,47 @@ import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
 import '../../homePage/widgets/campSitesList.dart';
 
 class AddEventForm extends StatefulWidget {
+  final user ;
+
+  const AddEventForm({Key key, this.user}) : super(key: key);
   @override
   _AddEventForm createState() => _AddEventForm();
 }
 
 class _AddEventForm extends State<AddEventForm> {
   List chosenImages = [];
+  List chosenImagesUrl = [] ;
   final descriptionController = TextEditingController();
   final latitudeController = TextEditingController();
   final longitudeController = TextEditingController();
   final nbPlaceController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  var username= "" ;
   var imagesError= "";
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    username= widget.user.data()["username"];
+  }
+  // ignore: missing_return
+  Future uploadImageToFirebase(BuildContext context)  async {
+  var image ;
+    FirebaseStorage storage = FirebaseStorage.instance;
+    for(File image in chosenImages){
+      Reference ref = storage.ref().child("$image" + DateTime.now().toString());
+      UploadTask uploadTask = ref.putFile(image);
+      uploadTask.then((res) {
+        if (mounted)
+        setState(() {
+          res.ref.getDownloadURL().then((value) => chosenImagesUrl.add(value));
 
+        });
+
+
+      });
+    }
+  }
   void deleteImage(int index) {
     setState(() {
       chosenImages.removeAt(index);
@@ -41,7 +69,7 @@ class _AddEventForm extends State<AddEventForm> {
     setState(() {
       _image = File(image.path);
 
-      chosenImages.add(image.path
+      chosenImages.add(_image
 
           //ImageContainer(imagePath: _image.path,index: chosenImages.length,deleteImage: deleteImage,          )
           );
@@ -98,41 +126,45 @@ class _AddEventForm extends State<AddEventForm> {
           Padding(
               padding: EdgeInsets.only(right: 20.0, top: 20),
               child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if(chosenImages.length==0)
                       setState(() {
                         imagesError="Choose at least a picture";
 
                       });
-      if(_formKey.currentState.validate()&& chosenImages.length>0) {
+    //  if(_formKey.currentState.validate()&& chosenImages.length>0) {
+          await uploadImageToFirebase(context);
+          CollectionReference collectionReference =FirebaseFirestore.instance.collection('event');
+          return collectionReference
+              .add({
+            'name' : 'camping by',
+            'description': descriptionController.text,
+            'latitude': latitudeController.text,
+            'longitude': longitudeController.text ,
+            'nbPart' : nbPlaceController.text ,
+            'startingDate' : selectedCampingDate ,
+            'dueDate' : selectedPayementDate ,
+            'publicationDate' : DateTime.now() ,
+            'images' : chosenImagesUrl,
+            'members' : [FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid)],
+            'adminId' : FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid) ,
+            'tasks' : [],
 
-        CollectionReference collectionReference =FirebaseFirestore.instance.collection('event');
-        return collectionReference
-            .add({
-          'name' : 'camping by',
-          'description': descriptionController.text,
-          'latitude': latitudeController.text,
-          'longitude': longitudeController.text ,
-          'nbPart' : nbPlaceController.text ,
-          'startingDate' : selectedCampingDate ,
-          'dueDate' : selectedPayementDate ,
-          'publicationDate' : DateTime.now() ,
-          'images' : [],
-          'members' : [],
-          'adminId' : FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid) ,
-          'tasks' : [],
+          })
+              .then((value)  {
+                print("hedhi ba3d");
+            descriptionController.clear();
+            latitudeController.clear();
+            longitudeController.clear();
+            nbPlaceController.clear();
+            Navigator.of(context).pop();
 
-        })
-            .then((value)  {
-              descriptionController.clear();
-              latitudeController.clear();
-              longitudeController.clear();
-              nbPlaceController.clear();
-              Navigator.of(context).pop();
+          })
+              .catchError((error) => print("Failed to add user: $error"));
 
-        })
-            .catchError((error) => print("Failed to add user: $error"));
-                          }},
+
+
+      },
                   child: Text(
                     "Publish",
                     style: TextStyle(
@@ -152,7 +184,7 @@ class _AddEventForm extends State<AddEventForm> {
               children: [
                 Container(
                   child: Text(
-                    "Hello username",
+                    "Hello ${username}",
                     style: TextStyle(fontSize: 28),
                   ),
                 ),
@@ -192,7 +224,7 @@ class _AddEventForm extends State<AddEventForm> {
                 ),
                 Container(
                   child: Wrap(
-                    spacing: 8.0,
+                    spacing: 4.0,
                     children: [
                       (chosenImages.length < 6)
                           ? GestureDetector(

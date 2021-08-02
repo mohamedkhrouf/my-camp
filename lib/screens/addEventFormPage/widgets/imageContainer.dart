@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 
 class ImageContainer extends StatefulWidget {
- final String imagePath ;
+ final  imagePath ;
    int index ;
  final void Function(int index) deleteImage;
 
@@ -32,7 +32,7 @@ class _ImageContainer extends State<ImageContainer> {
         image: DecorationImage(
           fit: BoxFit.fitHeight,
 
-          image: NetworkImage(widget.imagePath),
+          image: FileImage(widget.imagePath),
         ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12.0),

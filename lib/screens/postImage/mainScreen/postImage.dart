@@ -12,37 +12,22 @@ class _PostImageState extends State<PostImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40),
-            child: Container(
-              child: Row(
-                children: [
-                  Container(
-                    child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(Icons.arrow_back),
-                        style: ElevatedButton.styleFrom(
-                          side: BorderSide(color: Colors.white),
-                        )),
-                  ),
-                  Container(
-                      child: Text(
-                    "Profile",
-                    style: TextStyle(fontSize: 20, color: Colors.blue),
-                  ))
-                ],
-              ),
-              padding: EdgeInsets.all(0),
-            )),
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(36, 34, 47, 1),
+          leading: IconButton(
+            icon:
+            Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text("Post images"),
+        ),
         body: SingleChildScrollView(
             child: Column(children: [
           Row(
             children: [
               Spacer(),
               Container(
-                margin: EdgeInsets.only(bottom: 20, top:40),
+                margin: EdgeInsets.only(bottom: 20),
                 height: MediaQuery.of(context).size.width * 0.8,
                 width: MediaQuery.of(context).size.width,
                 color: Colors.blue,
@@ -67,7 +52,7 @@ class _PostImageState extends State<PostImage> {
             ],
           ),
           Container(
-            margin: EdgeInsets.only(bottom:10),
+            margin: EdgeInsets.only(bottom:10,right: 16.0 , left: 16.0),
             width: MediaQuery.of(context).size.width,
             child: TextField(
               decoration: const InputDecoration(

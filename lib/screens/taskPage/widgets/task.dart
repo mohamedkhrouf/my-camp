@@ -72,7 +72,10 @@ class _Task extends State<Task> {
       return Colors.blue;
     }
 
-    return ListTile(
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.0),
+
+      child:ListTile(
 
         leading: Container(
           child: CircleAvatar(
@@ -96,6 +99,6 @@ class _Task extends State<Task> {
               });
             },
           ),
-        ]));
+        ])) ,);
   }
 }
