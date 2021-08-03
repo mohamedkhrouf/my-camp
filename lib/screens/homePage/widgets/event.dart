@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_camp/screens/comments/mainScreen/evComment.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -18,11 +19,12 @@ class _EvPageState extends State<EvPage> {
   var clicked = false;
   var user;
 
-    @override
+  @override
   void initState() {
     super.initState();
     getUser();
   }
+
   getUser() {
 //    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
     String uid = widget.yep["adminId"].id;
@@ -36,7 +38,8 @@ class _EvPageState extends State<EvPage> {
     });
     return user;
   }
- nblikes() {
+
+  nblikes() {
     return widget.yep["likes"].length;
   }
 
@@ -75,6 +78,7 @@ class _EvPageState extends State<EvPage> {
           .catchError((error) => print("Failed to update user: $error"));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -89,7 +93,9 @@ class _EvPageState extends State<EvPage> {
                 Container(
                   child: CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: NetworkImage(user!=null?user.data()["avatar"]:"https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
+                    backgroundImage: NetworkImage(user != null
+                        ? user.data()["avatar"]
+                        : "https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -101,7 +107,7 @@ class _EvPageState extends State<EvPage> {
                   children: [
                     Container(
                       child: Text(
-                        user!=null ?  user.data()["username"]: "",
+                        user != null ? user.data()["username"] : "",
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.left,
                       ),
@@ -109,8 +115,9 @@ class _EvPageState extends State<EvPage> {
                     ),
                     Container(
                       child: Text(
-                        DateFormat('dd/MM/yyyy').format(DateTime.fromMicrosecondsSinceEpoch(
-                            widget.yep["publicationDate"].microsecondsSinceEpoch))
+                        DateFormat('dd/MM/yyyy')
+                            .format(DateTime.fromMicrosecondsSinceEpoch(widget
+                                .yep["publicationDate"].microsecondsSinceEpoch))
                             .toString(),
                         style: TextStyle(fontSize: 15),
                         textAlign: TextAlign.left,
@@ -166,14 +173,17 @@ class _EvPageState extends State<EvPage> {
                             )),
                         onPressed: () {
                           setState(() {
-                            FirebaseFirestore.instance.collection('demand').add(
-                              {
-                                  'eventId': FirebaseFirestore.instance.doc("event/"+widget.id),
-                                  'userId' : FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid),
-                                  'state': "pending",
-                                  'receiverId': FirebaseFirestore.instance.doc("user/"+user.id)
-                              }
-                            );
+                            FirebaseFirestore.instance
+                                .collection('demand')
+                                .add({
+                              'eventId': FirebaseFirestore.instance
+                                  .doc("event/" + widget.id),
+                              'userId': FirebaseFirestore.instance.doc("user/" +
+                                  (FirebaseAuth.instance.currentUser).uid),
+                              'state': "pending",
+                              'receiverId': FirebaseFirestore.instance
+                                  .doc("user/" + user.id)
+                            });
                           });
                         },
                         child: !clicked ? Text('Join') : Text('pending...'),
@@ -211,7 +221,7 @@ class _EvPageState extends State<EvPage> {
         )),
         Container(
             margin: EdgeInsets.only(bottom: 16),
-            padding: EdgeInsets.only(left:10.0 , top: 10.0),
+            padding: EdgeInsets.only(left: 10.0, top: 10.0),
             color: Color.fromRGBO(255, 255, 255, 1),
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -246,7 +256,10 @@ class _EvPageState extends State<EvPage> {
                             size: 27,
                           ),
                           onTap: () {
-                            setState(() {});
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EvComment(yep: widget.yep, id : widget.id)));
                           },
                         ),
                       )
@@ -254,7 +267,10 @@ class _EvPageState extends State<EvPage> {
                   ),
                 ),
                 SizedBox(height: 6.0),
-                Text("Event Name: "+widget.yep["name"],style: TextStyle(fontSize: 20),),
+                Text(
+                  "Event Name: " + widget.yep["name"],
+                  style: TextStyle(fontSize: 20),
+                ),
                 Container(
                   child: Text(
                     widget.yep["description"],
@@ -263,8 +279,7 @@ class _EvPageState extends State<EvPage> {
                   ),
                 ),
               ],
-            )
-        )
+            ))
       ],
     );
   }
