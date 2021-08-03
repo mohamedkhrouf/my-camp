@@ -12,6 +12,7 @@ class EvPage extends StatefulWidget {
   _EvPageState createState() => _EvPageState();
   final yep;
   final id;
+
   const EvPage({Key key, this.yep, this.id}) : super(key: key);
 }
 
@@ -152,42 +153,98 @@ class _EvPageState extends State<EvPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      child: OutlinedButton(
-                        style: ElevatedButton.styleFrom(
-                            side: BorderSide(color: Colors.brown),
-                            primary: Colors.white,
-                            padding: !clicked
-                                ? EdgeInsets.only(
-                                    top: 15, bottom: 15, left: 50, right: 50)
-                                : EdgeInsets.only(
-                                    top: 15,
-                                    bottom: 15,
-                                    left: 32.5,
-                                    right: 32.5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(30),
-                                  bottomRight: Radius.circular(30),
-                                  topLeft: Radius.circular(30),
-                                  bottomLeft: Radius.circular(30)),
-                            )),
-                        onPressed: () {
-                          setState(() {
-                            FirebaseFirestore.instance
-                                .collection('demand')
-                                .add({
-                              'eventId': FirebaseFirestore.instance
-                                  .doc("event/" + widget.id),
-                              'userId': FirebaseFirestore.instance.doc("user/" +
-                                  (FirebaseAuth.instance.currentUser).uid),
-                              'state': "pending",
-                              'receiverId': FirebaseFirestore.instance
-                                  .doc("user/" + user.id)
-                            });
-                          });
-                        },
-                        child: !clicked ? Text('Join') : Text('pending...'),
-                      ),
+                      child: widget.yep["pendingUsers"]
+                              .contains((FirebaseAuth.instance.currentUser).uid)
+                          ? OutlinedButton(
+                              style: ElevatedButton.styleFrom(
+                                  side: BorderSide(color: Colors.brown),
+                                  primary: Colors.white,
+                                  padding: !clicked
+                                      ? EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 50,
+                                          right: 50)
+                                      : EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 32.5,
+                                          right: 32.5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(30),
+                                        bottomRight: Radius.circular(30),
+                                        topLeft: Radius.circular(30),
+                                        bottomLeft: Radius.circular(30)),
+                                  )),
+                              onPressed: () {
+
+                              },
+                              child: Text('Pending...'),
+                            )
+                          : OutlinedButton(
+                              style: ElevatedButton.styleFrom(
+                                  side: BorderSide(color: Colors.brown),
+                                  primary: Colors.white,
+                                  padding: !clicked
+                                      ? EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 50,
+                                          right: 50)
+                                      : EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 32.5,
+                                          right: 32.5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(30),
+                                        bottomRight: Radius.circular(30),
+                                        topLeft: Radius.circular(30),
+                                        bottomLeft: Radius.circular(30)),
+                                  )),
+                              onPressed: () {
+                                setState(() {
+                                  FirebaseFirestore.instance
+                                      .collection('demand')
+                                      .add({
+                                    'eventId': FirebaseFirestore.instance
+                                        .doc("event/" + widget.id),
+                                    'userId': FirebaseFirestore.instance.doc(
+                                        "user/" +
+                                            (FirebaseAuth.instance.currentUser)
+                                                .uid),
+                                    'state': "pending",
+                                    'receiverId': FirebaseFirestore.instance
+                                        .doc("user/" + user.id)
+                                  }).then((value) => FirebaseFirestore.instance
+                                              .collection('event')
+                                              .doc(widget.id)
+                                              .update({
+                                            'pendingUsers':
+                                                FieldValue.arrayUnion([
+                                              (FirebaseAuth
+                                                      .instance.currentUser)
+                                                  .uid
+                                            ])
+                                          }));
+                                });
+                                FirebaseFirestore.instance.collection('user')
+                                    .doc(FirebaseAuth.instance.currentUser.uid)
+                                    .update(
+                                    {
+                                      'events' :FieldValue
+                                          .arrayUnion(
+                                          [FirebaseFirestore.instance.collection('event')
+                                              .doc(widget.id)]
+                                      )
+                                    }
+                                ).then((value) => print("ok"))
+                                    .catchError((error) => print("Failed to update event: $error"));
+                              },
+                              child: Text('Join'),
+                            ),
                       margin: EdgeInsets.only(right: 20),
                     ),
                     Container(

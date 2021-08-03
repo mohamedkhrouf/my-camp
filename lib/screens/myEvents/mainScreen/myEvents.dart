@@ -88,8 +88,8 @@ class _MyEvents extends State<MyEvents> {
           });
         });
       }
-      shownEventList = myEvents;
-    });
+    }).then((value) =>      shownEventList = myEvents);
+    print(myEvents);
   }
 
   @override
@@ -102,7 +102,10 @@ class _MyEvents extends State<MyEvents> {
               "My events",
               style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
             ))),
-        body: SingleChildScrollView(
+        body: (myEvents.length==0 && shownEventList.length==0)?
+        Center(child: Text("Loading..."),)
+            :
+        SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(children: [
               Container(
@@ -136,7 +139,8 @@ class _MyEvents extends State<MyEvents> {
                       e.data()["startingDate"].microsecondsSinceEpoch))
                       .toString(),
                   eventId: e.id,
-                  groupImage : e.data()["images"][0]
+                  groupImage : e.data()["images"][0],
+                  pendingUsers: e.data()["pendingUsers"],
                 );
               }),
               /* Container(

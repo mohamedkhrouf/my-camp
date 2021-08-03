@@ -89,6 +89,19 @@ class _Notif extends State<Notif> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
+                        // remove from pending
+                        FirebaseFirestore.instance.collection('event')
+                            .doc(widget.demand["eventId"].id)
+                            .update(
+                            {
+                              'pendingUsers' :FieldValue
+                                  .arrayRemove(
+                                  [widget.demand["userId"].id]
+                              )
+                            }
+                        ).then((value) => print(widget.demand["userId"]))
+                            .catchError((error) => print("Failed to update event: $error"));
+                        //add to members
                         FirebaseFirestore.instance.collection('event')
                             .doc(widget.demand["eventId"].id)
                             .update(
@@ -100,6 +113,7 @@ class _Notif extends State<Notif> {
                             }
                             ).then((value) => print(widget.demand["userId"]))
                             .catchError((error) => print("Failed to update event: $error"));
+                        // add event to user's events
                         FirebaseFirestore.instance.collection('user')
                             .doc(widget.demand["userId"].id)
                             .update(
@@ -125,7 +139,30 @@ class _Notif extends State<Notif> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        print("delete");
+                        // remove from pending
+                        FirebaseFirestore.instance.collection('event')
+                            .doc(widget.demand["eventId"].id)
+                            .update(
+                            {
+                              'pendingUsers' :FieldValue
+                                  .arrayRemove(
+                                  [widget.demand["userId"].id]
+                              )
+                            }
+                        ).then((value) => print(widget.demand["userId"]))
+                            .catchError((error) => print("Failed to update event: $error"));
+                        FirebaseFirestore.instance.collection('user')
+                            .doc(widget.demand["userId"].id)
+                            .update(
+                            {
+                              'events' :FieldValue
+                                  .arrayRemove(
+                                  [FirebaseFirestore.instance.collection('event')
+                                      .doc(widget.id)]
+                              )
+                            }
+                        ).then((value) => print("ok"))
+                            .catchError((error) => print("Failed to update event: $error"));
                         FirebaseFirestore.instance.collection('demand').doc(widget.id).delete();
                       },
                       child: Icon(Icons.clear, color: Colors.white),
