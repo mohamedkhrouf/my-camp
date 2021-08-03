@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_camp/screens/homePage/widgets/visitedProfile.dart';
 
 class Cont extends StatefulWidget {
   @override
@@ -114,12 +115,20 @@ class _ContState extends State<Cont> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Text(
+                      child:GestureDetector(
+                    onTap: (){
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => VisitedProfilePage(userId: widget.yep["userId"].id)),
+                );
+                },child: Text(
                         user != null ? user.data()["username"] : "",
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.left,
                       ),
-                      margin: EdgeInsets.only(right: 10),
+
+                    )
                     ),
                     Container(
                       child: Text(

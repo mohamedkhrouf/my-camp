@@ -4,6 +4,10 @@ import 'package:flutter_map/flutter_map.dart';
 import "package:latlong2/latlong.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class MapPage extends StatefulWidget {
+  final latitude ;
+  final longitude ;
+
+  const MapPage({Key key, this.latitude, this.longitude}) : super(key: key);
   @override
   _MapPageState createState() => _MapPageState();
 }
@@ -32,10 +36,10 @@ class _MapPageState extends State<MapPage> {
       body: 
    
         FlutterMap(
-        options: MapOptions(
-          bounds: LatLngBounds(LatLng(58.8, 6.1), LatLng(59, 6.2)),
-          boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(8.0)),
-        ),
+            options: new MapOptions(
+              center: new LatLng(widget.latitude.toDouble(), widget.longitude.toDouble()),
+              zoom: 13.0,
+            ),
         layers: [
           TileLayerOptions(
               urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -45,7 +49,7 @@ class _MapPageState extends State<MapPage> {
               Marker(
                 width: 80.0,
                 height: 80.0,
-                point: LatLng(58.9, 6.15),
+                point: LatLng(widget.latitude.toDouble(), widget.longitude.toDouble()),
                 builder: (ctx) => Container(
                   child: SizedBox(
                     height: 18.0,
@@ -72,7 +76,7 @@ class _MapPageState extends State<MapPage> {
               Marker(
                 width: 80.0,
                 height: 80.0,
-                point: LatLng(51.5, -0.09),
+                point: LatLng(widget.latitude.toDouble(), widget.longitude.toDouble()),
                 builder: (ctx) => Container(
                   child: Icon(
                     Icons.person,

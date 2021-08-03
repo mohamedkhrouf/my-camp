@@ -130,7 +130,6 @@ class _PostPageState extends State<PostPage> {
           Container(
               color: Color.fromRGBO(255, 255, 255, 1),
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(bottom: 16),
               child: Column(
                 children: [
                   Container(
@@ -180,7 +179,6 @@ class _PostPageState extends State<PostPage> {
               ))
         ],
       ),
-      margin: EdgeInsets.only(bottom: 16),
     );
   }
 }

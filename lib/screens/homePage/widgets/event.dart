@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:my_camp/screens/homePage/widgets/visitedProfile.dart';
 
 class EvPage extends StatefulWidget {
   @override
@@ -106,11 +107,20 @@ class _EvPageState extends State<EvPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Text(
-                        user != null ? user.data()["username"] : "",
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.left,
-                      ),
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VisitedProfilePage(userId: widget.yep["adminId"].id)),
+                          );
+                        },
+                        child: Text(
+                          user != null ? user.data()["username"] : "",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.left,
+                        ),
+                      ) ,
                       margin: EdgeInsets.only(right: 10),
                     ),
                     Container(
@@ -265,7 +275,7 @@ class _EvPageState extends State<EvPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MapPage()))
+                                  builder: (context) => MapPage(latitude: widget.yep["latitude"] ,longitude: widget.yep["longitude"] ,)))
                         },
                         child: Text('Map'),
                       ),

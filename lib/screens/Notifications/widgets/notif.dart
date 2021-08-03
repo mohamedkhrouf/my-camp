@@ -158,7 +158,7 @@ class _Notif extends State<Notif> {
                               'events' :FieldValue
                                   .arrayRemove(
                                   [FirebaseFirestore.instance.collection('event')
-                                      .doc(widget.id)]
+                                      .doc(widget.demand["eventId"].id)]
                               )
                             }
                         ).then((value) => print("ok"))
