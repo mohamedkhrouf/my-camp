@@ -266,7 +266,8 @@ class _PostCommentState extends State<PostComment> {
                       ),
                       margin: EdgeInsets.only(left: 10, right: 10),
                     ),
-                       Comment(),
+                    SingleChildScrollView(child:Column(children: [Comment(), Comment(), Comment()],),
+                    )
                   ],
                 ),
                 )

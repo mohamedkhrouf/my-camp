@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/comments/mainScreen/evComment.dart';
+import 'package:my_camp/screens/comments/widgets/comment.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -21,15 +22,18 @@ class _EvPageState extends State<EvPage> {
   var clicked = false;
   var user;
 
+  List commentList=[];
   @override
   void initState() {
     super.initState();
+
+    getComments();
     getUser();
   }
 
   getUser() {
 //    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
-    String uid = widget.yep["adminId"].id;
+    String uid = (FirebaseAuth.instance.currentUser).uid;
     print(uid);
     FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
       if (mounted) {
@@ -39,6 +43,23 @@ class _EvPageState extends State<EvPage> {
       }
     });
     return user;
+  }
+
+  List getComments() {
+    List documents;
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('comment');
+
+    collectionReference.snapshots().listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          commentList = snapshot.docs;
+
+          //print(documents[3].data());
+          // usersList = snapshot.docs;
+        });
+      }
+    });
   }
 
   nblikes() {
@@ -187,9 +208,7 @@ class _EvPageState extends State<EvPage> {
                                         topLeft: Radius.circular(30),
                                         bottomLeft: Radius.circular(30)),
                                   )),
-                              onPressed: () {
-
-                              },
+                              onPressed: () {},
                               child: Text('Pending...'),
                             )
                           : OutlinedButton(
@@ -240,18 +259,19 @@ class _EvPageState extends State<EvPage> {
                                             ])
                                           }));
                                 });
-                                FirebaseFirestore.instance.collection('user')
+                                FirebaseFirestore.instance
+                                    .collection('user')
                                     .doc(FirebaseAuth.instance.currentUser.uid)
-                                    .update(
-                                    {
-                                      'events' :FieldValue
-                                          .arrayUnion(
-                                          [FirebaseFirestore.instance.collection('event')
-                                              .doc(widget.id)]
-                                      )
-                                    }
-                                ).then((value) => print("ok"))
-                                    .catchError((error) => print("Failed to update event: $error"));
+                                    .update({
+                                      'events': FieldValue.arrayUnion([
+                                        FirebaseFirestore.instance
+                                            .collection('event')
+                                            .doc(widget.id)
+                                      ])
+                                    })
+                                    .then((value) => print("ok"))
+                                    .catchError((error) => print(
+                                        "Failed to update event: $error"));
                               },
                               child: Text('Join'),
                             ),
@@ -323,10 +343,43 @@ class _EvPageState extends State<EvPage> {
                             size: 27,
                           ),
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EvComment(yep: widget.yep, id : widget.id)));
+                            showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (BuildContext bc) {
+                                  return FractionallySizedBox(
+                                    heightFactor: 0.85,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 40.0,
+                                          width: double.infinity,
+                                          color: Colors.black54,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(25),
+                                                topRight: Radius.circular(25),
+                                              )),
+                                        ),
+                                        Container(
+                                            margin: EdgeInsets.only(top: 30),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                ...commentList.map((e) {
+                                                    return Comment(
+                                                       );
+                                                  }),
+                                                ],
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  );
+                                });
                           },
                         ),
                       )
