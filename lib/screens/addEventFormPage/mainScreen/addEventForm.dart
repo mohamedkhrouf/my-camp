@@ -132,7 +132,7 @@ class _AddEventForm extends State<AddEventForm> {
                         imagesError="Choose at least a picture";
 
                       });
-    //  if(_formKey.currentState.validate()&& chosenImages.length>0) {
+   
           await uploadImageToFirebase(context);
           CollectionReference collectionReference =FirebaseFirestore.instance.collection('event');
           return collectionReference

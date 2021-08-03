@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_camp/screens/homePage/widgets/visitedProfile.dart';
+import 'package:my_camp/screens/comments/mainScreen/postComment.dart';
 
 class Cont extends StatefulWidget {
   @override
@@ -64,15 +65,16 @@ class _ContState extends State<Cont> {
 
   Future<void> like() {
     String userId = (FirebaseAuth.instance.currentUser).uid;
-    
+
     if (widget.yep["likes"]
         .toString()
         .contains((FirebaseAuth.instance.currentUser).uid)) {
-      
       FirebaseFirestore.instance
           .collection('post')
           .doc(widget.id)
-          .update({'likes':FieldValue.arrayRemove([userId])})
+          .update({
+            'likes': FieldValue.arrayRemove([userId])
+          })
           .then((value) => print("User Updated"))
           .catchError((error) => print("Failed to update user: $error"));
     } else {
@@ -133,11 +135,11 @@ class _ContState extends State<Cont> {
                     Container(
                       child: Text(
                         widget.yep != null
-                            ? DateFormat('dd/MM/yyyy').format(DateTime.fromMicrosecondsSinceEpoch(
-                            widget.yep["publicationDate"].microsecondsSinceEpoch))
-                            .toString()
-
-
+                            ? DateFormat('dd/MM/yyyy')
+                                .format(DateTime.fromMicrosecondsSinceEpoch(
+                                    widget.yep["publicationDate"]
+                                        .microsecondsSinceEpoch))
+                                .toString()
                             : "",
                         style: TextStyle(fontSize: 15),
                       ),
@@ -155,64 +157,65 @@ class _ContState extends State<Cont> {
               ],
             )),
         GestureDetector(
-          onDoubleTap: (){
+          onDoubleTap: () {
             setState(() {
               like();
             });
           },
-          child:Stack(
-          children: [
-            CarouselSlider(
-              options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    ind = index + 1;
-                  });
-                },
-                height: MediaQuery.of(context).size.width * 0.8,
-                viewportFraction: 1,
-                enableInfiniteScroll: false,
-              ),
-              items: items.map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Image.network(i,
-                        height: MediaQuery.of(context).size.width,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.fitHeight);
+          child: Stack(
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      ind = index + 1;
+                    });
                   },
-                );
-              }).toList(),
-            ),
-            Positioned(
-                right: 10,
-                top: 5,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(
-                        top: 10,
-                        bottom: 10,
-                        left: 20,
-                        right: 10,
+                  height: MediaQuery.of(context).size.width * 0.8,
+                  viewportFraction: 1,
+                  enableInfiniteScroll: false,
+                ),
+                items: items.map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Image.network(i,
+                          height: MediaQuery.of(context).size.width,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.fitHeight);
+                    },
+                  );
+                }).toList(),
+              ),
+              Positioned(
+                  right: 10,
+                  top: 5,
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          bottom: 10,
+                          left: 20,
+                          right: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(0, 0, 0, 1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(0, 0, 0, 1),
-                        borderRadius: BorderRadius.circular(12),
+                      Container(
+                        child: Text(
+                          ' $ind/${widget.yep["images"].length}',
+                          style: TextStyle(
+                              color: Color.fromRGBO(255, 255, 255, 1)),
+                        ),
+                        margin: EdgeInsets.only(top: 2),
                       ),
-                    ),
-                    Container(
-                      child: Text(
-                        ' $ind/${widget.yep["images"].length}',
-                        style:
-                            TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
-                      ),
-                      margin: EdgeInsets.only(top: 2),
-                    ),
-                  ],
-                )),
-          ],
-        ),),
+                    ],
+                  )),
+            ],
+          ),
+        ),
         Container(
             color: Color.fromRGBO(255, 255, 255, 1),
             width: MediaQuery.of(context).size.width,
@@ -247,7 +250,10 @@ class _ContState extends State<Cont> {
                             size: 27,
                           ),
                           onTap: () {
-                            setState(() {});
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PostComment(yep : widget.yep , id :widget.id)));
                           },
                         ),
                       )

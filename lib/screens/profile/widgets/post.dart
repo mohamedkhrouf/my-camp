@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_camp/screens/comments/mainScreen/postComment.dart';
 import 'package:my_camp/screens/profile/widgets/image.dart';
 
 class PostPage extends StatefulWidget {
@@ -159,7 +160,12 @@ class _PostPageState extends State<PostPage> {
                             size: 27,
                           ),
                           onTap: () {
-                            setState(() {});
+                             Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PostComment(yep: widget.yep
+                                    ,id:widget.id)));
+                          
                           },
                         ),
                       )
