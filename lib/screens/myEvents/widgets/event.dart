@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/discussion/mainScreen/discussion.dart';
@@ -7,8 +8,8 @@ class Group extends StatefulWidget {
   final String eventId ;
   final String date;
   final String groupImage;
-
-  const Group({Key key, this.groupName, this.date, this.eventId, this.groupImage}) : super(key: key);
+  final List pendingUsers;
+  const Group({Key key, this.groupName, this.date, this.eventId, this.groupImage, this.pendingUsers}) : super(key: key);
 
   @override
   _Group createState() => _Group();
@@ -19,6 +20,8 @@ class _Group extends State<Group> {
   Widget build(BuildContext context) {
     return new GestureDetector(
         onTap: () {
+          if (!widget.pendingUsers
+              .contains((FirebaseAuth.instance.currentUser).uid))
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Discussion(eventId: widget.eventId, groupName: widget.groupName )),
@@ -60,15 +63,17 @@ class _Group extends State<Group> {
             ),
             
           ),
+          widget.pendingUsers
+              .contains((FirebaseAuth.instance.currentUser).uid) ?
           Positioned(
               right: 10,
               bottom: 20,
               child: Container(
                 margin: EdgeInsets.only(top: 30),
-                child: Text("Pending..."),
+                child: Text("Pending...")
                
               )
-          )
+          ): Container(),
         ],),
         
         ),
