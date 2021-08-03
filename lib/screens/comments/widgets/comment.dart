@@ -11,16 +11,31 @@ class Comment extends StatefulWidget {
 }
 
 class _Comment extends State<Comment> {
+  var text = new RichText(
+    text: new TextSpan(
+      // Note: Styles for TextSpans must be explicitly defined.
+      // Child text spans will inherit styles from parent
+      style: new TextStyle(
+        fontSize: 14.0,
+        color: Colors.black,
+      ),
+      children: <TextSpan>[
+        new TextSpan(text: 'username:', style: new TextStyle(fontWeight: FontWeight.bold)),
+        new TextSpan(
+            text: 'World h,flhnlmshnlkd,lkh,kqe,h legh,kh,k r,gk,erk,splg '),
+      ],
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+   
       child: Stack(
         children: [
           Container(
             padding: EdgeInsets.only(left: 14.0, right: 14.0),
            
-            child: Column(children: [Row(
+            child: Row(
               children: [
                 Container(
                   child: CircleAvatar(
@@ -30,42 +45,23 @@ class _Comment extends State<Comment> {
                   ),
                 ),
                 Container(
+                 
                     padding: EdgeInsets.only(left: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                    child: 
+                      Column(children: [ 
                         Container(
-                            child: Text("username",
-                                style: TextStyle(fontSize: 20))),
-                        Container(
-                          child:
-                              Text("date", style: TextStyle(fontSize: 15)),
-                        ),
-                      ],
-                    ),
-
-                    ),
-              ],
-            ),
-           Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      
-                      child: Text(
-                        "Should be left jvjjjjjjjjjjjjjjjjjjjjjjjj jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
-                      ),
-                    ),
-                  ),
-            
-Row(
-                    children: [
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            child: text),
+                    ],)
+                         
+                ),
+                    Spacer(),
+                    Spacer(),
                       Container(
+                  
                         child: GestureDetector(
                           onTap: () {
-                            setState(() {
-                             
-                            });
+                            setState(() {});
                           },
                           child: Icon(
                             FontAwesomeIcons.fire,
@@ -75,31 +71,25 @@ Row(
                             size: 27,
                           ),
                         ),
-                        margin: EdgeInsets.only(right: 20),
+      
                       ),
-                      Container(
-                        child: GestureDetector(
-                          child: Icon(
-                            FontAwesomeIcons.commentDots,
-                            color: Color.fromRGBO(0, 0, 0, 1),
-                            size: 27,
-                          ),
-                          onTap: () {
-                            setState(() {});
-                          },
-                        ),
-                      )
-                    ],
-                  ),
+                      Spacer(),
+              ],
+            ),
+            
+           
+            
+
 
 
             
-            ],)
+          
           ),
           
         ],
           
       ),
+      margin: EdgeInsets.only(bottom: 10)
     );
   }
 }
