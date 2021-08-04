@@ -373,7 +373,7 @@ class _EvPageState extends State<EvPage> {
                                               child: Column(
                                                 children: [
                                                 ...commentList.map((e) {
-                                                    return Comment(comment: e
+                                                    return Comment(comment: e, eventId: widget.id,
                                                        );
                                                   }),
                                                 ],

@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Comment extends StatefulWidget {
   final comment ;
-  const Comment({Key key, this.comment}) : super(key: key);
+  final eventId ;
+  const Comment({Key key, this.comment, this.eventId}) : super(key: key);
 
   @override
   _Comment createState() => _Comment();
@@ -19,6 +21,46 @@ class _Comment extends State<Comment> {
     getUser();
   }
   var user ;
+  nblikes() {
+    return widget.comment.data()["likes"].length;
+  }
+
+  liked() {
+    if (widget.comment.data()["likes"]
+        .toString()
+        .contains((FirebaseAuth.instance.currentUser).uid)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> like() {
+    String userId = (FirebaseAuth.instance.currentUser).uid;
+
+    if (widget.comment.data()["likes"]
+        .toString()
+        .contains((FirebaseAuth.instance.currentUser).uid)) {
+      FirebaseFirestore.instance.collection("event").doc(widget.eventId)
+          .collection('comments')
+          .doc(widget.comment.id)
+          .update({
+        'likes': FieldValue.arrayRemove([userId])
+      })
+          .then((value) => print("comment Updated"))
+          .catchError((error) => print("Failed to update comment: $error"));
+    } else {
+      FirebaseFirestore.instance
+          .collection("event").doc(widget.eventId)
+          .collection('comments')
+          .doc(widget.comment.id)
+          .update({
+        'likes': FieldValue.arrayUnion([userId])
+      })
+          .then((value) => print("comment Updated"))
+          .catchError((error) => print("Failed to update comment: $error"));
+    }
+  }
   void getUser(){
     FirebaseFirestore.instance.collection("user").doc(widget.comment.data()["userId"].id).get().
     then((value) {
@@ -80,11 +122,11 @@ class _Comment extends State<Comment> {
                   
                         child: GestureDetector(
                           onTap: () {
-                            setState(() {});
+                           like();
                           },
                           child: Icon(
                             FontAwesomeIcons.fire,
-                            color: true
+                            color: liked()
                                 ? Color.fromRGBO(207, 53, 46, 1)
                                 : Color.fromRGBO(0, 0, 0, 1),
                             size: 27,
