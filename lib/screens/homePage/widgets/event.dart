@@ -48,7 +48,7 @@ class _EvPageState extends State<EvPage> {
   List getComments() {
     List documents;
     CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('comment');
+        FirebaseFirestore.instance.collection('event').doc(widget.id).collection("comments");
 
     collectionReference.snapshots().listen((snapshot) {
       if (mounted) {
@@ -366,11 +366,14 @@ class _EvPageState extends State<EvPage> {
                                         ),
                                         Container(
                                             margin: EdgeInsets.only(top: 30),
-                                            child: SingleChildScrollView(
+                                            child: commentList.length==0 ?
+                                            Center(child: Text("No comments"),)
+                                                :
+                                            SingleChildScrollView(
                                               child: Column(
                                                 children: [
                                                 ...commentList.map((e) {
-                                                    return Comment(
+                                                    return Comment(comment: e
                                                        );
                                                   }),
                                                 ],

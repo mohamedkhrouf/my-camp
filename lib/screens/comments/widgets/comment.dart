@@ -1,16 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:my_camp/screens/discussion/mainScreen/discussion.dart';
 
 class Comment extends StatefulWidget {
-  const Comment({Key key}) : super(key: key);
+  final comment ;
+  const Comment({Key key, this.comment}) : super(key: key);
 
   @override
   _Comment createState() => _Comment();
 }
 
 class _Comment extends State<Comment> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+  }
+  var user ;
+  void getUser(){
+    FirebaseFirestore.instance.collection("user").doc(widget.comment.data()["userId"].id).get().
+    then((value) {
+      if (mounted)
+      setState(() {
+        user = value.data();
+
+      });
+    }
+    );
+  }
   var text = new RichText(
     text: new TextSpan(
       // Note: Styles for TextSpans must be explicitly defined.
@@ -22,7 +41,7 @@ class _Comment extends State<Comment> {
       children: <TextSpan>[
         new TextSpan(text: 'username:', style: new TextStyle(fontWeight: FontWeight.bold)),
         new TextSpan(
-            text: 'World h,flhnlmshnlkd,lkh,kqe,h legh,kh,k r,gk,erk,splg '),
+            text: "mm"),
       ],
     ),
   );
@@ -40,7 +59,7 @@ class _Comment extends State<Comment> {
                 Container(
                   child: CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Danny_DeVito_by_Gage_Skidmore.jpg/1200px-Danny_DeVito_by_Gage_Skidmore.jpg"),
+                    backgroundImage: NetworkImage(user!=null ? user["avatar"] : "https://www.waterair.com/sites/default/files/styles/slider/public/2020-03/gris-souris.jpg"),
                   
                   ),
                 ),
@@ -51,7 +70,7 @@ class _Comment extends State<Comment> {
                       Column(children: [ 
                         Container(
                             width: MediaQuery.of(context).size.width * 0.6,
-                            child: text),
+                            child: Text(widget.comment.data()["text"])),
                     ],)
                          
                 ),
