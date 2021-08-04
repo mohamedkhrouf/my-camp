@@ -21,8 +21,8 @@ class EvPage extends StatefulWidget {
 class _EvPageState extends State<EvPage> {
   var clicked = false;
   var user;
-
-  List commentList=[];
+  final messageController = TextEditingController();
+  List commentList = [];
   @override
   void initState() {
     super.initState();
@@ -47,8 +47,10 @@ class _EvPageState extends State<EvPage> {
 
   List getComments() {
     List documents;
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('event').doc(widget.id).collection("comments");
+    CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('event')
+        .doc(widget.id)
+        .collection("comments");
 
     collectionReference.snapshots().listen((snapshot) {
       if (mounted) {
@@ -130,11 +132,12 @@ class _EvPageState extends State<EvPage> {
                   children: [
                     Container(
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => VisitedProfilePage(userId: widget.yep["adminId"].id)),
+                                builder: (context) => VisitedProfilePage(
+                                    userId: widget.yep["adminId"].id)),
                           );
                         },
                         child: Text(
@@ -142,7 +145,7 @@ class _EvPageState extends State<EvPage> {
                           style: TextStyle(fontSize: 20),
                           textAlign: TextAlign.left,
                         ),
-                      ) ,
+                      ),
                       margin: EdgeInsets.only(right: 10),
                     ),
                     Container(
@@ -296,7 +299,10 @@ class _EvPageState extends State<EvPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MapPage(latitude: widget.yep["latitude"] ,longitude: widget.yep["longitude"] ,)))
+                                  builder: (context) => MapPage(
+                                        latitude: widget.yep["latitude"],
+                                        longitude: widget.yep["longitude"],
+                                      )))
                         },
                         child: Text('Map'),
                       ),
@@ -365,20 +371,136 @@ class _EvPageState extends State<EvPage> {
                                               )),
                                         ),
                                         Container(
-                                            margin: EdgeInsets.only(top: 30),
-                                            child: commentList.length==0 ?
-                                            Center(child: Text("No comments"),)
-                                                :
-                                            SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                ...commentList.map((e) {
-                                                    return Comment(comment: e, eventId: widget.id,
-                                                       );
-                                                  }),
-                                                ],
-                                              ),
-                                            )),
+                                            margin: EdgeInsets.only(
+                                                top: 30, bottom: 100),
+                                            child: commentList.length == 0
+                                                ? Center(
+                                                    child: Text("No comments"),
+                                                  )
+                                                : SingleChildScrollView(
+                                                    child: Column(
+                                                      children: [
+                                                        ...commentList.map((e) {
+                                                          return Comment(
+                                                            comment: e,
+                                                            eventId: widget.id,
+                                                          );
+                                                        }),
+                                                      ],
+                                                    ),
+                                                  )),
+                                        Positioned(
+                                       
+                                          child: Form(
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 64,
+                                                        color: Color(0xFF087949)
+                                                            .withOpacity(0.4),
+                                                        offset: Offset(0,
+                                                            5), // changes position of shadow
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  padding: EdgeInsets.only(
+                                                      top: 8.0,
+                                                      right: 16.0,
+                                                      left: 16.0,
+                                                      bottom: 8.0),
+                                                  child: Row(children: [
+                                                    /* GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              print("hrgnrs");
+                            });
+                          },
+                          child:Container(
+
+                              child:Icon(
+                            Icons.image,
+                            color: Color.fromRGBO(170, 215, 62, 1),
+                            size: 40,
+                          ))),*/
+                                                    new Flexible(
+                                                        child: Container(
+                                                            height: 35,
+                                                            child:
+                                                                TextFormField(
+                                                              controller:
+                                                                  messageController,
+                                                              decoration:
+                                                                  const InputDecoration(
+                                                                hintText:
+                                                                    'Enter your message',
+                                                                contentPadding:
+                                                                    EdgeInsets.only(
+                                                                        left:
+                                                                            15.0),
+                                                                border: OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(90.0))),
+                                                              ),
+                                                            ))),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 5),
+                                                      child: GestureDetector(
+                                                          onTap: () async {
+                                                            final newMessage =
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'event')
+                                                                    .doc()
+                                                                    .collection(
+                                                                        'messages')
+                                                                    .add({
+                                                              'eventId':
+                                                                  FirebaseFirestore
+                                                                      .instance
+                                                                      .doc(
+                                                                          "event/"),
+                                                              'senderId': FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'user')
+                                                                  .doc(FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser
+                                                                      .uid),
+                                                              'text':
+                                                                  messageController
+                                                                      .text,
+                                                              'sendTime':
+                                                                  DateTime.now()
+                                                            });
+
+                                                            messageController
+                                                                .clear();
+
+                                                            /* messages.add(ChatMessage(
+                                  message: messageController.text,
+                                  messageType: MessageType.sent,
+                                ));
+                                messageController.clear();*/
+                                                          },
+                                                          child: Icon(
+                                                            Icons.send,
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    170,
+                                                                    215,
+                                                                    62,
+                                                                    1),
+                                                            size: 33,
+                                                          )),
+                                                    ),
+                                                  ]))),
+                                        )
                                       ],
                                     ),
                                   );
