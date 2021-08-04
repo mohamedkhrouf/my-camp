@@ -70,8 +70,22 @@ class _Comment extends State<Comment> {
                       Column(children: [ 
                         Container(
                             width: MediaQuery.of(context).size.width * 0.6,
-                            child: Text(widget.comment.data()["text"])),
-                    ],)
+                            child:RichText(
+    text: new TextSpan(
+      // Note: Styles for TextSpans must be explicitly defined.
+      // Child text spans will inherit styles from parent
+      style: new TextStyle(
+        fontSize: 14.0,
+        color: Colors.black,
+      ),
+      children: <TextSpan>[
+        new TextSpan(text: user != null ? user["username"]+": "  :"", style: new TextStyle(fontWeight: FontWeight.bold)),
+        new TextSpan(
+            text: widget.comment.data()["text"]),
+      ],
+    ),
+  ),
+                      )],)
                          
                 ),
                     Spacer(),

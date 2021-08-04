@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' ;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,7 +13,7 @@ import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
 import '../../homePage/widgets/campSitesList.dart';
 
 class AddEventForm extends StatefulWidget {
-  final user ;
+  final user;
 
   const AddEventForm({Key key, this.user}) : super(key: key);
   @override
@@ -22,38 +22,42 @@ class AddEventForm extends StatefulWidget {
 
 class _AddEventForm extends State<AddEventForm> {
   List chosenImages = [];
-  List chosenImagesUrl = [] ;
+  List chosenImagesUrl = [];
   final descriptionController = TextEditingController();
   final latitudeController = TextEditingController();
   final longitudeController = TextEditingController();
   final nbPlaceController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var username= "" ;
-  var imagesError= "";
-@override
+  var username = "";
+  var imagesError = "";
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    username= widget.user.data()["username"];
+    username = widget.user.data()["username"];
   }
+
   // ignore: missing_return
-  Future uploadImageToFirebase(BuildContext context)  async {
-  var image ;
+  Future uploadImageToFirebase(BuildContext context) async {
+    var image;
     FirebaseStorage storage = FirebaseStorage.instance;
-    for(File image in chosenImages){
+
+    for (File image in chosenImages) {
       Reference ref = storage.ref().child("$image" + DateTime.now().toString());
       UploadTask uploadTask = ref.putFile(image);
       uploadTask.then((res) {
         if (mounted)
-        setState(() {
-          res.ref.getDownloadURL().then((value) => chosenImagesUrl.add(value));
-
-        });
-
-
+          setState(() {
+            res.ref
+                .getDownloadURL()
+                .then((value) => chosenImagesUrl.add(value));
+            print(chosenImagesUrl);
+          });
       });
+      return chosenImagesUrl;
     }
   }
+
   void deleteImage(int index) {
     setState(() {
       chosenImages.removeAt(index);
@@ -116,250 +120,254 @@ class _AddEventForm extends State<AddEventForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(36, 34, 47, 1),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
-          onPressed: () => Navigator.of(context).pop(),
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(36, 34, 47, 1),
+          leading: IconButton(
+            icon:
+                Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          actions: [
+            Padding(
+                padding: EdgeInsets.only(right: 20.0, top: 20),
+                child: GestureDetector(
+                    onTap: () async {
+                      if (chosenImages.length == 0)
+                        setState(() {
+                          imagesError = "Choose at least a picture";
+                          print("waaaaa");
+                          print(chosenImages);
+                        });
+                      print("waa");
+                      print(chosenImagesUrl);
+                      await uploadImageToFirebase(context);
+
+                      CollectionReference collectionReference =
+                          FirebaseFirestore.instance.collection('event');
+                      collectionReference.add({
+                        'name': 'camping by',
+                        'description': descriptionController.text,
+                        'latitude': latitudeController.text,
+                        'longitude': longitudeController.text,
+                        'nbPart': nbPlaceController.text,
+                        'startingDate': selectedCampingDate,
+                        'dueDate': selectedPayementDate,
+                        'publicationDate': DateTime.now(),
+                        'images': chosenImagesUrl,
+                        'members': [
+                          FirebaseFirestore.instance.doc(
+                              "user/" + (FirebaseAuth.instance.currentUser).uid)
+                        ],
+                        'adminId': FirebaseFirestore.instance.doc(
+                            "user/" + (FirebaseAuth.instance.currentUser).uid),
+                        'tasks': [],
+                      }).then((value) {
+                        print("hedhi ba3d");
+                        descriptionController.clear();
+                        latitudeController.clear();
+                        longitudeController.clear();
+                        nbPlaceController.clear();
+                        Navigator.of(context).pop();
+                      }).catchError(
+                          (error) => print("Failed to add user: $error"));
+                    },
+                    child: Text(
+                      "Publish",
+                      style: TextStyle(
+                        color: Color.fromRGBO(170, 215, 62, 1),
+                      ),
+                    ))),
+          ],
         ),
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0, top: 20),
-              child: GestureDetector(
-                  onTap: () async {
-                    if(chosenImages.length==0)
-                      setState(() {
-                        imagesError="Choose at least a picture";
-
-                      });
-   
-          await uploadImageToFirebase(context);
-          CollectionReference collectionReference =FirebaseFirestore.instance.collection('event');
-          return collectionReference
-              .add({
-            'name' : 'camping by',
-            'description': descriptionController.text,
-            'latitude': latitudeController.text,
-            'longitude': longitudeController.text ,
-            'nbPart' : nbPlaceController.text ,
-            'startingDate' : selectedCampingDate ,
-            'dueDate' : selectedPayementDate ,
-            'publicationDate' : DateTime.now() ,
-            'images' : chosenImagesUrl,
-            'members' : [FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid)],
-            'adminId' : FirebaseFirestore.instance.doc("user/"+(FirebaseAuth.instance.currentUser).uid) ,
-            'tasks' : [],
-
-          })
-              .then((value)  {
-                print("hedhi ba3d");
-            descriptionController.clear();
-            latitudeController.clear();
-            longitudeController.clear();
-            nbPlaceController.clear();
-            Navigator.of(context).pop();
-
-          })
-              .catchError((error) => print("Failed to add user: $error"));
-
-
-
-      },
-                  child: Text(
-                    "Publish",
-                    style: TextStyle(
-                      color: Color.fromRGBO(170, 215, 62, 1),
-                    ),
-                  ))),
-        ],
-      ),
-      body: Container(
+        body: Container(
           margin: EdgeInsets.only(left: 16.0),
           child: Form(
-
               key: _formKey,
-              child:ListView(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Text(
-                    "Hello ${username}",
-                    style: TextStyle(fontSize: 28),
-                  ),
-                ),
-                Container(
-                  child: Text(
-                    "Let's create a new camping event",
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.only(top: 16.0, right: 16.0),
-                    child: TextFormField(
-
-                      validator: (value) {
-    if (value.length==0) {
-    return 'Enter description';
-    }
-    return null ;},
-                      decoration: const InputDecoration(
-                        hintText: 'Enter event Description',
-                        contentPadding:
-                            EdgeInsets.only(left: 15.0, top: 3, bottom: 3),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0))),
+              child: ListView(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        "Hello ${username}",
+                        style: TextStyle(fontSize: 28),
                       ),
-                      controller: descriptionController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 5,
-                    )),
-                ListTile(
-                  leading: Icon(
-                    FontAwesomeIcons.images,
-                    color: Colors.green,
-                  ),
-                  title: Text("Choose an image"),
-                ),
-                Container(
-                  child: Wrap(
-                    spacing: 4.0,
-                    children: [
-                      (chosenImages.length < 6)
-                          ? GestureDetector(
-                              onTap: () {
-                                getImage();
-                              },
-                              child: AddImage(),
-                            )
-                          : Container(),
-                      ...chosenImages.asMap().entries.map((e) {
-                        return ImageContainer(
-                          imagePath: e.value,
-                          index: e.key,
-                          deleteImage: deleteImage,
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-                (imagesError== "")? Container() : Text(imagesError, style : TextStyle(color: Colors.red)),
-                GestureDetector(
-                    onTap: () {
-                      _selectCampingDate(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.calendarAlt,
-                        color: Colors.red,
+                    ),
+                    Container(
+                      child: Text(
+                        "Let's create a new camping event",
+                        style: TextStyle(fontSize: 24),
                       ),
-                      title: Text("Camping date"),
-                    )),
-                testCampingDate(selectedCampingDate)
-                    ? Container()
-                    : Text("Camping Date : $selectedCampingDate"),
-                GestureDetector(
-                    onTap: () {
-                      _selectPayementDate(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.calendarAlt,
-                        color: Colors.red,
-                      ),
-                      title: Text("Payement deadline"),
-                    )),
-                testCampingDate(selectedPayementDate)
-                    ? Container()
-                    : Text("Payement Date : $selectedPayementDate"),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CampSitesList()),
-                      );
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.mapMarkerAlt,
-                        color: Colors.red,
-                      ),
-                      title: Text("Choose position"),
-                    )),
-                Container(
-                  margin: EdgeInsets.only(right: 16.0 , bottom: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      new Flexible(
-                        child: Container(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: latitudeController,
-                            validator: (value) {
-                              if (value.length==0) {
-                                return 'Enter latitude';
-                              }
-                              return null ;},
-                            decoration: const InputDecoration(
-                              hintText: 'Latitude',
-                              contentPadding: EdgeInsets.only(
-                                  left: 15.0, top: 3, bottom: 3),
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16.0))),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Flexible(
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 16.0, right: 16.0),
                         child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          controller: longitudeController,
                           validator: (value) {
-                            if (value.length==0) {
-                              return 'Enter longitude';
+                            if (value.length == 0) {
+                              return 'Enter description';
                             }
-                            return null ;},
+                            return null;
+                          },
                           decoration: const InputDecoration(
-
-                            hintText: 'Longitude',
+                            hintText: 'Enter event Description',
                             contentPadding:
                                 EdgeInsets.only(left: 15.0, top: 3, bottom: 3),
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(16.0))),
                           ),
-                        ),
+                          controller: descriptionController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
+                        )),
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.images,
+                        color: Colors.green,
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 16.0),
-
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: nbPlaceController,
-                      validator: (value) {
-                        if (value.length==0) {
-                          return 'Enter number of places';
-                        }
-                        return null ;},
-                      decoration: const InputDecoration(
-                        hintText: 'Number of places',
-                        contentPadding:
-                            EdgeInsets.only(left: 15.0, top: 3, bottom: 3),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0))),
+                      title: Text("Choose an image"),
+                    ),
+                    Container(
+                      child: Wrap(
+                        spacing: 4.0,
+                        children: [
+                          (chosenImages.length < 6)
+                              ? GestureDetector(
+                                  onTap: () {
+                                    getImage();
+                                  },
+                                  child: AddImage(),
+                                )
+                              : Container(),
+                          ...chosenImages.asMap().entries.map((e) {
+                            return ImageContainer(
+                              imagePath: e.value,
+                              index: e.key,
+                              deleteImage: deleteImage,
+                            );
+                          }),
+                        ],
                       ),
                     ),
-                  ),
-
-              ])),
-    ));
+                    (imagesError == "")
+                        ? Container()
+                        : Text(imagesError,
+                            style: TextStyle(color: Colors.red)),
+                    GestureDetector(
+                        onTap: () {
+                          _selectCampingDate(context);
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.calendarAlt,
+                            color: Colors.red,
+                          ),
+                          title: Text("Camping date"),
+                        )),
+                    testCampingDate(selectedCampingDate)
+                        ? Container()
+                        : Text("Camping Date : $selectedCampingDate"),
+                    GestureDetector(
+                        onTap: () {
+                          _selectPayementDate(context);
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.calendarAlt,
+                            color: Colors.red,
+                          ),
+                          title: Text("Payement deadline"),
+                        )),
+                    testCampingDate(selectedPayementDate)
+                        ? Container()
+                        : Text("Payement Date : $selectedPayementDate"),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CampSitesList()),
+                          );
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.mapMarkerAlt,
+                            color: Colors.red,
+                          ),
+                          title: Text("Choose position"),
+                        )),
+                    Container(
+                      margin: EdgeInsets.only(right: 16.0, bottom: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          new Flexible(
+                            child: Container(
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: latitudeController,
+                                validator: (value) {
+                                  if (value.length == 0) {
+                                    return 'Enter latitude';
+                                  }
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: 'Latitude',
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15.0, top: 3, bottom: 3),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16.0))),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: longitudeController,
+                              validator: (value) {
+                                if (value.length == 0) {
+                                  return 'Enter longitude';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'Longitude',
+                                contentPadding: EdgeInsets.only(
+                                    left: 15.0, top: 3, bottom: 3),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(16.0))),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: 16.0),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: nbPlaceController,
+                        validator: (value) {
+                          if (value.length == 0) {
+                            return 'Enter number of places';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          hintText: 'Number of places',
+                          contentPadding:
+                              EdgeInsets.only(left: 15.0, top: 3, bottom: 3),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0))),
+                        ),
+                      ),
+                    ),
+                  ])),
+        ));
   }
 }
