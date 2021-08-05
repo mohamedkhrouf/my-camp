@@ -169,6 +169,7 @@ class _HomePageState extends State<HomePage> {
               ? Column(
                   children: [
                     ...postList.map((e) {
+
                       return Cont(yep: e.data(), id: e.id);
                     })
                   ],
@@ -214,6 +215,7 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     children: [
                       ...eventList.map((e) {
+
                         return EvPage(yep: e.data(),id:e.id);
                       }),
                     ],

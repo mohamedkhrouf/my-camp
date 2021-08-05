@@ -22,7 +22,6 @@ class AddEventForm extends StatefulWidget {
 
 class _AddEventForm extends State<AddEventForm> {
   List chosenImages = [];
-  List chosenImagesUrl = [];
   final descriptionController = TextEditingController();
   final latitudeController = TextEditingController();
   final longitudeController = TextEditingController();
@@ -37,25 +36,21 @@ class _AddEventForm extends State<AddEventForm> {
     username = widget.user.data()["username"];
   }
 
-  // ignore: missing_return
   Future uploadImageToFirebase(BuildContext context) async {
+    List chosenImagesUrl = [];
+
     var image;
     FirebaseStorage storage = FirebaseStorage.instance;
 
     for (File image in chosenImages) {
       Reference ref = storage.ref().child("$image" + DateTime.now().toString());
-      UploadTask uploadTask = ref.putFile(image);
-      uploadTask.then((res) {
-        if (mounted)
-          setState(() {
-            res.ref
-                .getDownloadURL()
-                .then((value) => chosenImagesUrl.add(value));
-            print(chosenImagesUrl);
-          });
-      });
-      return chosenImagesUrl;
+      TaskSnapshot uploadTask =await ref.putFile(image);
+      var imgUrl = await uploadTask.ref.getDownloadURL();
+      chosenImagesUrl.add(imgUrl);
     }
+    print(chosenImagesUrl);
+    return chosenImagesUrl;
+
   }
 
   void deleteImage(int index) {
@@ -135,42 +130,46 @@ class _AddEventForm extends State<AddEventForm> {
                       if (chosenImages.length == 0)
                         setState(() {
                           imagesError = "Choose at least a picture";
-                          print("waaaaa");
-                          print(chosenImages);
-                        });
-                      print("waa");
-                      print(chosenImagesUrl);
-                      await uploadImageToFirebase(context);
 
-                      CollectionReference collectionReference =
-                          FirebaseFirestore.instance.collection('event');
-                      collectionReference.add({
-                        'name': 'camping by',
-                        'description': descriptionController.text,
-                        'latitude': latitudeController.text,
-                        'longitude': longitudeController.text,
-                        'nbPart': nbPlaceController.text,
-                        'startingDate': selectedCampingDate,
-                        'dueDate': selectedPayementDate,
-                        'publicationDate': DateTime.now(),
-                        'images': chosenImagesUrl,
-                        'members': [
-                          FirebaseFirestore.instance.doc(
-                              "user/" + (FirebaseAuth.instance.currentUser).uid)
-                        ],
-                        'adminId': FirebaseFirestore.instance.doc(
-                            "user/" + (FirebaseAuth.instance.currentUser).uid),
-                        'tasks': [],
-                      }).then((value) {
-                        print("hedhi ba3d");
-                        descriptionController.clear();
-                        latitudeController.clear();
-                        longitudeController.clear();
-                        nbPlaceController.clear();
-                        Navigator.of(context).pop();
-                      }).catchError(
-                          (error) => print("Failed to add user: $error"));
-                    },
+                        });
+                     uploadImageToFirebase(context).then((value) {
+                       print(value);
+                       CollectionReference collectionReference =
+                       FirebaseFirestore.instance.collection('event');
+                       collectionReference.add({
+                         'name': 'camping by',
+                         'description': descriptionController.text,
+                         'latitude': latitudeController.text,
+                         'longitude': longitudeController.text,
+                         'nbPart': nbPlaceController.text,
+                         'startingDate': selectedCampingDate,
+                         'dueDate': selectedPayementDate,
+                         'publicationDate': DateTime.now(),
+                         'images': value,
+                         'likes' : [],
+                         'pendingUsers' : [],
+                         'members': [
+                           FirebaseFirestore.instance.doc(
+                               "user/" + (FirebaseAuth.instance.currentUser).uid)
+                         ],
+                         'adminId': FirebaseFirestore.instance.doc(
+                             "user/" + (FirebaseAuth.instance.currentUser).uid),
+                         'tasks': [],
+                       }).then((value) {
+                         print("hedhi ba3d");
+                         descriptionController.clear();
+                         latitudeController.clear();
+                         longitudeController.clear();
+                         nbPlaceController.clear();
+                         Navigator.of(context).pop();
+                       }).catchError(
+                               (error) => print("Failed to add user: $error"));
+                     });
+
+
+
+
+                      },
                     child: Text(
                       "Publish",
                       style: TextStyle(
