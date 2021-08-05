@@ -1,11 +1,9 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/comments/mainScreen/evComment.dart';
 import 'package:my_camp/screens/comments/widgets/comment.dart';
-import 'package:my_camp/screens/discussion/mainScreen/discussion.dart';
 import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -23,16 +21,12 @@ class EvPage extends StatefulWidget {
 class _EvPageState extends State<EvPage> {
   var clicked = false;
   var user;
-  var items = [];
-  var ind = 1;
+
   List commentList=[];
   @override
   void initState() {
     super.initState();
-    widget.yep["images"].forEach((e) {
-      items.add(e.toString());
-      print(e.toString());
-    });
+
     getComments();
     getUser();
   }
@@ -117,7 +111,6 @@ class _EvPageState extends State<EvPage> {
             padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
             width: MediaQuery.of(context).size.width,
             child: Row(
-
               children: [
                 Spacer(),
                 Container(
@@ -176,72 +169,24 @@ class _EvPageState extends State<EvPage> {
               ],
             )),
         Container(
-            width: MediaQuery.of(context).size.width,
-
             child: Stack(
           children: [
-            CarouselSlider(
-              options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    ind = index + 1;
-                  });
-                },
-                height: MediaQuery.of(context).size.width * 0.8,
-                viewportFraction: 1,
-                enableInfiniteScroll: false,
-              ),
-              items: items.map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Image.network(i,
-                        height: MediaQuery.of(context).size.width,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.fitHeight);
-                  },
-                );
-              }).toList(),
+            Image.network(
+              widget.yep["images"][0],
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.fitWidth,
             ),
             Positioned(
-                right: 10,
-                top: 5,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(
-                        top: 10,
-                        bottom: 10,
-                        left: 20,
-                        right: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(0, 0, 0, 1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    Container(
-                      child: Text(
-                        ' $ind/${widget.yep["images"].length}',
-                        style: TextStyle(
-                            color: Color.fromRGBO(255, 255, 255, 1)),
-                      ),
-                      margin: EdgeInsets.only(top: 2),
-                    ),
-                  ],
-                )),
-            Positioned(
-              width: MediaQuery.of(context).size.width,
-
               bottom: 20,
+              left: 60,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       child: widget.yep["pendingUsers"]
                               .contains((FirebaseAuth.instance.currentUser).uid)
-                          ?
-
-                      OutlinedButton(
+                          ? OutlinedButton(
                               style: ElevatedButton.styleFrom(
                                   side: BorderSide(color: Colors.brown),
                                   primary: Colors.white,
@@ -266,39 +211,7 @@ class _EvPageState extends State<EvPage> {
                               onPressed: () {},
                               child: Text('Pending...'),
                             )
-                          :  widget.yep["members"]
-        .contains(                (FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser.uid))) ?
-                      OutlinedButton(
-                        style: ElevatedButton.styleFrom(
-                            side: BorderSide(color: Colors.brown),
-                            primary: Colors.white,
-                            padding: !clicked
-                                ? EdgeInsets.only(
-                                top: 15,
-                                bottom: 15,
-                                left: 50,
-                                right: 50)
-                                : EdgeInsets.only(
-                                top: 15,
-                                bottom: 15,
-                                left: 32.5,
-                                right: 32.5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(30),
-                                  bottomRight: Radius.circular(30),
-                                  topLeft: Radius.circular(30),
-                                  bottomLeft: Radius.circular(30)),
-                            )),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Discussion(eventId: widget.id,groupName: widget.yep["name"],)));
-
-                        },
-                        child: Text('Discussion'),
-                      ):OutlinedButton(
+                          : OutlinedButton(
                               style: ElevatedButton.styleFrom(
                                   side: BorderSide(color: Colors.brown),
                                   primary: Colors.white,
