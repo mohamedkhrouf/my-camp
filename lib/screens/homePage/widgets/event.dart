@@ -349,50 +349,72 @@ class _EvPageState extends State<EvPage> {
                             size: 27,
                           ),
                           onTap: () {
-                            showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext bc) {
-                                  return FractionallySizedBox(
-                                    heightFactor: 0.85,
-                                    child: Stack(
+                            showModalBottomSheet<void>(
+                              isScrollControlled: true,
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0)),
+                              ),
+                              builder: (BuildContext context) {
+                                return Padding(
+                                    padding: MediaQuery.of(context).viewInsets,
+                                    child: Container(
+                                      height: 500,
+                                        child: Wrap(
                                       children: <Widget>[
                                         Container(
-                                          height: 40.0,
-                                          width: double.infinity,
-                                          color: Colors.black54,
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(25),
-                                                topRight: Radius.circular(25),
-                                              )),
-                                        ),
-                                        Container(
-                                            margin: EdgeInsets.only(
-                                                top: 30, bottom: 100),
-                                            child: commentList.length == 0
-                                                ? Center(
-                                                    child: Text("No comments"),
-                                                  )
-                                                : SingleChildScrollView(
-                                                    child: Column(
-                                                      children: [
-                                                        ...commentList.map((e) {
-                                                          return Comment(
-                                                            comment: e,
-                                                            eventId: widget.id,
-                                                          );
-                                                        }),
-                                                      ],
-                                                    ),
-                                                  )),
-                                        Positioned(
-                                       
-                                          child: Form(
+                                            child: Stack(
+                                              children: <Widget>[
+                                                Container(
+                                                
+                                                  width: double.infinity,
+                                                  color: Colors.black54,
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(25),
+                                                        topRight:
+                                                            Radius.circular(25),
+                                                      )),
+                                                ),
+                                                Container(
+                                                    margin: EdgeInsets.only(
+                                                        top: 50, bottom: 100),
+                                                    child: commentList.length ==
+                                                            0
+                                                        ? Center(
+                                                            child: Text(
+                                                                "No comments"),
+                                                          )
+                                                        : SingleChildScrollView(
+                                                            child: Column(
+                                                              children: [
+                                                                ...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                        widget
+                                                                            .id,
+                                                                  );
+                                                                }),
+                                                              ],
+                                                            ),
+                                                          )),
+                                              ],
+                                            ),
+                                          ),
+                                         
+                                          Form(
+
                                               child: Container(
+                                              
                                                   decoration: BoxDecoration(
                                                     color: Colors.white,
                                                     boxShadow: [
@@ -500,11 +522,10 @@ class _EvPageState extends State<EvPage> {
                                                           )),
                                                     ),
                                                   ]))),
-                                        )
                                       ],
-                                    ),
-                                  );
-                                });
+                                    )));
+                              },
+                            );
                           },
                         ),
                       )
