@@ -190,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PostImage()));
+                    MaterialPageRoute(builder: (context) => PostImage(user: user)));
               },
               child: Icon(Icons.add, color: Colors.white),
               style: ElevatedButton.styleFrom(

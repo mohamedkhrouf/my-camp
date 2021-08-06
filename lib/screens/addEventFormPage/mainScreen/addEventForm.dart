@@ -156,7 +156,6 @@ class _AddEventForm extends State<AddEventForm> {
                              "user/" + (FirebaseAuth.instance.currentUser).uid),
                          'tasks': [],
                        }).then((value) {
-                         print("hedhi ba3d");
                          descriptionController.clear();
                          latitudeController.clear();
                          longitudeController.clear();
