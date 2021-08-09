@@ -115,11 +115,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Container(
             padding: EdgeInsets.only(top: 10),
-            child: Wrap(
+            child: Row(
               children: [
                 Spacer(),
                 Container(
-                  margin: EdgeInsets.only(right: 16.0, bottom: 16.0),
+                  margin: EdgeInsets.only(right: 16.0, ),
                   child: OutlinedButton(
                     style: ElevatedButton.styleFrom(
                         side: BorderSide(
@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.blue),
                         primary: Color.fromRGBO(241, 249, 255, 1),
                         padding: EdgeInsets.only(
-                            top: 10, bottom: 10, left: 40, right: 40),
+                            top: 10, bottom: 10, left: 45, right: 45),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(30),
@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             side: BorderSide(color: Colors.red))),
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => EditProfilePage()));
+                          MaterialPageRoute(builder: (context) => EditProfilePage(user : user)));
                     },
                     child: Text('Edit Profile'),
                   ),
