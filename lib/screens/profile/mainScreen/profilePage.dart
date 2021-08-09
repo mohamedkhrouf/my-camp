@@ -138,7 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             side: BorderSide(color: Colors.red))),
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => EditProfilePage()));
+                          MaterialPageRoute(builder: (context) => EditProfilePage(image: user != null
+                                      ? user.data()["avatar"]
+                                      : "https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w")));
                     },
                     child: Text('Edit Profile'),
                   ),

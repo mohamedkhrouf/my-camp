@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_camp/screens/campSiteForm/mainScreen/campSiteForm.dart';
 import 'package:my_camp/screens/campSites/widgets/campSite.dart';
 
 class CampSites extends StatefulWidget {
@@ -36,7 +37,8 @@ class _CampSites extends State<CampSites> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Stack
+    (
       children: [
         SingleChildScrollView(
           child: Column(
@@ -63,19 +65,28 @@ class _CampSites extends State<CampSites> {
             ],
           ),
         ),
-        Positioned(
-            right: 15.0,
-            bottom: 10.0,
-            child: ElevatedButton(
-              onPressed: null,
-              child: Icon(Icons.add),
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(30),
-                primary: Colors.blue, // <-- Button color
-                onPrimary: Colors.red, // <-- Splash color
-              ),
-            )),
+        Container(
+          margin: EdgeInsets.only(top:530 ,left:315),
+          child: Positioned(
+              right: 50,
+              bottom: 50.0,
+              child: ElevatedButton(
+                onPressed: ()=>{
+ Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CampSiteForm()),
+          )
+                },
+                child: Icon(Icons.add),
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(30),
+                  primary: Colors.blue, // <-- Button color
+                  onPrimary: Colors.white, // <-- Splash color
+                ),
+              )),
+        )
+        
       ],
     );
   }

@@ -21,8 +21,8 @@ class _ContState extends State<Cont> {
   var items = [];
   var ind = 1;
   var user;
-  List commentList=[];
-
+  List commentList = [];
+  final messageController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -50,10 +50,13 @@ class _ContState extends State<Cont> {
     });
     return user;
   }
+
   List getComments() {
     List documents;
-    CollectionReference collectionReference =
-    FirebaseFirestore.instance.collection('post').doc(widget.id).collection("comments");
+    CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('post')
+        .doc(widget.id)
+        .collection("comments");
 
     collectionReference.snapshots().listen((snapshot) {
       if (mounted) {
@@ -66,6 +69,7 @@ class _ContState extends State<Cont> {
       }
     });
   }
+
   nblikes() {
     return widget.yep["likes"].length;
   }
@@ -134,21 +138,21 @@ class _ContState extends State<Cont> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child:GestureDetector(
-                    onTap: (){
-                Navigator.push(
-                context,
-                MaterialPageRoute(
-                builder: (context) => VisitedProfilePage(userId: widget.yep["userId"].id)),
-                );
-                },child: Text(
+                        child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VisitedProfilePage(
+                                  userId: widget.yep["userId"].id)),
+                        );
+                      },
+                      child: Text(
                         user != null ? user.data()["username"] : "",
                         style: TextStyle(fontSize: 20),
                         textAlign: TextAlign.left,
                       ),
-
-                    )
-                    ),
+                    )),
                     Container(
                       child: Text(
                         widget.yep != null
@@ -279,14 +283,15 @@ class _ContState extends State<Cont> {
                                 return Padding(
                                     padding: MediaQuery.of(context).viewInsets,
                                     child: Container(
-                                        height: MediaQuery.of(context).size.height*0.85,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.85,
                                         child: Wrap(
                                           children: <Widget>[
                                             Container(
                                               child: Stack(
                                                 children: <Widget>[
                                                   Container(
-
                                                     width: double.infinity,
                                                     color: Colors.black54,
                                                   ),
@@ -294,149 +299,147 @@ class _ContState extends State<Cont> {
                                                     decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius:
-                                                        BorderRadius.only(
+                                                            BorderRadius.only(
                                                           topLeft:
-                                                          Radius.circular(25),
+                                                              Radius.circular(
+                                                                  25),
                                                           topRight:
-                                                          Radius.circular(25),
+                                                              Radius.circular(
+                                                                  25),
                                                         )),
                                                   ),
                                                   Container(
-                                                      margin: EdgeInsets.only(
-                                                          top: 50, bottom: 100),
-                                                      child: commentList.length ==
-                                                          0
-                                                          ? Center(
-                                                        child: Text(
-                                                            "No comments"),
-                                                      )
-                                                          : SingleChildScrollView(
-                                                        child: Column(
-                                                          children: [
-                                                            ...commentList
-                                                                .map((e) {
-                                                              return Comment(
-                                                                comment: e,
-                                                                eventId:
-                                                                widget
-                                                                    .id,
-                                                              );
-                                                            }),
-                                                          ],
-                                                        ),
-                                                      )),
+                                                      color: Colors.white,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      child: Stack(children: [
+                                                        SingleChildScrollView(
+                                                            reverse: true,
+                                                            physics:
+                                                                ScrollPhysics(),
+                                                            child: Column(
+                                                              children: [
+                                                                ...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                        widget
+                                                                            .id,
+                                                                  );
+                                                                }),
+                                                                ...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                        widget
+                                                                            .id,
+                                                                  );
+                                                                }),
+                                                                ...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                        widget
+                                                                            .id,
+                                                                  );
+                                                                }),
+                                                                ...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                        widget
+                                                                            .id,
+                                                                  );
+                                                                }),
+                                                                ...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                        widget
+                                                                            .id,
+                                                                  );
+                                                                }),
+                                                              ],
+                                                            )),
+                                                        Container(
+                                                            margin: EdgeInsets.only(
+                                                                top: MediaQuery.of(context)
+                                                                            .viewInsets
+                                                                            .bottom !=
+                                                                        0
+                                                                    ? 350
+                                                                    : 529),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  blurRadius:
+                                                                      64,
+                                                                  color: Color(
+                                                                          0xFF087949)
+                                                                      .withOpacity(
+                                                                          0.4),
+                                                                  offset: Offset(
+                                                                      0,
+                                                                      5), // changes position of shadow
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 8.0,
+                                                                    right: 16.0,
+                                                                    left: 16.0,
+                                                                    bottom:
+                                                                        8.0),
+                                                            child: Row(
+                                                                children: [
+                                                                  new Flexible(
+                                                                      child: Container(
+                                                                          height: 35,
+                                                                          child: TextFormField(
+                                                                            controller:
+                                                                                messageController,
+                                                                            decoration:
+                                                                                const InputDecoration(
+                                                                              hintText: 'Enter your message',
+                                                                              contentPadding: EdgeInsets.only(left: 15.0),
+                                                                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(90.0))),
+                                                                            ),
+                                                                          ))),
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            left:
+                                                                                5),
+                                                                    child: GestureDetector(
+                                                                        onTap: () async {},
+                                                                        child: Icon(
+                                                                          Icons
+                                                                              .send,
+                                                                          color: Color.fromRGBO(
+                                                                              170,
+                                                                              215,
+                                                                              62,
+                                                                              1),
+                                                                          size:
+                                                                              33,
+                                                                        )),
+                                                                  ),
+                                                                ])),
+                                                      ])),
                                                 ],
                                               ),
                                             ),
-
-                                            Form(
-
-                                                child: Container(
-
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          blurRadius: 64,
-                                                          color: Color(0xFF087949)
-                                                              .withOpacity(0.4),
-                                                          offset: Offset(0,
-                                                              5), // changes position of shadow
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    padding: EdgeInsets.only(
-                                                        top: 8.0,
-                                                        right: 16.0,
-                                                        left: 16.0,
-                                                        bottom: 8.0),
-                                                    child: Row(children: [
-                                                      /* GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              print("hrgnrs");
-                            });
-                          },
-                          child:Container(
-
-                              child:Icon(
-                            Icons.image,
-                            color: Color.fromRGBO(170, 215, 62, 1),
-                            size: 40,
-                          ))),*/
-                                                      new Flexible(
-                                                          child: Container(
-                                                              height: 35,
-                                                              child:
-                                                              TextFormField(
-
-                                                                decoration:
-                                                                const InputDecoration(
-                                                                  hintText:
-                                                                  'Enter your message',
-                                                                  contentPadding:
-                                                                  EdgeInsets.only(
-                                                                      left:
-                                                                      15.0),
-                                                                  border: OutlineInputBorder(
-                                                                      borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(90.0))),
-                                                                ),
-                                                              ))),
-                                                      Container(
-                                                        margin: EdgeInsets.only(
-                                                            left: 5),
-                                                        child: GestureDetector(
-                                                            onTap: () async {
-                                                              final newMessage =
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                  'event')
-                                                                  .doc()
-                                                                  .collection(
-                                                                  'messages')
-                                                                  .add({
-                                                                'eventId':
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .doc(
-                                                                    "event/"),
-                                                                'senderId': FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                    'user')
-                                                                    .doc(FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser
-                                                                    .uid),
-
-
-                                                                'sendTime':
-                                                                DateTime.now()
-                                                              });
-
-
-
-                                                              /* messages.add(ChatMessage(
-                                  message: messageController.text,
-                                  messageType: MessageType.sent,
-                                ));
-                                messageController.clear();*/
-                                                            },
-                                                            child: Icon(
-                                                              Icons.send,
-                                                              color:
-                                                              Color.fromRGBO(
-                                                                  170,
-                                                                  215,
-                                                                  62,
-                                                                  1),
-                                                              size: 33,
-                                                            )),
-                                                      ),
-                                                    ]))),
                                           ],
                                         )));
                               },

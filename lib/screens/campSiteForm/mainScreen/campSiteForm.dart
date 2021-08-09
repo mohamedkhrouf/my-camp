@@ -11,15 +11,14 @@ import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
 
 import '../../homePage/widgets/campSitesList.dart';
 
-class EditProfilePage extends StatefulWidget {
+class CampSiteForm extends StatefulWidget {
   @override
-  _EditProfilePage createState() => _EditProfilePage();
-  final image;
-  const EditProfilePage({Key key, this.image}) : super(key: key);
+  _CampSiteForm createState() => _CampSiteForm();
+  
 }
 
-class _EditProfilePage extends State<EditProfilePage> {
-  var chosenImage ;
+class _CampSiteForm extends State<CampSiteForm> {
+  List chosenImages = [];
   final descriptionController = TextEditingController();
   final usernameController = TextEditingController();
   final villeController = TextEditingController();
@@ -32,7 +31,6 @@ class _EditProfilePage extends State<EditProfilePage> {
   void initState() {
     super.initState();
     getProfile();
-    img = widget.image;
   }
 
   List getProfile() {
@@ -49,7 +47,11 @@ class _EditProfilePage extends State<EditProfilePage> {
     return user;
   }
 
-
+  void deleteImage(int index) {
+    setState(() {
+      chosenImages.removeAt(index);
+    });
+  }
 
   File _image;
   var img;
@@ -88,7 +90,18 @@ class _EditProfilePage extends State<EditProfilePage> {
     print(selectedCampingDate);
   }
 
-
+  Future<void> _selectPayementDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: firstDate,
+        firstDate: firstDate,
+        lastDate: selectedCampingDate);
+    if (picked != null && picked != selectedPayementDate)
+      setState(() {
+        selectedPayementDate = picked;
+      });
+    print(selectedPayementDate);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +123,12 @@ class _EditProfilePage extends State<EditProfilePage> {
                 padding: EdgeInsets.only(right: 20.0, top: 20),
                 child: GestureDetector(
                     onTap: () {
-                      if (chosenImage == null)
+                      if (chosenImages.length == 0)
                         setState(() {
                           imagesError = "Choose at least a picture";
                         });
                       if (_formKey.currentState.validate() &&
-                          chosenImage!=null) {
+                          chosenImages.length > 0) {
                         /* CollectionReference collectionReference =
                             FirebaseFirestore.instance.collection('event');
                         return collectionReference.add({
@@ -167,7 +180,9 @@ class _EditProfilePage extends State<EditProfilePage> {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.contain,
-                          image: NetworkImage(img),
+                          image: NetworkImage(user != null
+                              ? user.data()["avatar"]
+                              : "https://media.tarkett-image.com/large/TH_24567080_24594080_24596080_24601080_24563080_24565080_24588080_001.jpg"),
                         ),
                       ),
                     ),
@@ -314,3 +329,4 @@ class _EditProfilePage extends State<EditProfilePage> {
         ));
   }
 }
+

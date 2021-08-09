@@ -25,7 +25,8 @@ class _EvPageState extends State<EvPage> {
   var user;
   var items = [];
   var ind = 1;
-  List commentList=[];
+  List commentList = [];
+  final messageController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -53,8 +54,10 @@ class _EvPageState extends State<EvPage> {
 
   List getComments() {
     List documents;
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('event').doc(widget.id).collection("comments");
+    CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('event')
+        .doc(widget.id)
+        .collection("comments");
 
     collectionReference.snapshots().listen((snapshot) {
       if (mounted) {
@@ -135,11 +138,12 @@ class _EvPageState extends State<EvPage> {
                   children: [
                     Container(
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => VisitedProfilePage(userId: widget.yep["adminId"].id)),
+                                builder: (context) => VisitedProfilePage(
+                                    userId: widget.yep["adminId"].id)),
                           );
                         },
                         child: Text(
@@ -147,7 +151,7 @@ class _EvPageState extends State<EvPage> {
                           style: TextStyle(fontSize: 20),
                           textAlign: TextAlign.left,
                         ),
-                      ) ,
+                      ),
                       margin: EdgeInsets.only(right: 10),
                     ),
                     Container(
@@ -218,163 +222,183 @@ class _EvPageState extends State<EvPage> {
                     Container(
                       child: Text(
                         ' $ind/${widget.yep["images"].length}',
-                        style: TextStyle(
-                            color: Color.fromRGBO(255, 255, 255, 1)),
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
                       ),
                       margin: EdgeInsets.only(top: 2),
                     ),
                   ],
                 )),
             Positioned(
-
-              bottom: 20,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-
-                child:Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      child: widget.yep["pendingUsers"]
-                              .contains((FirebaseAuth.instance.currentUser).uid)
-                          ? OutlinedButton(
-                              style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: Colors.brown),
-                                  primary: Colors.white,
-                                  padding: EdgeInsets.only(
+                bottom: 20,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          child: widget.yep["pendingUsers"].contains(
+                                  (FirebaseAuth.instance.currentUser).uid)
+                              ? OutlinedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      side: BorderSide(color: Colors.brown),
+                                      primary: Colors.white,
+                                      padding: EdgeInsets.only(
                                           top: 15,
                                           bottom: 15,
                                           left: 32.5,
                                           right: 32.5),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        bottomRight: Radius.circular(30),
-                                        topLeft: Radius.circular(30),
-                                        bottomLeft: Radius.circular(30)),
-                                  )),
-                              onPressed: () {},
-                              child: Text('Pending...'),
-                            )
-                          :
-                            widget.yep["members"]
-                                .contains(FirebaseFirestore.instance.collection("user").doc(FirebaseAuth.instance.currentUser.uid))?
-
-                            OutlinedButton(
-                              style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: Colors.brown),
-                                  primary: Colors.white,
-                                  padding:  EdgeInsets.only(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(30),
+                                            bottomRight: Radius.circular(30),
+                                            topLeft: Radius.circular(30),
+                                            bottomLeft: Radius.circular(30)),
+                                      )),
+                                  onPressed: () {},
+                                  child: Text('Pending...'),
+                                )
+                              : widget.yep["members"].contains(FirebaseFirestore
+                                      .instance
+                                      .collection("user")
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser.uid))
+                                  ? OutlinedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          side: BorderSide(color: Colors.brown),
+                                          primary: Colors.white,
+                                          padding: EdgeInsets.only(
+                                              top: 15,
+                                              bottom: 15,
+                                              left: 32.5,
+                                              right: 32.5),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(30),
+                                                bottomRight:
+                                                    Radius.circular(30),
+                                                topLeft: Radius.circular(30),
+                                                bottomLeft:
+                                                    Radius.circular(30)),
+                                          )),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Discussion(
+                                                    eventId: widget.id,
+                                                    groupName:
+                                                        widget.yep["name"],
+                                                  )),
+                                        );
+                                      },
+                                      child: Text('Discussion'),
+                                    )
+                                  : OutlinedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          side: BorderSide(color: Colors.brown),
+                                          primary: Colors.white,
+                                          padding: !clicked
+                                              ? EdgeInsets.only(
+                                                  top: 15,
+                                                  bottom: 15,
+                                                  left: 50,
+                                                  right: 50)
+                                              : EdgeInsets.only(
+                                                  top: 15,
+                                                  bottom: 15,
+                                                  left: 32.5,
+                                                  right: 32.5),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(30),
+                                                bottomRight:
+                                                    Radius.circular(30),
+                                                topLeft: Radius.circular(30),
+                                                bottomLeft:
+                                                    Radius.circular(30)),
+                                          )),
+                                      onPressed: () {
+                                        setState(() {
+                                          FirebaseFirestore.instance
+                                              .collection('demand')
+                                              .add({
+                                            'eventId': FirebaseFirestore
+                                                .instance
+                                                .doc("event/" + widget.id),
+                                            'userId': FirebaseFirestore.instance
+                                                .doc("user/" +
+                                                    (FirebaseAuth.instance
+                                                            .currentUser)
+                                                        .uid),
+                                            'state': "pending",
+                                            'receiverId': FirebaseFirestore
+                                                .instance
+                                                .doc("user/" + user.id)
+                                          }).then((value) => FirebaseFirestore
+                                                      .instance
+                                                      .collection('event')
+                                                      .doc(widget.id)
+                                                      .update({
+                                                    'pendingUsers':
+                                                        FieldValue.arrayUnion([
+                                                      (FirebaseAuth.instance
+                                                              .currentUser)
+                                                          .uid
+                                                    ])
+                                                  }));
+                                        });
+                                        FirebaseFirestore.instance
+                                            .collection('user')
+                                            .doc(FirebaseAuth
+                                                .instance.currentUser.uid)
+                                            .update({
+                                              'events': FieldValue.arrayUnion([
+                                                FirebaseFirestore.instance
+                                                    .collection('event')
+                                                    .doc(widget.id)
+                                              ])
+                                            })
+                                            .then((value) => print("ok"))
+                                            .catchError((error) => print(
+                                                "Failed to update event: $error"));
+                                      },
+                                      child: Text('Join'),
+                                    ),
+                        ),
+                        Container(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.only(
                                       top: 15,
                                       bottom: 15,
-                                      left: 32.5,
-                                      right: 32.5),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        bottomRight: Radius.circular(30),
-                                        topLeft: Radius.circular(30),
-                                        bottomLeft: Radius.circular(30)),
-                                  )),
-                              onPressed: () {
-                                Navigator.push(
+                                      left: 50,
+                                      right: 50)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    bottomLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
+                                    bottomRight: Radius.circular(30)),
+                              )),
+                            ),
+                            onPressed: () => {
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Discussion(eventId: widget.id,groupName: widget.yep["name"],)),
-                                );
-                              },
-                              child: Text('Discussion'),
-                            ):OutlinedButton(
-                              style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: Colors.brown),
-                                  primary: Colors.white,
-                                  padding: !clicked
-                                      ? EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 15,
-                                          left: 50,
-                                          right: 50)
-                                      : EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 15,
-                                          left: 32.5,
-                                          right: 32.5),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        bottomRight: Radius.circular(30),
-                                        topLeft: Radius.circular(30),
-                                        bottomLeft: Radius.circular(30)),
-                                  )),
-                              onPressed: () {
-                                setState(() {
-                                  FirebaseFirestore.instance
-                                      .collection('demand')
-                                      .add({
-                                    'eventId': FirebaseFirestore.instance
-                                        .doc("event/" + widget.id),
-                                    'userId': FirebaseFirestore.instance.doc(
-                                        "user/" +
-                                            (FirebaseAuth.instance.currentUser)
-                                                .uid),
-                                    'state': "pending",
-                                    'receiverId': FirebaseFirestore.instance
-                                        .doc("user/" + user.id)
-                                  }).then((value) => FirebaseFirestore.instance
-                                              .collection('event')
-                                              .doc(widget.id)
-                                              .update({
-                                            'pendingUsers':
-                                                FieldValue.arrayUnion([
-                                              (FirebaseAuth
-                                                      .instance.currentUser)
-                                                  .uid
-                                            ])
-                                          }));
-                                });
-                                FirebaseFirestore.instance
-                                    .collection('user')
-                                    .doc(FirebaseAuth.instance.currentUser.uid)
-                                    .update({
-                                      'events': FieldValue.arrayUnion([
-                                        FirebaseFirestore.instance
-                                            .collection('event')
-                                            .doc(widget.id)
-                                      ])
-                                    })
-                                    .then((value) => print("ok"))
-                                    .catchError((error) => print(
-                                        "Failed to update event: $error"));
-                              },
-                              child: Text('Join'),
-                            ),
-                    ),
-                    Container(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(EdgeInsets.only(
-                              top: 15, bottom: 15, left: 50, right: 50)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30),
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30)),
-                          )),
-                        ),
-                        onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MapPage(latitude: widget.yep["latitude"] ,longitude: widget.yep["longitude"] ,)))
-                        },
-                        child: Text('Map'),
-                      ),
-                    )
-                  ]),)
-            ),
+                                      builder: (context) => MapPage(
+                                            latitude: widget.yep["latitude"],
+                                            longitude: widget.yep["longitude"],
+                                          )))
+                            },
+                            child: Text('Map'),
+                          ),
+                        )
+                      ]),
+                )),
           ],
         )),
         Container(
@@ -426,211 +450,174 @@ class _EvPageState extends State<EvPage> {
                                 return Padding(
                                     padding: MediaQuery.of(context).viewInsets,
                                     child: Container(
-                                      height: 500,
-                                        child: Column(
-                                      children: <Widget>[
-
-                                        Container(
-                                            child: Stack(
-                                              children: <Widget>[
-                                                Container(
-                                                
-                                                  width: double.infinity,
-                                                  color: Colors.black54,
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.85,
+                                        child: Wrap(
+                                          children: <Widget>[
+                                            Container(
+                                              child: Stack(
+                                                children: <Widget>[
+                                                  Container(
+                                                    width: double.infinity,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  25),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  25),
+                                                        )),
+                                                  ),
+                                                  Container(
                                                       color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(25),
-                                                        topRight:
-                                                            Radius.circular(25),
-                                                      )),
-                                                ),
-                                                Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 50),
-                                                    child: commentList.length ==
-                                                            0
-                                                        ? Center(
-                                                            child: Text(
-                                                                "No comments"),
-                                                          )
-                                                        : Container(child:SingleChildScrollView(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      child: Stack(children: [
+                                                        SingleChildScrollView(
                                                             child: ListView(
-                                                              scrollDirection: Axis.vertical,
-                                                              children:[
-                                                                ...commentList
-                                                                    .map((e) {
-                                                                  return Comment(
-                                                                    comment: e,
-                                                                    eventId:
-                                                                    widget
-                                                                        .id,
-                                                                  );
-                                                                }),...commentList
-                                                                    .map((e) {
-                                                                  return Comment(
-                                                                    comment: e,
-                                                                    eventId:
-                                                                    widget
-                                                                        .id,
-                                                                  );
-                                                                }),...commentList
-                                                                    .map((e) {
-                                                                  return Comment(
-                                                                    comment: e,
-                                                                    eventId:
-                                                                    widget
-                                                                        .id,
-                                                                  );
-                                                                }),...commentList
-                                                                    .map((e) {
-                                                                  return Comment(
-                                                                    comment: e,
-                                                                    eventId:
-                                                                    widget
-                                                                        .id,
-                                                                  );
-                                                                }),...commentList
-                                                                    .map((e) {
-                                                                  return Comment(
-                                                                    comment: e,
-                                                                    eventId:
-                                                                    widget
-                                                                        .id,
-                                                                  );
-                                                                }),...commentList
-                                                                    .map((e) {
-                                                                  return Comment(
-                                                                    comment: e,
-                                                                    eventId:
-                                                                    widget
-                                                                        .id,
-                                                                  );
-                                                                }),
+                                                          shrinkWrap: true,
+                                                          children: [
+                                                            ...commentList
+                                                                .map((e) {
+                                                              return Comment(
+                                                                comment: e,
+                                                                eventId:
+                                                                    widget.id,
+                                                              );
+                                                            }),
+                                                            ...commentList
+                                                                .map((e) {
+                                                              return Comment(
+                                                                comment: e,
+                                                                eventId:
+                                                                    widget.id,
+                                                              );
+                                                            }),
+                                                            ...commentList
+                                                                .map((e) {
+                                                              return Comment(
+                                                                comment: e,
+                                                                eventId:
+                                                                    widget.id,
+                                                              );
+                                                            }),
+                                                            ...commentList
+                                                                .map((e) {
+                                                              return Comment(
+                                                                comment: e,
+                                                                eventId:
+                                                                    widget.id,
+                                                              );
+                                                            }),
+                                                            ...commentList
+                                                                .map((e) {
+                                                              return Comment(
+                                                                comment: e,
+                                                                eventId:
+                                                                    widget.id,
+                                                              );
+                                                            }),
+                                                            ...commentList
+                                                                .map((e) {
+                                                              return Comment(
+                                                                comment: e,
+                                                                eventId:
+                                                                    widget.id,
+                                                              );
+                                                            }),
+                                                            ...commentList
+                                                                .map((e) {
+                                                              return Comment(
+                                                                comment: e,
+                                                                eventId:
+                                                                    widget.id,
+                                                              );
+                                                            }),
+                                                          ],
+                                                        )),
+                                                        Container(
+                                                            margin: EdgeInsets.only(
+                                                                top: MediaQuery.of(context)
+                                                                            .viewInsets
+                                                                            .bottom !=
+                                                                        0
+                                                                    ? 350
+                                                                    : 529),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  blurRadius:
+                                                                      64,
+                                                                  color: Color(
+                                                                          0xFF087949)
+                                                                      .withOpacity(
+                                                                          0.4),
+                                                                  offset: Offset(
+                                                                      0,
+                                                                      5), // changes position of shadow
+                                                                ),
                                                               ],
                                                             ),
-                                                          ))),
-                                              ],
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 8.0,
+                                                                    right: 16.0,
+                                                                    left: 16.0,
+                                                                    bottom:
+                                                                        8.0),
+                                                            child: Row(
+                                                                children: [
+                                                                  new Flexible(
+                                                                      child: Container(
+                                                                          height: 35,
+                                                                          child: TextFormField(
+                                                                            controller:
+                                                                                messageController,
+                                                                            decoration:
+                                                                                const InputDecoration(
+                                                                              hintText: 'Enter your message',
+                                                                              contentPadding: EdgeInsets.only(left: 15.0),
+                                                                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(90.0))),
+                                                                            ),
+                                                                          ))),
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .only(
+                                                                            left:
+                                                                                5),
+                                                                    child: GestureDetector(
+                                                                        onTap: () async {},
+                                                                        child: Icon(
+                                                                          Icons
+                                                                              .send,
+                                                                          color: Color.fromRGBO(
+                                                                              170,
+                                                                              215,
+                                                                              62,
+                                                                              1),
+                                                                          size:
+                                                                              33,
+                                                                        )),
+                                                                  ),
+                                                                ])),
+                                                      ])),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            child:Container()
-                                          ),
-                                         
-                                          Form(
-
-                                              child: Container(
-                                              
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        blurRadius: 64,
-                                                        color: Color(0xFF087949)
-                                                            .withOpacity(0.4),
-                                                        offset: Offset(0,
-                                                            5), // changes position of shadow
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  padding: EdgeInsets.only(
-                                                      top: 8.0,
-                                                      right: 16.0,
-                                                      left: 16.0,
-                                                      bottom: 8.0),
-                                                  child: Row(children: [
-                                                    /* GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              print("hrgnrs");
-                            });
-                          },
-                          child:Container(
-
-                              child:Icon(
-                            Icons.image,
-                            color: Color.fromRGBO(170, 215, 62, 1),
-                            size: 40,
-                          ))),*/
-                                                    new Flexible(
-                                                        child: Container(
-                                                            height: 35,
-                                                            child:
-                                                                TextFormField(
-                                                             
-                                                              decoration:
-                                                                  const InputDecoration(
-                                                                hintText:
-                                                                    'Enter your message',
-                                                                contentPadding:
-                                                                    EdgeInsets.only(
-                                                                        left:
-                                                                            15.0),
-                                                                border: OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(90.0))),
-                                                              ),
-                                                            ))),
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 5),
-                                                      child: GestureDetector(
-                                                          onTap: () async {
-                                                            final newMessage =
-                                                                await FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        'event')
-                                                                    .doc()
-                                                                    .collection(
-                                                                        'messages')
-                                                                    .add({
-                                                              'eventId':
-                                                                  FirebaseFirestore
-                                                                      .instance
-                                                                      .doc(
-                                                                          "event/"),
-                                                              'senderId': FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'user')
-                                                                  .doc(FirebaseAuth
-                                                                      .instance
-                                                                      .currentUser
-                                                                      .uid),
-                                                         
-                                                                      
-                                                              'sendTime':
-                                                                  DateTime.now()
-                                                            });
-
-                                                           
-
-                                                            /* messages.add(ChatMessage(
-                                  message: messageController.text,
-                                  messageType: MessageType.sent,
-                                ));
-                                messageController.clear();*/
-                                                          },
-                                                          child: Icon(
-                                                            Icons.send,
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    170,
-                                                                    215,
-                                                                    62,
-                                                                    1),
-                                                            size: 33,
-                                                          )),
-                                                    ),
-                                                  ]))),
-                               ],
-                                    )));
+                                          ],
+                                        )));
                               },
                             );
                           },
