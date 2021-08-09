@@ -483,8 +483,8 @@ class _EvPageState extends State<EvPage> {
                                                               .width,
                                                       child: Stack(children: [
                                                         SingleChildScrollView(
-                                                            child: ListView(
-                                                          shrinkWrap: true,
+                                                            child: Column(
+                                                          
                                                           children: [
                                                             ...commentList
                                                                 .map((e) {
@@ -550,10 +550,9 @@ class _EvPageState extends State<EvPage> {
                                                                             .viewInsets
                                                                             .bottom !=
                                                                         0
-                                                                    ?  MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height*0.513
+                                                                    ?  MediaQuery.of(context)
+                                                                            .viewInsets
+                                                                            .bottom*1.25
                                                                     : MediaQuery.of(
                                                                             context)
                                                                         .size
