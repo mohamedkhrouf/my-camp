@@ -135,7 +135,7 @@ class _EvPageState extends State<EvPage> {
                   children: [
                     Container(
                       child: GestureDetector(
-                        onTap: ()
+                        onTap: (){
                           Navigator.push(
                             context,
                             MaterialPageRoute(
