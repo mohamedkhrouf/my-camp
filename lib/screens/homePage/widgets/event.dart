@@ -550,8 +550,14 @@ class _EvPageState extends State<EvPage> {
                                                                             .viewInsets
                                                                             .bottom !=
                                                                         0
-                                                                    ? 350
-                                                                    : 529),
+                                                                    ?  MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height*0.513
+                                                                    : MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height*0.78),
                                                             decoration:
                                                                 BoxDecoration(
                                                               color:
