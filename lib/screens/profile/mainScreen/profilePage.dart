@@ -115,11 +115,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Container(
             padding: EdgeInsets.only(top: 10),
-            child: Wrap(
+            child: Row(
               children: [
                 Spacer(),
                 Container(
-                  margin: EdgeInsets.only(right: 16.0, bottom: 16.0),
+                  margin: EdgeInsets.only(right: 16.0, ),
                   child: OutlinedButton(
                     style: ElevatedButton.styleFrom(
                         side: BorderSide(
@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.blue),
                         primary: Color.fromRGBO(241, 249, 255, 1),
                         padding: EdgeInsets.only(
-                            top: 10, bottom: 10, left: 40, right: 40),
+                            top: 10, bottom: 10, left: 45, right: 45),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(30),
@@ -138,9 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             side: BorderSide(color: Colors.red))),
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => EditProfilePage(image: user != null
-                                      ? user.data()["avatar"]
-                                      : "https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w")));
+                          MaterialPageRoute(builder: (context) => EditProfilePage(user : user)));
                     },
                     child: Text('Edit Profile'),
                   ),

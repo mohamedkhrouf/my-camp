@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
+import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
 import '../../homePage/widgets/campSitesList.dart';
 
@@ -21,6 +22,7 @@ class PostImage extends StatefulWidget {
 }
 
 class _PostImage extends State<PostImage> {
+  var loading = false ;
   List chosenImages = [];
   final descriptionController = TextEditingController();
 
@@ -81,7 +83,7 @@ class _PostImage extends State<PostImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading():Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(36, 34, 47, 1),
           leading: IconButton(
@@ -99,42 +101,40 @@ class _PostImage extends State<PostImage> {
                           imagesError = "Choose at least a picture";
 
                         });
-                      uploadImageToFirebase(context).then((value) {
-                        print(value);
-                        CollectionReference collectionReference =
-                        FirebaseFirestore.instance.collection('event');
-                        collectionReference.add({
-                          'name': 'camping by',
-                          'description': descriptionController.text,
-
-
-                          'publicationDate': DateTime.now(),
-                          'images': value,
-                          'likes' : [],
-                          'pendingUsers' : [],
-                          'members': [
-                            FirebaseFirestore.instance.doc(
-                                "user/" + (FirebaseAuth.instance.currentUser).uid)
-                          ],
-                          'adminId': FirebaseFirestore.instance.doc(
-                              "user/" + (FirebaseAuth.instance.currentUser).uid),
-                          'tasks': [],
-                        }).then((value) {
-                          descriptionController.clear();
-                          Navigator.of(context).pop();
-                        }).catchError(
-                                (error) => print("Failed to add user: $error"));
-                      });
-
-
+                      if(_formKey.currentState.validate()&& chosenImages.length>0) {
+                        setState(() {
+                          loading=true ;
+                        });
+                        uploadImageToFirebase(context).then((value) {
+                          print(value);
+                          CollectionReference collectionReference =
+                          FirebaseFirestore.instance.collection('post');
+                          collectionReference.add({
+                            'text': descriptionController.text,
+                            'userId': FirebaseFirestore.instance.collection(
+                                'user').
+                            doc(FirebaseAuth.instance.currentUser.uid),
+                            'placeId': '',
+                            'publicationDate': DateTime.now(),
+                            'images': value,
+                            'likes': [],
+                          }).then((value) {
+                            descriptionController.clear();
+                            Navigator.of(context).pop();
+                          }).catchError(
+                                  (error) {
+                                    setState(() {
+                                      loading=false ;
+                                    });
+                                  });
+                        });
+                      }
 
 
                     },
                     child: Text(
                       "Publish",
-                      style: TextStyle(
-                        color: Color.fromRGBO(170, 215, 62, 1),
-                      ),
+                        style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1),fontSize: 16)
                     ))),
           ],
         ),
@@ -147,7 +147,7 @@ class _PostImage extends State<PostImage> {
                 //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top:80),
+                      margin: EdgeInsets.only(top:60),
                       child: Text(
                         "Hello ${username}",
                         style: TextStyle(fontSize: 28),
@@ -229,6 +229,24 @@ class _PostImage extends State<PostImage> {
                         ? Container()
                         : Text(imagesError,
                         style: TextStyle(color: Colors.red)),
+    /*        Container(
+                margin: EdgeInsets.only(right:16.0),
+                child:Padding(
+
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                onPressed: () {
+
+                },
+                padding: EdgeInsets.all(12),
+
+                color: Color.fromRGBO(36, 34, 47, 1),
+                child: Text('Submit', style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1),fontSize: 20)),
+              ),
+            ))*/
 
 
 

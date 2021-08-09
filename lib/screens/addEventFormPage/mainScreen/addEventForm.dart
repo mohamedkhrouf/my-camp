@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
+import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
 import '../../homePage/widgets/campSitesList.dart';
 
@@ -21,6 +22,7 @@ class AddEventForm extends StatefulWidget {
 }
 
 class _AddEventForm extends State<AddEventForm> {
+  var loading= false ;
   List chosenImages = [];
   final descriptionController = TextEditingController();
   final latitudeController = TextEditingController();
@@ -114,7 +116,7 @@ class _AddEventForm extends State<AddEventForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() :Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(36, 34, 47, 1),
           leading: IconButton(
@@ -132,47 +134,66 @@ class _AddEventForm extends State<AddEventForm> {
                           imagesError = "Choose at least a picture";
 
                         });
-                     uploadImageToFirebase(context).then((value) {
-                       print(value);
-                       CollectionReference collectionReference =
-                       FirebaseFirestore.instance.collection('event');
-                       collectionReference.add({
-                         'name': 'camping by',
-                         'description': descriptionController.text,
-                         'latitude': latitudeController.text,
-                         'longitude': longitudeController.text,
-                         'nbPart': nbPlaceController.text,
-                         'startingDate': selectedCampingDate,
-                         'dueDate': selectedPayementDate,
-                         'publicationDate': DateTime.now(),
-                         'images': value,
-                         'likes' : [],
-                         'pendingUsers' : [],
-                         'members': [
-                           FirebaseFirestore.instance.doc(
-                               "user/" + (FirebaseAuth.instance.currentUser).uid)
-                         ],
-                         'adminId': FirebaseFirestore.instance.doc(
-                             "user/" + (FirebaseAuth.instance.currentUser).uid),
-                         'tasks': [],
-                       }).then((value) {
-                         descriptionController.clear();
-                         latitudeController.clear();
-                         longitudeController.clear();
-                         nbPlaceController.clear();
-                         Navigator.of(context).pop();
-                       }).catchError(
-                               (error) => print("Failed to add user: $error"));
-                     });
+                      if(_formKey.currentState.validate()&& chosenImages.length>0)
+                      {
+                            setState(() {
+                              loading=true ;
+                            });
+                            uploadImageToFirebase(context).then((value) {
+                              print(value);
+                              CollectionReference collectionReference =
+                                  FirebaseFirestore.instance
+                                      .collection('event');
+                              collectionReference.add({
+                                'name': 'camping by',
+                                'description': descriptionController.text,
+                                'latitude': latitudeController.text,
+                                'longitude': longitudeController.text,
+                                'nbPart': nbPlaceController.text,
+                                'startingDate': selectedCampingDate,
+                                'dueDate': selectedPayementDate,
+                                'publicationDate': DateTime.now(),
+                                'images': value,
+                                'likes': [],
+                                'pendingUsers': [],
+                                'members': [
+                                  FirebaseFirestore.instance.doc("user/" +
+                                      (FirebaseAuth.instance.currentUser).uid)
+                                ],
+                                'adminId': FirebaseFirestore.instance.doc(
+                                    "user/" +
+                                        (FirebaseAuth.instance.currentUser)
+                                            .uid),
+                                'tasks': [],
+                              }).then((value) {
+                                FirebaseFirestore.instance
+                                    .collection('user')
+                                    .doc(FirebaseAuth.instance.currentUser.uid)
+                                    .update({
+                                  'events': FieldValue.arrayUnion([value])
+                                })
+                                    .then((value) => print("User Updated"))
+                                    .catchError((error) => print("Failed to update user: $error"));
+                                descriptionController.clear();
+                                latitudeController.clear();
+                                longitudeController.clear();
+                                nbPlaceController.clear();
+                                Navigator.of(context).pop();
+                              }).catchError((error) {
+                                setState(() {
+                                  loading = false;
+                                });
+                                }
+                                );
 
-
-
-
-                      },
+                            });
+                          }
+                        },
                     child: Text(
                       "Publish",
                       style: TextStyle(
                         color: Color.fromRGBO(170, 215, 62, 1),
+                        fontSize: 16.0
                       ),
                     ))),
           ],

@@ -71,6 +71,7 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: 12.0),
       child: Column(
         children: [
           Stack(
@@ -132,6 +133,8 @@ class _PostPageState extends State<PostPage> {
               color: Color.fromRGBO(255, 255, 255, 1),
               width: MediaQuery.of(context).size.width,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     child: Row(children: [
@@ -175,7 +178,7 @@ class _PostPageState extends State<PostPage> {
                   ),
                   Container(
                     child: Text(
-                      "name surname lorem ipsum lorem ipsum lorem ipsum lorem lorem  ipsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaum lorem",
+                      widget.yep["text"],
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.left,
                     ),

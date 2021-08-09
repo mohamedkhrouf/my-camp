@@ -2,28 +2,33 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
-import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
+import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
-import '../../homePage/widgets/campSitesList.dart';
 
 class EditProfilePage extends StatefulWidget {
+  final user ;
+
+  const EditProfilePage({Key key, this.user}) : super(key: key);
   @override
   _EditProfilePage createState() => _EditProfilePage();
-  final image;
-  const EditProfilePage({Key key, this.image}) : super(key: key);
+
 }
 
 class _EditProfilePage extends State<EditProfilePage> {
-  var chosenImage ;
+  var loading= false ;
+  var imageChanged = false ;
+  var chosenImage = null ;
+  var chosenImageUrl = "";
   final descriptionController = TextEditingController();
   final usernameController = TextEditingController();
   final villeController = TextEditingController();
   final phoneController = TextEditingController();
+  var birthday = "";
   final _formKey = GlobalKey<FormState>();
   var user;
   DateTime selectedBrithdate = DateTime.now();
@@ -31,42 +36,41 @@ class _EditProfilePage extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    getProfile();
-    img = widget.image;
+    usernameController.text = widget.user.data()["username"];
+    phoneController.text = widget.user.data()["phone"];
+    villeController.text = widget.user.data()["ville"];
+    birthday = widget.user.data()["birthday"];
+    descriptionController.text = widget.user.data()["description"];
+    chosenImage= widget.user.data()["avatar"];
   }
 
-  List getProfile() {
-    var uid = (FirebaseAuth.instance.currentUser).uid;
+  Future uploadImageToFirebase(BuildContext context) async {
 
-    print(uid);
-    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
-      if (mounted) {
-        setState(() {
-          user = value;
-        });
-      }
-    });
-    return user;
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+      Reference ref = storage.ref().child("$chosenImage" + DateTime.now().toString());
+      TaskSnapshot uploadTask =await ref.putFile(chosenImage);
+      var imgUrl = await uploadTask.ref.getDownloadURL();
+      chosenImageUrl= imgUrl;
+
+    return chosenImageUrl;
+
   }
 
 
-
-  File _image;
   var img;
   final _picker = ImagePicker();
 
   Future getImage() async {
     final image = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
-      _image = File(image.path);
-      img = image.path;
-      return (image.path);
+      chosenImage = File(image.path);
+      imageChanged=true ;
     });
   }
 
-  DateTime firstDate = DateTime.utc(1998, 11, 9);
-  DateTime selectedCampingDate = DateTime.now();
-  DateTime selectedPayementDate = DateTime.now();
+  DateTime firstDate = DateTime.now();
+
 
   bool testCampingDate(selectedDate) {
     DateTime today = DateTime.now();
@@ -75,31 +79,30 @@ class _EditProfilePage extends State<EditProfilePage> {
         selectedDate.day == today.day);
   }
 
-  Future<void> _selectCampingDate(BuildContext context) async {
+  Future<void> _selectBirthDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: firstDate,
         firstDate: firstDate,
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedCampingDate)
+    if (picked != null)
       setState(() {
-        selectedCampingDate = picked;
+        selectedBrithdate = picked;
       });
-    print(selectedCampingDate);
   }
 
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading():Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(36, 34, 47, 1),
-          title: Center(
-              child: Text(
+          title:
+          Text(
             "Edit Profile",
             style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
-          )),
+          ),
           leading: IconButton(
             icon:
                 Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
@@ -110,12 +113,11 @@ class _EditProfilePage extends State<EditProfilePage> {
                 padding: EdgeInsets.only(right: 20.0, top: 20),
                 child: GestureDetector(
                     onTap: () {
-                      if (chosenImage == null)
+
+                      if (_formKey.currentState.validate() ) {
                         setState(() {
-                          imagesError = "Choose at least a picture";
+                          loading = true ;
                         });
-                      if (_formKey.currentState.validate() &&
-                          chosenImage!=null) {
                         /* CollectionReference collectionReference =
                             FirebaseFirestore.instance.collection('event');
                         return collectionReference.add({
@@ -131,23 +133,48 @@ class _EditProfilePage extends State<EditProfilePage> {
                           Navigator.of(context).pop();
                         }).catchError(
                             (error) => print("Failed to add user: $error")); */
-                        FirebaseFirestore.instance
-                            .collection('user')
-                            .doc((FirebaseAuth.instance.currentUser).uid)
-                            .update({
+                        if(imageChanged)
+                          uploadImageToFirebase(context).then((value) {
+                            FirebaseFirestore.instance
+                                .collection('user')
+                                .doc((FirebaseAuth.instance.currentUser).uid)
+                                .update({
                               'username': usernameController.text,
                               'ville': villeController.text,
                               'description': descriptionController.text,
-                              'avatar': img,
+                              'avatar': value,
                               'phone': phoneController.text,
                             })
-                            .then((value) => print("User Updated"))
-                            .catchError((error) =>
-                                print("Failed to update user: $error"));
+                                .then((value) => Navigator.of(context).pop())
+                                .catchError((error) {                                  setState(() {
+                              loading= false ;
+                            });
+                            });
+                          });
+                        else
+                          {
+                            FirebaseFirestore.instance
+                                .collection('user')
+                                .doc((FirebaseAuth.instance.currentUser).uid)
+                                .update({
+                              'username': usernameController.text,
+                              'ville': villeController.text,
+                              'description': descriptionController.text,
+                              'phone': phoneController.text,
+                            })
+                                .then((value) =>                                Navigator.of(context).pop()
+                            )
+                                .catchError((error) {
+                                  setState(() {
+                                    loading= false ;
+                                  });
+                            });
+                          }
+
                       }
                     },
                     child: Text(
-                      "Publish",
+                      "Update",
                       style: TextStyle(
                         color: Color.fromRGBO(170, 215, 62, 1),
                       ),
@@ -163,11 +190,18 @@ class _EditProfilePage extends State<EditProfilePage> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 400,
+                      height: 300,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.contain,
-                          image: NetworkImage(img),
+                          image:chosenImage is File ?
+                            FileImage(
+                            chosenImage):
+                            NetworkImage(chosenImage != null
+                              ? chosenImage
+                              : "https://media.tarkett-image.com/large/TH_24567080_24594080_24596080_24601080_24563080_24565080_24588080_001.jpg")
+
+
                         ),
                       ),
                     ),
@@ -185,10 +219,10 @@ class _EditProfilePage extends State<EditProfilePage> {
                     ),
                     Container(
                         margin: EdgeInsets.only(left: 20.0),
-                        child: Text("username:")),
+                        child: Text("Username:",style: TextStyle(fontSize: 18.0),)),
                     Container(
                       margin:
-                          EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
+                          EdgeInsets.only(top: 3.0, right: 16.0, left: 16.0),
                       child: Container(
                         margin: EdgeInsets.only(right: 16.0),
                         child: TextFormField(
@@ -212,7 +246,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                     ),
                     Container(
                         margin: EdgeInsets.only(left: 20.0),
-                        child: Text("state:")),
+                        child: Text("State:",style: TextStyle(fontSize: 18.0),)),
                     Container(
                       margin:
                           EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
@@ -239,7 +273,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                     ),
                     Container(
                         margin: EdgeInsets.only(left: 20.0),
-                        child: Text("description:")),
+                        child: Text("Description:",style: TextStyle(fontSize: 18.0),)),
                     Container(
                       margin:
                           EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
@@ -271,7 +305,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                             style: TextStyle(color: Colors.red)),
                     GestureDetector(
                         onTap: () {
-                          _selectCampingDate(context);
+                          _selectBirthDate(context);
                         },
                         child: ListTile(
                           leading: Icon(
@@ -280,15 +314,16 @@ class _EditProfilePage extends State<EditProfilePage> {
                           ),
                           title: Text("Birthdate"),
                         )),
-                    testCampingDate(selectedCampingDate)
-                        ? Container()
-                        : Text("Birthdate : $selectedCampingDate"),
+
+                      Container(
+                          padding: EdgeInsets.only(left:16.0),
+                          child : Text("Birthdate : $selectedBrithdate"))  ,
                     Container(
                         margin: EdgeInsets.only(left: 20.0),
-                        child: Text("phone:")),
+                        child: Text("Phone:",style: TextStyle(fontSize: 18.0),)),
                     Container(
                       margin:
-                          EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
+                          EdgeInsets.only(bottom: 12.0, right: 16.0, left: 16.0),
                       child: Container(
                         margin: EdgeInsets.only(right: 16.0),
                         child: TextFormField(
