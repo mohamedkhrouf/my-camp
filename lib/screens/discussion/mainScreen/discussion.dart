@@ -195,8 +195,7 @@ print (members);
                             messageType: messages[index].data()["senderId"].id == FirebaseAuth.instance.currentUser.uid ? MessageType.sent : MessageType.received,
                             //time: messages[index].data()["sendTime"],
                             message: messages[index].data()["text"],
-                            //senderImage: "https://www.justifit.fr/wp-content/uploads/2020/06/Droit-a-limage.jpg",
-                              senderId: messages[index].data()["senderId"].id,
+                            senderId: messages[index].data()["senderId"].id,
                             members: members
 
                           );

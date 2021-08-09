@@ -60,7 +60,6 @@ class _EvPageState extends State<EvPage> {
       if (mounted) {
         setState(() {
           commentList = snapshot.docs;
-
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
@@ -136,7 +135,7 @@ class _EvPageState extends State<EvPage> {
                   children: [
                     Container(
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: ()
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -428,8 +427,9 @@ class _EvPageState extends State<EvPage> {
                                     padding: MediaQuery.of(context).viewInsets,
                                     child: Container(
                                       height: 500,
-                                        child: Wrap(
+                                        child: Column(
                                       children: <Widget>[
+
                                         Container(
                                             child: Stack(
                                               children: <Widget>[
@@ -451,30 +451,74 @@ class _EvPageState extends State<EvPage> {
                                                 ),
                                                 Container(
                                                     margin: EdgeInsets.only(
-                                                        top: 50, bottom: 100),
+                                                        top: 50),
                                                     child: commentList.length ==
                                                             0
                                                         ? Center(
                                                             child: Text(
                                                                 "No comments"),
                                                           )
-                                                        : SingleChildScrollView(
-                                                            child: Column(
-                                                              children: [
+                                                        : Container(child:SingleChildScrollView(
+                                                            child: ListView(
+                                                              scrollDirection: Axis.vertical,
+                                                              children:[
                                                                 ...commentList
                                                                     .map((e) {
                                                                   return Comment(
                                                                     comment: e,
                                                                     eventId:
-                                                                        widget
-                                                                            .id,
+                                                                    widget
+                                                                        .id,
+                                                                  );
+                                                                }),...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                    widget
+                                                                        .id,
+                                                                  );
+                                                                }),...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                    widget
+                                                                        .id,
+                                                                  );
+                                                                }),...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                    widget
+                                                                        .id,
+                                                                  );
+                                                                }),...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                    widget
+                                                                        .id,
+                                                                  );
+                                                                }),...commentList
+                                                                    .map((e) {
+                                                                  return Comment(
+                                                                    comment: e,
+                                                                    eventId:
+                                                                    widget
+                                                                        .id,
                                                                   );
                                                                 }),
                                                               ],
                                                             ),
-                                                          )),
+                                                          ))),
                                               ],
                                             ),
+                                          ),
+                                          Expanded(
+                                            child:Container()
                                           ),
                                          
                                           Form(
@@ -585,7 +629,7 @@ class _EvPageState extends State<EvPage> {
                                                           )),
                                                     ),
                                                   ]))),
-                                      ],
+                               ],
                                     )));
                               },
                             );
