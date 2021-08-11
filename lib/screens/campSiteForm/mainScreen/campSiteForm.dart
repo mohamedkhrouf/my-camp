@@ -14,11 +14,12 @@ import '../../homePage/widgets/campSitesList.dart';
 class CampSiteForm extends StatefulWidget {
   @override
   _CampSiteForm createState() => _CampSiteForm();
-  
 }
 
 class _CampSiteForm extends State<CampSiteForm> {
   List chosenImages = [];
+   final latitudeController = TextEditingController();
+  final longitudeController = TextEditingController();
   final descriptionController = TextEditingController();
   final usernameController = TextEditingController();
   final villeController = TextEditingController();
@@ -31,7 +32,12 @@ class _CampSiteForm extends State<CampSiteForm> {
   void initState() {
     super.initState();
     getProfile();
+ 
   }
+
+
+
+
 
   List getProfile() {
     var uid = (FirebaseAuth.instance.currentUser).uid;
@@ -66,42 +72,6 @@ class _CampSiteForm extends State<CampSiteForm> {
     });
   }
 
-  DateTime firstDate = DateTime.utc(1998, 11, 9);
-  DateTime selectedCampingDate = DateTime.now();
-  DateTime selectedPayementDate = DateTime.now();
-
-  bool testCampingDate(selectedDate) {
-    DateTime today = DateTime.now();
-    return (selectedDate.year == today.year &&
-        selectedDate.month == today.month &&
-        selectedDate.day == today.day);
-  }
-
-  Future<void> _selectCampingDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: firstDate,
-        firstDate: firstDate,
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedCampingDate)
-      setState(() {
-        selectedCampingDate = picked;
-      });
-    print(selectedCampingDate);
-  }
-
-  Future<void> _selectPayementDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: firstDate,
-        firstDate: firstDate,
-        lastDate: selectedCampingDate);
-    if (picked != null && picked != selectedPayementDate)
-      setState(() {
-        selectedPayementDate = picked;
-      });
-    print(selectedPayementDate);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +80,7 @@ class _CampSiteForm extends State<CampSiteForm> {
           backgroundColor: Color.fromRGBO(36, 34, 47, 1),
           title: Center(
               child: Text(
-            "Edit Profile",
+            "Add camping place",
             style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
           )),
           leading: IconButton(
@@ -175,32 +145,22 @@ class _CampSiteForm extends State<CampSiteForm> {
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 400,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.contain,
-                          image: NetworkImage(user != null
-                              ? user.data()["avatar"]
-                              : "https://media.tarkett-image.com/large/TH_24567080_24594080_24596080_24601080_24563080_24565080_24588080_001.jpg"),
-                        ),
+                      margin: EdgeInsets.only(top: 60,left:16.0),
+                      child: Text(
+                        user!=null?"Hello ${user.data()["username"]}":"Hello",
+                        style: TextStyle(fontSize: 28),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        getImage();
-                      },
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.images,
-                          color: Colors.green,
-                        ),
-                        title: Text("Edit profile avatar"),
+                    Container(
+                         margin: EdgeInsets.only(left:16.0),
+                      child: Text(
+                        "Let's create a new camp place",
+                        style: TextStyle(fontSize: 24),
                       ),
                     ),
                     Container(
                         margin: EdgeInsets.only(left: 20.0),
-                        child: Text("username:")),
+                        child: Text("name:")),
                     Container(
                       margin:
                           EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
@@ -227,7 +187,7 @@ class _CampSiteForm extends State<CampSiteForm> {
                     ),
                     Container(
                         margin: EdgeInsets.only(left: 20.0),
-                        child: Text("state:")),
+                        child: Text("address:")),
                     Container(
                       margin:
                           EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
@@ -237,7 +197,7 @@ class _CampSiteForm extends State<CampSiteForm> {
                           keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value.length == 0) {
-                              return 'Enter valid state';
+                              return 'Enter valid address';
                             }
                             return null;
                           },
@@ -284,49 +244,64 @@ class _CampSiteForm extends State<CampSiteForm> {
                         ? Container()
                         : Text(imagesError,
                             style: TextStyle(color: Colors.red)),
-                    GestureDetector(
-                        onTap: () {
-                          _selectCampingDate(context);
-                        },
-                        child: ListTile(
+                   ListTile(
                           leading: Icon(
-                            FontAwesomeIcons.calendarAlt,
+                            FontAwesomeIcons.mapMarkerAlt,
                             color: Colors.red,
                           ),
-                          title: Text("Birthdate"),
-                        )),
-                    testCampingDate(selectedCampingDate)
-                        ? Container()
-                        : Text("Birthdate : $selectedCampingDate"),
-                    Container(
-                        margin: EdgeInsets.only(left: 20.0),
-                        child: Text("phone:")),
-                    Container(
-                      margin:
-                          EdgeInsets.only(top: 0.0, right: 16.0, left: 16.0),
-                      child: Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value.length == 0) {
-                              return 'Enter valid phone number';
-                            }
-                            return null;
-                          },
-                          controller: phoneController,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            contentPadding:
-                                EdgeInsets.only(left: 15.0, top: 3, bottom: 3),
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16.0))),
-                          ),
+                          title: Text("Choose position:"),
                         ),
+                         Container(
+                      margin: EdgeInsets.only(left:16.0,right: 16.0, bottom: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          new Flexible(
+                            child: Container(
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: latitudeController,
+                                validator: (value) {
+                                  if (value.length == 0) {
+                                    return 'Enter latitude';
+                                  }
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: 'Latitude',
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15.0, top: 3, bottom: 3),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16.0))),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: longitudeController,
+                              validator: (value) {
+                                if (value.length == 0) {
+                                  return 'Enter longitude';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'Longitude',
+                                contentPadding: EdgeInsets.only(
+                                    left: 15.0, top: 3, bottom: 3),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(16.0))),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ])),
         ));
   }
 }
-
