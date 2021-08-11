@@ -8,19 +8,21 @@ import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 import 'package:my_camp/screens/tasks/mainScreen/tasks.dart';
 
 class Discussion extends StatefulWidget {
-  final eventId ;
+  final eventId;
   final groupName;
 
   const Discussion({Key key, this.eventId, this.groupName}) : super(key: key);
   @override
   _Discussion createState() => _Discussion();
 }
-class Member{
-Member({this.memberImage, this.memberId});
 
-final String memberImage;
-final String memberId;
+class Member {
+  Member({this.memberImage, this.memberId});
+
+  final String memberImage;
+  final String memberId;
 }
+
 class _Discussion extends State<Discussion> {
   /*var messages = [
     ChatMessage(
@@ -55,7 +57,7 @@ class _Discussion extends State<Discussion> {
     ChatMessage(),
     ChatMessage(),
   ];*/
-  var messages = [] ;
+  var messages = [];
   var members = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final messageController = TextEditingController();
@@ -67,15 +69,19 @@ class _Discussion extends State<Discussion> {
     //getMembers();
     getMessages();
   }
-  Future<void> getMessages() async{
-    FirebaseFirestore.instance.collection('event').doc(widget.eventId).
-    collection('messages').orderBy("sendTime" ).snapshots().listen((snapshot) {
+
+  Future<void> getMessages() async {
+    FirebaseFirestore.instance
+        .collection('event')
+        .doc(widget.eventId)
+        .collection('messages')
+        .orderBy("sendTime")
+        .snapshots()
+        .listen((snapshot) {
       if (mounted) {
         setState(() {
-          messages= snapshot.docs ;
-         //while(messages.length>images.length)
-
-
+          messages = snapshot.docs;
+          //while(messages.length>images.length)
 
           //print(documents[3].data());
           // usersList = snapshot.docs;
@@ -83,24 +89,33 @@ class _Discussion extends State<Discussion> {
       }
     });
 
-print (members);
+    print(members);
   }
-  getMembers(){
-    FirebaseFirestore.instance.collection('event').doc(widget.eventId).get().then((value) {
+
+  getMembers() {
+    FirebaseFirestore.instance
+        .collection('event')
+        .doc(widget.eventId)
+        .get()
+        .then((value) {
       setState(() {
         var tempMembers = value.data()["members"];
-        for(int i =0 ; i<tempMembers.length; i++)
-        {
-          var tempMemberImage="";
-          FirebaseFirestore.instance.collection('user').doc(tempMembers[i].id).get().then((value) {
-            tempMemberImage=value.data()["avatar"];
-            members.add(new Member(memberId: tempMembers[i].id,memberImage: tempMemberImage));
+        for (int i = 0; i < tempMembers.length; i++) {
+          var tempMemberImage = "";
+          FirebaseFirestore.instance
+              .collection('user')
+              .doc(tempMembers[i].id)
+              .get()
+              .then((value) {
+            tempMemberImage = value.data()["avatar"];
+            members.add(new Member(
+                memberId: tempMembers[i].id, memberImage: tempMemberImage));
           });
-
         }
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,24 +125,28 @@ print (members);
           icon: Icon(Icons.arrow_back, color: Color.fromRGBO(170, 215, 62, 1)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(widget.groupName
-          ,
+        title: Text(
+          widget.groupName,
           style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
         ),
         actions: [
           Padding(
-              padding: EdgeInsets.only(right: 20.0,top: 20),
+              padding: EdgeInsets.only(right: 20.0, top: 20),
               child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Tasks(eventId: widget.eventId,)),
-                    );
-                  },
-
-                    child: Text("Tasks",style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),),
-
-                  )),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Tasks(
+                              eventId: widget.eventId,
+                            )),
+                  );
+                },
+                child: Text(
+                  "Tasks",
+                  style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
+                ),
+              )),
         ],
       ),
 
@@ -174,52 +193,45 @@ print (members);
             padding: EdgeInsets.all(16.0),
           )
       ),*/
-      body:Container(
-        color: Colors.white,
+      body: Container(
+          color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: Column(children: [
             Expanded(
                 child: SingleChildScrollView(
                     reverse: true,
                     physics: ScrollPhysics(),
-
-                    child:
-
-                  ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: messages.length,
+                    child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: messages.length,
                         itemBuilder: (context, index) {
-
                           return ChatMessage(
-                            messageType: messages[index].data()["senderId"].id == FirebaseAuth.instance.currentUser.uid ? MessageType.sent : MessageType.received,
-                            //time: messages[index].data()["sendTime"],
-                            message: messages[index].data()["text"],
-                            senderId: messages[index].data()["senderId"].id,
-                            members: members
-
-                          );
-                        }
-                        )
-                )
-            ),
+                              messageType:
+                                  messages[index].data()["senderId"].id ==
+                                          FirebaseAuth.instance.currentUser.uid
+                                      ? MessageType.sent
+                                      : MessageType.received,
+                              //time: messages[index].data()["sendTime"],
+                              message: messages[index].data()["text"],
+                              senderId: messages[index].data()["senderId"].id,
+                              members: members);
+                        }))),
             Form(
-
                 key: _formKey,
                 child: Container(
-
                     decoration: BoxDecoration(
                       color: Colors.white,
-
                       boxShadow: [
-                      BoxShadow(
-                        blurRadius:64,
-                        color: Color(0xFF087949).withOpacity(0.4),
-                        offset: Offset(0, 5), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                    padding: EdgeInsets.only(top: 8.0,right: 16.0, left: 16.0,bottom: 8.0),
+                        BoxShadow(
+                          blurRadius: 64,
+                          color: Color(0xFF087949).withOpacity(0.4),
+                          offset: Offset(0, 5), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.only(
+                        top: 8.0, right: 16.0, left: 16.0, bottom: 8.0),
                     child: Row(children: [
                       /* GestureDetector(
                           onTap: () {
@@ -250,26 +262,29 @@ print (members);
                       Container(
                         margin: EdgeInsets.only(left: 5),
                         child: GestureDetector(
-
                             onTap: () async {
+                              final newMessage = await FirebaseFirestore
+                                  .instance
+                                  .collection('event')
+                                  .doc(widget.eventId)
+                                  .collection('messages')
+                                  .add({
+                                'eventId': FirebaseFirestore.instance
+                                    .doc("event/" + widget.eventId),
+                                'senderId': FirebaseFirestore.instance
+                                    .collection('user')
+                                    .doc(FirebaseAuth.instance.currentUser.uid),
+                                'text': messageController.text,
+                                'sendTime': DateTime.now()
+                              });
 
-                              final newMessage= await FirebaseFirestore.instance.collection('event').doc(widget.eventId).collection('messages').add(
-                                    {
-                                      'eventId': FirebaseFirestore.instance.doc("event/"+widget.eventId),
-                                      'senderId' : FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser.uid) ,
-                                      'text' : messageController.text,
-                                      'sendTime' : DateTime.now()
-                                    });
-             
-                                messageController.clear();
+                              messageController.clear();
 
-
-                               /* messages.add(ChatMessage(
+                              /* messages.add(ChatMessage(
                                   message: messageController.text,
                                   messageType: MessageType.sent,
                                 ));
                                 messageController.clear();*/
-
                             },
                             child: Icon(
                               Icons.send,
