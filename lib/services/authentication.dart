@@ -9,11 +9,11 @@ class AuthenticationHelper {
   //SIGN UP METHOD
   Future signUp({String email, String password}) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      var user = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return null;
+      return user;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }

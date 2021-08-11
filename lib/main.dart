@@ -39,15 +39,16 @@ class MyApp extends StatelessWidget {
                 print('You have an error ! ${snapshot.error.toString()}');
                 return Text('Something went wrong!');
               } else if (snapshot.hasData) {
-                return FutureBuilder<User>(
+                return FutureBuilder(
+
                     builder: (BuildContext context, AsyncSnapshot<User> snapshot){
-                      if (snapshot.hasData){
+                      if (FirebaseAuth.instance.currentUser == null){
                         User user = snapshot.data; // this is your user instance
                         /// is because there is user already logged
-                        return Index();
+                        return LogIn();
                       }
                       /// other way there is no user logged.
-                      return LogIn();
+                      return Index();
                     }
                 ) ;
               } else {

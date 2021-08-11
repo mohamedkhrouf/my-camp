@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
+import 'package:intl/intl.dart';
 
 
 class EditProfilePage extends StatefulWidget {
@@ -87,7 +88,11 @@ class _EditProfilePage extends State<EditProfilePage> {
         lastDate: DateTime(2101));
     if (picked != null)
       setState(() {
-        selectedBrithdate = picked;
+
+        birthday = DateFormat('dd/MM/yyyy')
+            .format(DateTime.fromMicrosecondsSinceEpoch(picked.microsecondsSinceEpoch))
+            .toString();
+
       });
   }
 
@@ -144,6 +149,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               'description': descriptionController.text,
                               'avatar': value,
                               'phone': phoneController.text,
+                              'birthday' : birthday
                             })
                                 .then((value) => Navigator.of(context).pop())
                                 .catchError((error) {                                  setState(() {
@@ -317,7 +323,7 @@ class _EditProfilePage extends State<EditProfilePage> {
 
                       Container(
                           padding: EdgeInsets.only(left:16.0),
-                          child : Text("Birthdate : $selectedBrithdate"))  ,
+                          child : Text("Birthdate : $birthday"))  ,
                     Container(
                         margin: EdgeInsets.only(left: 20.0),
                         child: Text("Phone:",style: TextStyle(fontSize: 18.0),)),

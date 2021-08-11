@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -192,10 +193,20 @@ class _SignUp extends State<SignUp> {
                 .signUp(
                     email: emailController.text,
                     password: passwordController.text)
-                .then((result) {
-              if (result == null) {
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => Index()));
+                .then((result) async {
+              if (result is UserCredential) {
+               // var userNbr = await FirebaseFirestore.instance.collection('user').snapshots().length;
+                FirebaseFirestore.instance.collection("user").doc(result.user.uid).set({
+                  'avatar' : "https://firebasestorage.googleapis.com/v0/b/my-camp-acfe1.appspot.com/o/5102708.png?alt=media&token=9cc7ff2c-f526-4669-a46b-c0d3963a1eb3",
+                  'birthday' : "Unknown",
+                  'description' : "" ,
+                  'events' : [],
+                  'posts': [],
+                  'username': "user",
+                  'ville' : "Unknown"
+                }).then((value) => Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => Index())));
+
               } else {
                 setState(() {
                   error = result;
