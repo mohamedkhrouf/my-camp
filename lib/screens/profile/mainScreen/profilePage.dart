@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var uid = (FirebaseAuth.instance.currentUser).uid;
 
     print(uid);
-    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
+    FirebaseFirestore.instance.collection('user').doc(uid).snapshots().listen((value) {
       if (mounted) {
         setState(() {
           user = value;

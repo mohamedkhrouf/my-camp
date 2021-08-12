@@ -84,7 +84,7 @@ class _EditProfilePage extends State<EditProfilePage> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: firstDate,
-        firstDate: firstDate,
+        firstDate: DateTime(1980),
         lastDate: DateTime(2101));
     if (picked != null)
       setState(() {
@@ -167,6 +167,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               'ville': villeController.text,
                               'description': descriptionController.text,
                               'phone': phoneController.text,
+                              'birthday' : birthday
                             })
                                 .then((value) =>                                Navigator.of(context).pop()
                             )

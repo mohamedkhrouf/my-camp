@@ -40,7 +40,7 @@ class _EvPageState extends State<EvPage> {
 
   getUser() {
 //    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
-    String uid = (FirebaseAuth.instance.currentUser).uid;
+    String uid = widget.yep["adminId"].id;
     print(uid);
     FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
       if (mounted) {

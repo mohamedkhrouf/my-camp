@@ -103,7 +103,7 @@ class _MyEvents extends State<MyEvents> {
               style: TextStyle(color: Color.fromRGBO(170, 215, 62, 1)),
             ))),
         body: (myEvents.length==0 && shownEventList.length==0)?
-        Center(child: Text("Loading..."),)
+        Center(child: Text("No events for the moment"),)
             :
         SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
