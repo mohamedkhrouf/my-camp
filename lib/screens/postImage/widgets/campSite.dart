@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_camp/screens/campSitePage/mainScreen/campSitePage.dart';
 
 class CampSite extends StatefulWidget {
   @override
   _CampSite createState() => _CampSite();
   final data;
-  const CampSite({Key key, this.data}) : super(key: key);
+  final id ;
+  final void Function(dynamic pos) getPosition;
+  const CampSite({Key key, this.data, this.getPosition, this.id}) : super(key: key);
 }
 
 class _CampSite extends State<CampSite> {
@@ -35,7 +36,7 @@ class _CampSite extends State<CampSite> {
             ),
             Container(
               child: Text(
-                (widget.data["latitude"]).toString()+" "+
+                (widget.data["latitude"]).toString()+" , "+
                     (widget.data["longitude"]).toString(),
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -59,15 +60,13 @@ class _CampSite extends State<CampSite> {
         bottom: 10.0,
         child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CampSitePage()),
-              );
+              widget.getPosition(widget.id);
+              Navigator.pop(context);
             },
             child: Row(
               children: [
                 Text(
-                  "More",
+                  "Select",
                   style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 1),
                     fontSize: 14 * 1.1,
