@@ -93,12 +93,8 @@ class _CampSiteForm extends State<CampSiteForm> {
                 padding: EdgeInsets.only(right: 20.0, top: 20),
                 child: GestureDetector(
                     onTap: () {
-                      if (chosenImages.length == 0)
-                        setState(() {
-                          imagesError = "Choose at least a picture";
-                        });
-                      if (_formKey.currentState.validate() &&
-                          chosenImages.length > 0) {
+                  
+                      if (_formKey.currentState.validate()) {
                         /* CollectionReference collectionReference =
                             FirebaseFirestore.instance.collection('event');
                         return collectionReference.add({
@@ -115,14 +111,14 @@ class _CampSiteForm extends State<CampSiteForm> {
                         }).catchError(
                             (error) => print("Failed to add user: $error")); */
                         FirebaseFirestore.instance
-                            .collection('user')
-                            .doc((FirebaseAuth.instance.currentUser).uid)
-                            .update({
-                              'username': usernameController.text,
-                              'ville': villeController.text,
+                            .collection('place')
+                           
+                            .add({
+                              'name': usernameController.text,
+                              'address': villeController.text,
                               'description': descriptionController.text,
-                              'avatar': img,
-                              'phone': phoneController.text,
+                              'longitude': longitudeController.text,
+                              'latitude': latitudeController.text
                             })
                             .then((value) => print("User Updated"))
                             .catchError((error) =>
