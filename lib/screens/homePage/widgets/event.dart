@@ -166,6 +166,7 @@ class _EvPageState extends State<EvPage> {
                       ),
                       margin: EdgeInsets.only(right: 40),
                     ),
+
                   ],
                 )),
                 Spacer(),
@@ -604,6 +605,11 @@ class _EvPageState extends State<EvPage> {
                   "Event Name: " + widget.yep["name"],
                   style: TextStyle(fontSize: 20),
                 ),
+                widget.yep["position"]!= null ?
+                Text(
+                   "Place: " + widget.yep["position"]["name"] ,
+                  style: TextStyle(fontSize: 20),
+                ): Container(),
                 Container(
                   child: Text(
                     widget.yep["description"],

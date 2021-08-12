@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
+import 'package:my_camp/screens/addEventFormPage/widgets/positionsList.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
 import '../../homePage/widgets/campSitesList.dart';
@@ -31,6 +32,7 @@ class _AddEventForm extends State<AddEventForm> {
   final _formKey = GlobalKey<FormState>();
   var username = "";
   var imagesError = "";
+  var position ;
   @override
   void initState() {
     // TODO: implement initState
@@ -54,7 +56,11 @@ class _AddEventForm extends State<AddEventForm> {
     return chosenImagesUrl;
 
   }
-
+  void getPosition(pos){
+    setState(() {
+      position=pos ;
+    });
+  }
   void deleteImage(int index) {
     setState(() {
       chosenImages.removeAt(index);
@@ -134,7 +140,7 @@ class _AddEventForm extends State<AddEventForm> {
                           imagesError = "Choose at least a picture";
 
                         });
-                      if(_formKey.currentState.validate()&& chosenImages.length>0)
+                      if(_formKey.currentState.validate())
                       {
                             setState(() {
                               loading=true ;
@@ -146,6 +152,7 @@ class _AddEventForm extends State<AddEventForm> {
                                       .collection('event');
                               collectionReference.add({
                                 'name': 'camping by',
+                                'position' : position,
                                 'description': descriptionController.text,
                                 'latitude': latitudeController.text,
                                 'longitude': longitudeController.text,
@@ -305,7 +312,7 @@ class _AddEventForm extends State<AddEventForm> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CampSitesList()),
+                                builder: (context) => PositionsList(getPosition: getPosition,)),
                           );
                         },
                         child: ListTile(
@@ -315,6 +322,10 @@ class _AddEventForm extends State<AddEventForm> {
                           ),
                           title: Text("Choose position"),
                         )),
+                    position == null
+                        ? Container()
+                        : Container(margin : EdgeInsets.only(left: 16.0,bottom: 16.0),child :Text("Chosen place : "+ position['name'])),
+
                     Container(
                       margin: EdgeInsets.only(right: 16.0, bottom: 16.0),
                       child: Row(

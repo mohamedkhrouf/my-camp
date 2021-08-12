@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/addImage.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
+import 'package:my_camp/screens/postImage/widgets/positionsList.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
 import '../../homePage/widgets/campSitesList.dart';
@@ -25,7 +26,7 @@ class _PostImage extends State<PostImage> {
   var loading = false ;
   List chosenImages = [];
   final descriptionController = TextEditingController();
-
+  var position ;
   final _formKey = GlobalKey<FormState>();
   var username = "";
   var imagesError = "";
@@ -35,7 +36,11 @@ class _PostImage extends State<PostImage> {
     super.initState();
     username = widget.user.data()["username"];
   }
-
+  void getPosition(pos){
+    setState(() {
+      position=pos ;
+    });
+  }
   Future uploadImageToFirebase(BuildContext context) async {
     List chosenImagesUrl = [];
 
@@ -101,7 +106,7 @@ class _PostImage extends State<PostImage> {
                           imagesError = "Choose at least a picture";
 
                         });
-                      if(_formKey.currentState.validate()&& chosenImages.length>0) {
+                      if(_formKey.currentState.validate()) {
                         setState(() {
                           loading=true ;
                         });
@@ -114,11 +119,16 @@ class _PostImage extends State<PostImage> {
                             'userId': FirebaseFirestore.instance.collection(
                                 'user').
                             doc(FirebaseAuth.instance.currentUser.uid),
-                            'placeId': '',
+                            'placeId': position,
                             'publicationDate': DateTime.now(),
                             'images': value,
                             'likes': [],
                           }).then((value) {
+                            FirebaseFirestore.instance.collection("place").doc(position).update({
+                              'posts' : FieldValue.arrayUnion([value])
+                            }
+
+                            );
                             descriptionController.clear();
                             Navigator.of(context).pop();
                           }).catchError(
@@ -185,7 +195,7 @@ class _PostImage extends State<PostImage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CampSitesList()),
+                                builder: (context) => PositionsList(getPosition: getPosition,)),
                           );
                         },
                         child: ListTile(
