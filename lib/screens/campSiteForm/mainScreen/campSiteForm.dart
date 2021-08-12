@@ -118,7 +118,8 @@ class _CampSiteForm extends State<CampSiteForm> {
                               'address': villeController.text,
                               'description': descriptionController.text,
                               'longitude': longitudeController.text,
-                              'latitude': latitudeController.text
+                              'latitude': latitudeController.text,
+                              'pending': true
                             })
                             .then((value) => print("User Updated"))
                             .catchError((error) =>

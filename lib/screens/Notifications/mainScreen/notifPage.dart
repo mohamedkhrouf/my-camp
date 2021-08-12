@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/Notifications/widgets/notif.dart';
+import 'package:my_camp/screens/Notifications/widgets/placeN.dart';
 
 class NotifPage extends StatefulWidget {
   @override
@@ -12,11 +13,14 @@ class NotifPage extends StatefulWidget {
 
 class _NotifPageState extends State<NotifPage> {
   List notifs = [];
-
+  List places = [];
+  var user;
   @override
   void initState() {
     super.initState();
     getNotifs();
+    getPlaces();
+    getUser();
   }
 
   List getNotifs() {
@@ -30,6 +34,35 @@ class _NotifPageState extends State<NotifPage> {
           notifs = snapshot.docs;
           //print(documents[3].data());
           // usersList = snapshot.docs;
+        });
+      }
+    });
+  }
+
+  List getPlaces() {
+    List documents;
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('place');
+
+    collectionReference.snapshots().listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          places = snapshot.docs;
+          //print(documents[3].data());
+          // usersList = snapshot.docs;
+        });
+      }
+    });
+  }
+
+  getUser() {
+//    CollectionReference collectionReference =FirebaseFirestore.instance.collection('user');
+    String uid = (FirebaseAuth.instance.currentUser).uid;
+    print(uid);
+    FirebaseFirestore.instance.collection('user').doc(uid).get().then((value) {
+      if (mounted) {
+        setState(() {
+          user = value;
         });
       }
     });
@@ -51,43 +84,41 @@ class _NotifPageState extends State<NotifPage> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-
-        /*PreferredSize(
-            preferredSize: const Size.fromHeight(40),
-            child: Container(
-              child:Row(children: [
-                  Container(
-                    child: OutlinedButton(
-                        onPressed:(){ Navigator.pop(context);},
-                        child: Icon(Icons.arrow_back),
-                       style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: Colors.white),)
-                    ),
-
-                  ),
-                 
-              ],
-            ),
-              padding: EdgeInsets.all(0),
-            )
-
-        ) ,*/
-        body: notifs.length==0? Center(child: Text("No notifications")): SingleChildScrollView(
-            child: Column(children: [
-          ...notifs.map((item) {
-            if (item.data()["receiverId"] != null) {
-              if (item.data()["receiverId"].id ==
-                  (((FirebaseAuth.instance.currentUser).uid))) {
-                
-                return new Notif(demand: item.data(), id: item.id);
-              } else {
-                return Container();
-              }
-            } else {
-              return Container();
-            }
-          }).toList(),
-        ]
-         )));
+        body: (notifs.length == 0 && places.length == 0)
+            ? Center(child: Text("No notifications"))
+            : SingleChildScrollView(
+                child: Column(children: [
+                ...notifs.map((item) {
+                  if (item.data()["receiverId"] != null) {
+                    if (item.data()["receiverId"].id ==
+                        (((FirebaseAuth.instance.currentUser).uid))) {
+                      return new Notif(demand: item.data(), id: item.id);
+                    } else {
+                      return Container();
+                    }
+                  } else {
+                    return Container();
+                  }
+                }).toList(),
+                ...places.map((item) {
+                  if (user != null) {
+                    if (user.data()["admin"] != false) {
+                      if (item.data()["pending"] != null) {
+                        if (item.data()["pending"] == true) {
+                          return new PlaceN(demand: item.data(), id: item.id);
+                        } else {
+                          return Container();
+                        }
+                      } else {
+                        return Container();
+                      }
+                    } else {
+                      return Container();
+                    }
+                  } else {
+                    return Container();
+                  }
+                }).toList(),
+              ])));
   }
 }
