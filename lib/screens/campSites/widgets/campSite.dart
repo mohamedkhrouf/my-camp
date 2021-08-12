@@ -35,8 +35,8 @@ class _CampSite extends State<CampSite> {
             ),
             Container(
               child: Text(
-                (widget.data["position"].latitude).toString()+" "+
-                    (widget.data["position"].longitude).toString(),
+                (widget.data["latitude"]).toString()+"."+
+                    (widget.data["longitude"]).toString(),
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
                   fontSize: 10 * 1.1,

@@ -63,19 +63,7 @@ class _CampSites extends State<CampSites> {
                       ]))),
               ...campList.map((e) {
                 return CampSite(data:e.data());
-              }),...campList.map((e) {
-                return CampSite(data:e.data());
-              }),...campList.map((e) {
-                return CampSite(data:e.data());
-              }),...campList.map((e) {
-                return CampSite(data:e.data());
-              }),...campList.map((e) {
-                return CampSite(data:e.data());
-              }),...campList.map((e) {
-                return CampSite(data:e.data());
-              }),...campList.map((e) {
-                return CampSite(data:e.data());
-              }),
+              })
             ],
           ),
         ),)
