@@ -85,10 +85,11 @@ class _MyEvents extends State<MyEvents> {
 
           setState(() {
             myEvents.add(value);
+            shownEventList.add(value);
           });
         });
       }
-    }).then((value) =>      shownEventList = myEvents);
+    });
     print(myEvents);
   }
 

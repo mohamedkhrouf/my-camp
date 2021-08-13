@@ -13,6 +13,8 @@ class CampSites extends StatefulWidget {
 class _CampSites extends State<CampSites> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List campList = [];
+  List shownCampingSites = [] ;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,7 @@ class _CampSites extends State<CampSites> {
       if (mounted) {
         setState(() {
           campList = snapshot.docs;
+          shownCampingSites= campList ;
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
@@ -52,8 +55,17 @@ class _CampSites extends State<CampSites> {
                       child: Row(children: [
                         new Flexible(
                             child: TextFormField(
+                              onChanged: (text) {
+                                print(text);
+                                setState(() {
+                                  shownCampingSites = campList
+                                      .where(
+                                          (e) => e.data()["name"].contains(text))
+                                      .toList();
+                                });
+                              },
                               decoration: const InputDecoration(
-                                  hintText: 'Enter your task',
+                                  hintText: 'Search',
                                   contentPadding: EdgeInsets.only(left: 15.0),
                                   border: OutlineInputBorder(
                                       borderRadius:
@@ -61,7 +73,7 @@ class _CampSites extends State<CampSites> {
                                   prefixIcon: Icon(Icons.search)),
                             )),
                       ]))),
-              ...campList.map((e) {
+              ...shownCampingSites.map((e) {
                 return CampSite(data:e.data());
               })
             ],

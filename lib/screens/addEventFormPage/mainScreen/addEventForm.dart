@@ -47,7 +47,7 @@ class _AddEventForm extends State<AddEventForm> {
     FirebaseStorage storage = FirebaseStorage.instance;
 
     for (File image in chosenImages) {
-      Reference ref = storage.ref().child("$image" + DateTime.now().toString());
+      Reference ref = storage.ref().child("$image" +"_"+ DateTime.now().toString()+"_"+(FirebaseAuth.instance.currentUser).uid);
       TaskSnapshot uploadTask =await ref.putFile(image);
       var imgUrl = await uploadTask.ref.getDownloadURL();
       chosenImagesUrl.add(imgUrl);
