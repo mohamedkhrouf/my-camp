@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/campSitePage/widgets/widgets/post.dart';
+import 'package:my_camp/screens/homePage/mainScreen/mapPage.dart';
 
 class CampSitePage extends StatefulWidget {
   final campSiteData ;
@@ -95,7 +96,36 @@ class _CampSitePage extends State<CampSitePage> {
                 ),
               ),
               width: MediaQuery.of(context).size.width * 0.9,
-              margin: EdgeInsets.only(top: 10, bottom: 0),
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                    EdgeInsets.only(
+                        top: 15,
+                        bottom: 15,
+                        left: 50,
+                        right: 50)),
+                shape: MaterialStateProperty.all<
+                    RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30)),
+                    )),
+              ),
+              onPressed: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MapPage(
+                          latitude: widget.campSiteData["latitude"],
+                          longitude: widget.campSiteData["longitude"],
+                        )))
+              },
+              child: Text('Map'),
             ),
           campSitePosts.length==0 ?
               Container(margin: EdgeInsets.only(top:250) ,child: Center(child: Text("No post for this camp site"),),):

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import "package:latlong/latlong.dart";
+import "package:latlong2/latlong.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class MapPage extends StatefulWidget {
   final latitude ;
@@ -37,7 +37,7 @@ class _MapPageState extends State<MapPage> {
    
         FlutterMap(
             options: new MapOptions(
-              center: new LatLng(widget.latitude.toDouble(), widget.longitude.toDouble()),
+              center: new LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
               zoom: 13.0,
             ),
         layers: [
@@ -49,7 +49,7 @@ class _MapPageState extends State<MapPage> {
               Marker(
                 width: 80.0,
                 height: 80.0,
-                point: LatLng(widget.latitude.toDouble(), widget.longitude.toDouble()),
+                point: LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
                 builder: (ctx) => Container(
                   child: SizedBox(
                     height: 18.0,
@@ -76,7 +76,7 @@ class _MapPageState extends State<MapPage> {
               Marker(
                 width: 80.0,
                 height: 80.0,
-                point: LatLng(widget.latitude.toDouble(), widget.longitude.toDouble()),
+                point: LatLng(double.parse(widget.latitude), double.parse(widget.longitude)),
                 builder: (ctx) => Container(
                   child: Icon(
                     Icons.person,

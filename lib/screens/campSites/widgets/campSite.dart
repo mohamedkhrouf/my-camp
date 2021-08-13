@@ -29,17 +29,17 @@ class _CampSite extends State<CampSite> {
                widget.data["name"],
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
-                  fontSize: 14 * 1.1,
+                  fontSize: 18,
                 ),
               ),
             ),
             Container(
               child: Text(
-                (widget.data["latitude"]!=null?widget.data["latitude"].toString():"")+"."+
+                ("Position: "+widget.data["latitude"]!=null?widget.data["latitude"].toString():"")+" , "+
                     (widget.data["longitude"]!=null?widget.data["longitude"]:"").toString(),
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
-                  fontSize: 10 * 1.1,
+                  fontSize: 14.0,
                 ),
               ),
             ),
@@ -48,7 +48,7 @@ class _CampSite extends State<CampSite> {
               widget.data["description"],
               style: TextStyle(
                 color: Color.fromRGBO(0, 0, 0, 1),
-                fontSize: 14 * 1.1,
+                fontSize: 16,
               ),
             )),
           ],
