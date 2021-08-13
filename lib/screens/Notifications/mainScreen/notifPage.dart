@@ -44,7 +44,10 @@ class _NotifPageState extends State<NotifPage> {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('place');
 
-    collectionReference.snapshots().listen((snapshot) {
+    collectionReference
+        .where("pending", isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
       if (mounted) {
         setState(() {
           places = snapshot.docs;
@@ -103,8 +106,8 @@ class _NotifPageState extends State<NotifPage> {
                 ...places.map((item) {
                   if (user != null) {
                     if (user.data()["admin"] != false) {
-                      if (item.data()["pending"] != null) {
-                        if (item.data()["pending"] == true) {
+                     
+                        
                           return new PlaceN(demand: item.data(), id: item.id);
                         } else {
                           return Container();
@@ -112,12 +115,7 @@ class _NotifPageState extends State<NotifPage> {
                       } else {
                         return Container();
                       }
-                    } else {
-                      return Container();
-                    }
-                  } else {
-                    return Container();
-                  }
+              
                 }).toList(),
               ])));
   }

@@ -32,36 +32,25 @@ class _PlaceN extends State<PlaceN> {
         children: [
          
           Container(
-              padding: EdgeInsets.only(left: 20),
+              padding: EdgeInsets.only(left: 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+              
                     child: Text( widget.demand["name"] ,
                         style: TextStyle(fontSize: 20)),
                   ),
                   Container(
+                      
                     child: Text(widget.demand["address"],
                         style: TextStyle(fontSize: 15)),
                   ),
                     Container(
-                      
-                    child: RichText(
-                              text: new TextSpan(
-                                // Note: Styles for TextSpans must be explicitly defined.
-                                // Child text spans will inherit styles from parent
-                                style: new TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                                children: <TextSpan>[
-                             
-                                  new TextSpan(
-                                      text: widget.demand["description"]),
-                                ],
-                              ),
-                            ),
+                       width: MediaQuery.of(context).size.width*0.6,
+                    child: Text(widget.demand["description"],
+                        style: TextStyle(fontSize: 15)),
                   ),
                 ],
               )),
