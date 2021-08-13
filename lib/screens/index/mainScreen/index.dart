@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_camp/screens/campSites/mainScreen/campSites.dart';
 
 import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
-import 'package:my_camp/screens/loginPage/mainScreen/loginPage.dart';
+
 import 'package:my_camp/screens/myEvents/mainScreen/myEvents.dart';
 
 import 'package:my_camp/screens/profile/mainScreen/profilePage.dart';

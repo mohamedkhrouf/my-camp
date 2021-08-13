@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_camp/screens/homePage/mainScreen/homePage.dart';
 import 'package:my_camp/screens/index/mainScreen/index.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 import 'package:my_camp/services/login.dart';
@@ -24,16 +25,14 @@ class _SignUp extends State<SignUp> {
   var error = "";
   Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
-    final AccessToken result =
-        await FacebookAuth.instance.login() as AccessToken;
+    final LoginResult loginResult = await FacebookAuth.instance.login();
 
     // Create a credential from the access token
-    final facebookAuthCredential =
-        FacebookAuthProvider.credential(result.token);
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken.token);
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
 
   Future<UserCredential> signInWithGoogle() async {
@@ -49,6 +48,7 @@ class _SignUp extends State<SignUp> {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
@@ -61,11 +61,24 @@ class _SignUp extends State<SignUp> {
               borderRadius: BorderRadius.all(Radius.circular(30)),
             )),
         onPressed: () {
-          print(signInWithGoogle().then((value) => {
+              print(signInWithGoogle().then((value) => {
                 if (value.user.emailVerified)
                   {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => Index()))
+                    FirebaseFirestore.instance
+                    .collection("user")
+                    .doc(value.user.uid)
+                    .set({
+                  'avatar':value.user.photoURL
+                     ,
+                  'birthday': "unknown",
+                  'description': "",
+                  'events': [],
+                  'posts': [],
+                  'username': value.user.displayName,
+                  'ville': "Unknown"
+                }).then((value) => Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Index())))
+                    
                   }
                 else
                   {print("non")}
@@ -89,15 +102,7 @@ class _SignUp extends State<SignUp> {
             borderRadius: BorderRadius.all(Radius.circular(30)),
           )),
       onPressed: () {
-        signInWithFacebook().then((value) => {
-              if (value.user.emailVerified)
-                {
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => Index()))
-                }
-              else
-                {print("non")}
-            });
+        signInWithFacebook().then((value) => {print(value)});
       },
       child: Container(
           width: 25,
@@ -195,18 +200,21 @@ class _SignUp extends State<SignUp> {
                     password: passwordController.text)
                 .then((result) async {
               if (result is UserCredential) {
-               // var userNbr = await FirebaseFirestore.instance.collection('user').snapshots().length;
-                FirebaseFirestore.instance.collection("user").doc(result.user.uid).set({
-                  'avatar' : "https://firebasestorage.googleapis.com/v0/b/my-camp-acfe1.appspot.com/o/5102708.png?alt=media&token=9cc7ff2c-f526-4669-a46b-c0d3963a1eb3",
-                  'birthday' : "Unknown",
-                  'description' : "" ,
-                  'events' : [],
+                // var userNbr = await FirebaseFirestore.instance.collection('user').snapshots().length;
+                FirebaseFirestore.instance
+                    .collection("user")
+                    .doc(result.user.uid)
+                    .set({
+                  'avatar':
+                      "https://firebasestorage.googleapis.com/v0/b/my-camp-acfe1.appspot.com/o/5102708.png?alt=media&token=9cc7ff2c-f526-4669-a46b-c0d3963a1eb3",
+                  'birthday': "Unknown",
+                  'description': "",
+                  'events': [],
                   'posts': [],
                   'username': "user",
-                  'ville' : "Unknown"
-                }).then((value) => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => Index())));
-
+                  'ville': "Unknown"
+                }).then((value) => Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Index())));
               } else {
                 setState(() {
                   error = result;
@@ -268,7 +276,6 @@ class _SignUp extends State<SignUp> {
                       Spacer(),
                       Spacer(),
                       Spacer(),
-                      logindirect
                     ],
                   )
                 ],

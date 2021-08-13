@@ -15,7 +15,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   var user;
-  List posts=[];
+  var n = 0;
+  List posts = [];
   @override
   void initState() {
     super.initState();
@@ -28,7 +29,11 @@ class _ProfilePageState extends State<ProfilePage> {
     var uid = (FirebaseAuth.instance.currentUser).uid;
 
     print(uid);
-    FirebaseFirestore.instance.collection('user').doc(uid).snapshots().listen((value) {
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .snapshots()
+        .listen((value) {
       if (mounted) {
         setState(() {
           user = value;
@@ -43,10 +48,19 @@ class _ProfilePageState extends State<ProfilePage> {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('post');
 
-    collectionReference.snapshots().listen((snapshot) {
+    collectionReference
+        .where(
+          "userId",
+          isEqualTo: FirebaseFirestore.instance
+              .collection('user')
+              .doc(FirebaseAuth.instance.currentUser.uid),
+        )
+        .snapshots()
+        .listen((snapshot) {
       if (mounted) {
         setState(() {
           posts = snapshot.docs;
+
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
@@ -56,167 +70,171 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            child: Row(
-              children: [
-                Spacer(),
-                Container(
-                  child: CircleAvatar(
-                    radius: 60.0,
-                    backgroundImage: NetworkImage(user != null
-                        ? user.data()["avatar"]
-                        : "https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
-                    backgroundColor: Colors.transparent,
-                  ),
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Column(
+      children: [
+        Container(
+          child: Row(
+            children: [
+              Spacer(),
+              Container(
+                child: CircleAvatar(
+                  radius: 60.0,
+                  backgroundImage: NetworkImage(user != null
+                      ? user.data()["avatar"]
+                      : "https://images.squarespace-cdn.com/content/v1/5d9cceda4305a15ce8619c7e/1574894159388-EUV3A0SC8ZZXQXMN7RAL/ke17ZwdGBToddI8pDm48kKPxQF3y6ACiilOwP4hijyt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UdvLbAfL5pxwrgbwpvOCYZ-gFZWzBm2i02YX3WjdvL58ZDqXZYzu2fuaodM4POSZ4w/grey.png?format=2500w"),
+                  backgroundColor: Colors.transparent,
                 ),
-                Spacer(),
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Text(
-                          user != null ? user.data()["username"] : "",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Container(
-                          child: Text(user != null ? user.data()["ville"] : "",
-                              maxLines: 3, style: TextStyle(fontSize: 15)),
-                        ),
-                      ),
-                      Container(
-                        child: Container(
-                          child: Text(
-                              user != null ? user.data()["birthday"] : "",
-                              maxLines: 3,
-                              style: TextStyle(fontSize: 15)),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Spacer()
-              ],
-            ),
-            margin: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.071,
-                top: MediaQuery.of(context).size.width * 0.071),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Row(
-              children: [
-                Spacer(),
-                Container(
-                  margin: EdgeInsets.only(right: 16.0, ),
-                  child: OutlinedButton(
-                    style: ElevatedButton.styleFrom(
-                        side: BorderSide(
-                            width: 3,
-                            style: BorderStyle.solid,
-                            color: Colors.blue),
-                        primary: Color.fromRGBO(241, 249, 255, 1),
-                        padding: EdgeInsets.only(
-                            top: 10, bottom: 10, left: 45, right: 45),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30),
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30)),
-                            side: BorderSide(color: Colors.red))),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => EditProfilePage(user : user)));
-                    },
-                    child: Text('Edit Profile'),
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  child: OutlinedButton(
-                    style: ElevatedButton.styleFrom(
-                        side: BorderSide(
-                            width: 3,
-                            style: BorderStyle.solid,
-                            color: Colors.blue),
-                        primary: Color.fromRGBO(241, 249, 255, 1),
-                        padding: EdgeInsets.only(
-                            top: 10, bottom: 10, left: 40, right: 40),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30),
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30)),
-                            side: BorderSide(
-                                width: 3,
-                                style: BorderStyle.solid,
-                                color: Colors.blue))),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => NotifPage()));
-                    },
-                    child: Text('Notifications'),
-                  ),
-                ),
-                Spacer()
-              ],
-            ),
-          ),
-          Container(
-            child: Text(
-              user != null ? user.data()["description"] : "",
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.grey,
               ),
-            ),
-            width: MediaQuery.of(context).size.width * 0.9,
-            margin: EdgeInsets.only(top: 10, bottom: 0),
+              Spacer(),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Text(
+                        user != null ? user.data()["username"] : "",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Container(
+                        child: Text(user != null ? user.data()["ville"] : "",
+                            maxLines: 3, style: TextStyle(fontSize: 15)),
+                      ),
+                    ),
+                    Container(
+                      child: Container(
+                        child: Text(user != null ? user.data()["birthday"] : "",
+                            maxLines: 3, style: TextStyle(fontSize: 15)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Spacer()
+            ],
           ),
-          Container(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PostImage(user: user)));
-              },
-              child: Icon(Icons.add, color: Colors.white),
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(10),
+          margin: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.071,
+              top: MediaQuery.of(context).size.width * 0.071),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 10),
+          child: Row(
+            children: [
+              Spacer(),
+              Container(
+                margin: EdgeInsets.only(
+                  right: 16.0,
+                ),
+                child: OutlinedButton(
+                  style: ElevatedButton.styleFrom(
+                      side: BorderSide(
+                          width: 3,
+                          style: BorderStyle.solid,
+                          color: Colors.blue),
+                      primary: Color.fromRGBO(241, 249, 255, 1),
+                      padding: EdgeInsets.only(
+                          top: 10, bottom: 10, left: 45, right: 45),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                              topLeft: Radius.circular(30),
+                              bottomLeft: Radius.circular(30)),
+                          side: BorderSide(color: Colors.red))),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditProfilePage(user: user)));
+                  },
+                  child: Text('Edit Profile'),
+                ),
+              ),
+              Spacer(),
+              Container(
+                child: OutlinedButton(
+                  style: ElevatedButton.styleFrom(
+                      side: BorderSide(
+                          width: 3,
+                          style: BorderStyle.solid,
+                          color: Colors.blue),
+                      primary: Color.fromRGBO(241, 249, 255, 1),
+                      padding: EdgeInsets.only(
+                          top: 10, bottom: 10, left: 40, right: 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                              topLeft: Radius.circular(30),
+                              bottomLeft: Radius.circular(30)),
+                          side: BorderSide(
+                              width: 3,
+                              style: BorderStyle.solid,
+                              color: Colors.blue))),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => NotifPage()));
+                  },
+                  child: Text('Notifications'),
+                ),
+              ),
+              Spacer()
+            ],
+          ),
+        ),
+        Container(
+          child: Text(
+            user != null ? user.data()["description"] : "",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.grey,
+            ),
+          ),
+          width: MediaQuery.of(context).size.width * 0.9,
+          margin: EdgeInsets.only(top: 10, bottom: 0),
+        ),
+        Container(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PostImage(user: user)));
+            },
+            child: Icon(Icons.add, color: Colors.white),
+            style: ElevatedButton.styleFrom(
+              shape: CircleBorder(),
+              padding: EdgeInsets.all(10),
 
-                primary: Colors.blue, // <-- Button color
-                onPrimary: Colors.red, // <-- Splash color
-              ),
+              primary: Colors.blue, // <-- Button color
+              onPrimary: Colors.red, // <-- Splash color
             ),
-            margin: EdgeInsets.all(10),
           ),
-        ...posts.map((item) {
-            if (item.data()["userId"] != null) {
-              if (item.data()["userId"].id ==
-                  (((FirebaseAuth.instance.currentUser).uid))) {
-                return new PostPage(yep: item.data(),id: item.id);
-              } else {
-                return Container();
-              }
-            } else {
-              return Container();
-            }
-          }).toList(),
-        ],
-      ),
-    );
+          margin: EdgeInsets.all(10),
+        ),
+        (posts.length == 0)
+            ? Expanded(
+                child: (Center(
+                child: Text("no posts"),
+              )))
+            : Column(
+                children: [
+                  ...posts.map((item) {
+                    return new PostPage(yep: item.data(), id: item.id);
+                  }).toList(),
+                ],
+              ),
+      ],
+    )));
   }
 }
