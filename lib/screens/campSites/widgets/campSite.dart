@@ -61,7 +61,7 @@ class _CampSite extends State<CampSite> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CampSitePage()),
+                MaterialPageRoute(builder: (context) => CampSitePage(campSiteData : widget.data)),
               );
             },
             child: Row(

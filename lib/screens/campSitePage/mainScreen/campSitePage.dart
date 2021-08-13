@@ -1,14 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_camp/screens/campSitePage/widgets/widgets/post.dart';
 
 class CampSitePage extends StatefulWidget {
+  final campSiteData ;
+
+  const CampSitePage({Key key, this.campSiteData}) : super(key: key);
   @override
   _CampSitePage createState() => _CampSitePage();
 }
 
 class _CampSitePage extends State<CampSitePage> {
+  List campSitePosts = [] ;
+  CollectionReference postRef = FirebaseFirestore.instance.collection("post");
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    for(int i=0 ; i< widget.campSiteData["posts"].length ; i++)
+      {
+        postRef.doc((widget.campSiteData["posts"])[i].id).get().then((value) {
+          if(mounted)
+          setState(() {
+            campSitePosts.add(value);
+          });
+
+        }
+        );
+      }
+  }
   @override
   Widget build(BuildContext context)
   {
@@ -35,6 +57,7 @@ class _CampSitePage extends State<CampSitePage> {
                 children: [
 
                   Container(
+
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +65,7 @@ class _CampSitePage extends State<CampSitePage> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.5,
                           child: Text(
-                            "Camp site 125",
+                            widget.campSiteData["name"],
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.blue,
@@ -57,13 +80,15 @@ class _CampSitePage extends State<CampSitePage> {
                   ),
                 ],
               ),
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.071,
+              padding: EdgeInsets.only(
+                  left: 22.0,
                   ),
+
             ),
             Container(
+
               child: Text(
-                'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                widget.campSiteData["description"],
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.grey,
@@ -72,9 +97,12 @@ class _CampSitePage extends State<CampSitePage> {
               width: MediaQuery.of(context).size.width * 0.9,
               margin: EdgeInsets.only(top: 10, bottom: 0),
             ),
-
-            PostPage(),
-            PostPage(),
+          campSitePosts.length==0 ?
+              Container(margin: EdgeInsets.only(top:250) ,child: Center(child: Text("No post for this camp site"),),):
+              Container(),
+          ...campSitePosts.map((e) =>
+              Post(yep : e.data(), id: e.id,)
+          ),
           ],
         ),
       ),

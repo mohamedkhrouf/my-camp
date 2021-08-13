@@ -106,7 +106,7 @@ class _PostImage extends State<PostImage> {
                           imagesError = "Choose at least a picture";
 
                         });
-                      if(_formKey.currentState.validate()) {
+                      if(_formKey.currentState.validate()&& chosenImages.length > 0) {
                         setState(() {
                           loading=true ;
                         });

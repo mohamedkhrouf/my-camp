@@ -610,6 +610,13 @@ class _EvPageState extends State<EvPage> {
                    "Place: " + widget.yep["position"]["name"] ,
                   style: TextStyle(fontSize: 20),
                 ): Container(),
+                Text(
+                  "Camping Date: " + DateFormat('dd/MM/yyyy')
+                      .format(DateTime.fromMicrosecondsSinceEpoch(widget
+                      .yep["publicationDate"].microsecondsSinceEpoch))
+                      .toString() ,
+                  style: TextStyle(fontSize: 20),
+                ),
                 Text("Number of places: "+ widget.yep["members"].length.toString() +"/"+widget.yep["nbPart"].toString(),style: TextStyle(fontSize: 20),),
                 Container(
                   padding: EdgeInsets.only(right: 16.0),

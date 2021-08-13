@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('event');
 
-    collectionReference.snapshots().listen((snapshot) {
+    collectionReference.orderBy("publicationDate",descending: true).snapshots().listen((snapshot) {
       if (mounted) {
         setState(() {
           eventList = snapshot.docs;
@@ -215,8 +215,10 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     children: [
                       ...eventList.map((e) {
-
-                        return EvPage(yep: e.data(),id:e.id);
+                          if(DateTime.now().microsecondsSinceEpoch<=(e.data()["startingDate"].microsecondsSinceEpoch))
+                            return EvPage(yep: e.data(),id:e.id);
+                          else
+                            return Container();
                       }),
                     ],
                   )
