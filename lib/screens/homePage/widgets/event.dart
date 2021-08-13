@@ -610,11 +610,13 @@ class _EvPageState extends State<EvPage> {
                    "Place: " + widget.yep["position"]["name"] ,
                   style: TextStyle(fontSize: 20),
                 ): Container(),
+                Text("Number of places: "+ widget.yep["members"].length.toString() +"/"+widget.yep["nbPart"].toString(),style: TextStyle(fontSize: 20),),
                 Container(
+                  padding: EdgeInsets.only(right: 16.0),
                   child: Text(
                     widget.yep["description"],
                     style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.justify,
                   ),
                 ),
               ],
