@@ -15,6 +15,8 @@ class PositionsList extends StatefulWidget {
 class _PositionsList extends State<PositionsList> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List campList = [];
+  List shownCampingSites = [] ;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +32,8 @@ class _PositionsList extends State<PositionsList> {
       if (mounted) {
         setState(() {
           campList = snapshot.docs;
+          shownCampingSites= campList ;
+
           //print(documents[3].data());
           // usersList = snapshot.docs;
         });
@@ -62,6 +66,15 @@ class _PositionsList extends State<PositionsList> {
                         child: Row(children: [
                           new Flexible(
                               child: TextFormField(
+                                onChanged: (text) {
+                                  print(text);
+                                  setState(() {
+                                    shownCampingSites = campList
+                                        .where(
+                                            (e) => e.data()["name"].contains(text))
+                                        .toList();
+                                  });
+                                },
                                 decoration: const InputDecoration(
                                     hintText: 'Enter camp site',
                                     contentPadding: EdgeInsets.only(left: 15.0),
@@ -71,7 +84,7 @@ class _PositionsList extends State<PositionsList> {
                                     prefixIcon: Icon(Icons.search)),
                               )),
                         ]))),
-                ...campList.map((e) {
+                ...shownCampingSites.map((e) {
                   return CampSite(data:e.data(), id : e.id, getPosition: widget.getPosition,);
                 }),
               ],

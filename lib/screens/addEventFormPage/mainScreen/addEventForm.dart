@@ -12,7 +12,6 @@ import 'package:my_camp/screens/addEventFormPage/widgets/imageContainer.dart';
 import 'package:my_camp/screens/addEventFormPage/widgets/positionsList.dart';
 import 'package:my_camp/screens/loading/mainScreen/loading.dart';
 
-import '../../homePage/widgets/campSitesList.dart';
 
 class AddEventForm extends StatefulWidget {
   final user;
