@@ -243,6 +243,8 @@ class _ContState extends State<Cont> {
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(bottom: 16),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   child: Row(
@@ -438,7 +440,7 @@ class _ContState extends State<Cont> {
                   child: Text(
                     widget.yep["text"],
                     style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.justify,
                   ),
                   margin: EdgeInsets.only(left: 10, right: 10),
                 ),
