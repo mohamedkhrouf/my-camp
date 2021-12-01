@@ -320,14 +320,8 @@ class _ContState extends State<Cont> {
                                                                   .viewInsets
                                                                   .bottom !=
                                                               0
-                                                          ? MediaQuery.of(
-                                                                  context)
-                                                              .viewInsets
-                                                              .bottom
-                                                          : MediaQuery.of(
-                                                                  context)
-                                                              .viewInsets
-                                                              .bottom),
+                                                          ? 500
+                                                          : 530),
                                                   decoration: BoxDecoration(
                                                     color: Colors.white,
                                                     boxShadow: [
